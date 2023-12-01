@@ -6,7 +6,8 @@ export const getItems = async () => {
     order: [
       ['type', 'ASC'],
       ['name', 'ASC']
-    ]
+    ],
+    raw: true
   });
   return items;
 };

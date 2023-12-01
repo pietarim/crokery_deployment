@@ -1,85 +1,127 @@
-/* import { ChakraProvider } from '@chakra-ui/react' */
-/* import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg'; */
-import { Tabs, TabList, Tab, TabPanel, TabPanels, Button } from "@chakra-ui/react";
+import { useState, useEffect } from 'react';
+import { Tabs, TabList, Tab, TabPanel, TabPanels, Button, Text, Menu, MenuButton, MenuList, MenuItem, IconButton } from "@chakra-ui/react";
+import { HamburgerIcon } from '@chakra-ui/icons';
 import './App.css';
 import ListRecipes from './Components/ListRecipes';
 import CreateRecipe from "./Components/CreateRecipe";
 import ShoppingList from "./Components/ShoppingList";
-import Friend from "./Components/Friend";
-
+import Login from "./Components/Login";
+import CreateNewUser from './Components/CreateNewUser';
+import { useAxios } from './hooks/useAxios';
+import { useAuth } from './hooks/useAuth';
+import Friend from './Components/Friend';
 
 function App() {
-  /* const [recipe, setRecipe] = useState<Recipe[]>([]);
-  const [imageUri, setImageUri] = useState<string>("null"); */
+  const { setToken, token } = useAuth();
+  const { get } = useAxios();
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [mobileRoute, setMobileRoute] = useState<string>('');
 
-  /* useEffect(() => {
-    const fetchRecipes = async () => {
-      const recipes = await axios.get('http://localhost:3001/api/recipes');
-      const recipeData = recipes.data as Recipe[];
-      setImageUri(`http://localhost:3001/api/images/${recipeData[0].imageUri}`);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsMobileView(true);
+      } else {
+        setIsMobileView(false);
+      }
     };
-    fetchRecipes();
-  }, []); */
+    window.addEventListener('resize', handleResize); // TODO is this doing anything?
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-  /* const returnImage = () => {
-    if (imageUri !== "null") {
+  useEffect(() => {
+    const getAuthUser = async () => {
+      try {
+        const user = await get('/auth/access-token', { withCredentials: true });
+        setToken({ token: user.data.token, username: user.data.username, id: user.data.id }); // handle error
+      } catch (err) {
+        console.log('not logged in');
+      }
+
+    };
+    getAuthUser();
+  }, []);
+
+  const handleLogout = () => {
+    setToken(null);
+  };
+
+  if (!token) {
+    return (
+      <div>
+        <Login />
+        <CreateNewUser />
+      </div>
+    );
+  } else {
+    if (isMobileView) {
+      const returnMobileRoute = () => {
+        switch (mobileRoute) {
+          case "view":
+            return <ListRecipes isMobile={true} />;
+          case "create":
+            return <CreateRecipe isMobile={true} />;
+          case "shopping-cart":
+            return <ShoppingList isMobile={true} />;
+          default:
+            return <ListRecipes isMobile={true} />;
+        }
+      };
       return (
-        <img style={{ 'height': 512, 'width': 512 }} src={imageUri} />
+        <>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label='Options'
+              icon={<HamburgerIcon />}
+              variant='outline'
+            />
+            <MenuList>
+              <MenuItem onClick={() => setMobileRoute("view")}>Discover recipes</MenuItem>
+              <MenuItem onClick={() => setMobileRoute("create")}>Create recipe</MenuItem>
+              <MenuItem onClick={() => setMobileRoute("shopping-cart")}>Shopping list</MenuItem>
+              <MenuItem onClick={() => handleLogout()}>Log out</MenuItem>
+            </MenuList>
+          </Menu>
+          {returnMobileRoute()}
+        </>
       );
-    } */
+    } else if (!isMobileView) {
+      return (
+        <div>
+          <Tabs variant='enclosed'>
+            <TabList>
+              <Tab>Discover recipes</Tab>
+              <Tab>My recipes</Tab>
+              <Tab>Create recipe</Tab>
+              <Tab>Shopping cart</Tab>
+              <Tab>Friends</Tab>
+              <Text>User: {token.username} logged in</Text>
+              <Button onClick={() => handleLogout()}>Log out</Button>
+            </TabList>
 
-  /* if (recipe[0]) {
-    console.log(recipe[0]);
-    if (recipe[0].imageUri) {
-      console.log('true');
+            <TabPanels>
+              <TabPanel>
+                <ListRecipes isMobile={false} />
+              </TabPanel>
+              <TabPanel>
+                <p>two!</p>
+              </TabPanel>
+              <TabPanel>
+                {/* <CreateRecipe /> */}
+              </TabPanel>
+              <TabPanel>
+                <ShoppingList />
+              </TabPanel>
+              <TabPanel>
+                <Friend />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </div>
+      );
     }
   }
-   
-  console.log(recipe[0].imageUri); */
-
-
-  return (
-    <div>
-      <Tabs variant='enclosed'>
-        <TabList>
-          <Tab>Discover recipes</Tab>
-          <Tab>My recipes</Tab>
-          <Tab>Create recipe</Tab>
-          <Tab>Shopping cart</Tab>
-          <Tab>Friends</Tab>
-          <Button>Log out</Button>
-        </TabList>
-        {/* <ListRecipes /> */}
-
-        <TabPanels>
-          <TabPanel>
-            <ListRecipes />
-          </TabPanel>
-          <TabPanel>
-            <p>two!</p>
-          </TabPanel>
-          <TabPanel>
-            <CreateRecipe />
-          </TabPanel>
-          <TabPanel>
-            <ShoppingList />
-          </TabPanel>
-          <TabPanel>
-            <Friend />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </div>
-  );
 }
-{/* <>
-      <div className="card">
-        <ListRecipes />
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </> */}
 
 export default App;

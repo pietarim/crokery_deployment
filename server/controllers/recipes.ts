@@ -10,19 +10,12 @@ import { getRandomRecipes, getUsersRecipes, getMostLikedRecipes } from '../query
 
 export const getUsersOwnRecipes = async (req: any, res: any) => {
   const { userId } = req.body;
-  /* const recipes = await Recipe.findAll({
-    where: {
-      ownerId: userId
-    }
-  });
-  res.send(recipes); */
   const recipes = await getUsersRecipes(userId);
   res.send(recipes);
 };
 
 export const getIntroduceRecipes = async (req: any, res: any) => {
   const recipes = await getRandomRecipes();
-  /* console.log(recipes); */
   res.json(recipes);
 };
 
@@ -31,17 +24,9 @@ export const returnMostLikedRecipes = async (req: any, res: any) => {
   res.json(recipes);
 };
 
-/* export const addAllIncredients = async (recipe: any) => {
-  await RecipeToItem.create({
-    recipeId: recipe.id,
-    incredientId: recipe.incredientId,
-    amount: recipe.amount
-  });
-}; */
-
-
 export const createRecipe = async (req: any, res: any) => {
-  const { name, description, ownerId, global, incredients } = req.body;
+  const { name, description, global, incredients } = req.body;
+  const ownerId = req.user.id;
   const transaction = await sequelize.transaction();
 
   const parsedIncredients: NewRecipesItem[] = incredients.map((incredient: any) => {
@@ -130,7 +115,6 @@ export const updateRecipe = async (recipe: NewRecipe, id: number, ingredients: a
     });
     await transaction.commit();
   } catch (error) {
-    console.log(error);
     await transaction.rollback();
     throw new Error('Something went wrong');
   }

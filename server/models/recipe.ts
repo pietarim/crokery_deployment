@@ -1,7 +1,18 @@
-import { Model, DataTypes, Sequelize, QueryTypes } from 'sequelize';
+import { Model, DataTypes, Sequelize, QueryTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/db';
 
-class Recipe extends Model {
+interface RecipeAttributes {
+  id: number;
+  name: string;
+  description: string;
+  ownerId: number;
+  imageUri?: string;
+  global: boolean;
+}
+
+type RecipeCreationAttributes = Optional<RecipeAttributes, 'id'>;
+
+class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
   public id!: number;
   public name!: string;
   public description!: string;

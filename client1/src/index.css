@@ -68,3 +68,61 @@ button:focus-visible {
   }
 }
  */
+
+.recipe-container {
+  position: relative;
+  /* padding: 20px; */
+  margin: 46px;
+}
+
+.detailed-recipe-background {
+  z-index: 1;
+  height: 100vh;
+  width: 100vw;
+  background-color: cadetblue;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.recipe-content {
+  z-index: 2;
+  position: relative;
+  background-color: red;
+}
+
+.fade-in-div {
+  /* height: 100vh;
+  width: 100vw; */
+  position: fixed;
+  z-index: 1;
+  height: 100vh;
+  width: 100vw;
+  background-color: cadetblue;
+  left: 0;
+  top: 0;
+  opacity: 0; /* Start with the div being transparent */
+  animation: fadeIn 0.1s ease-in forwards; /* Animation named fadeIn, lasting 1 second, with ease-in timing */
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1; /* Fade to fully opaque */
+  }
+}
+
+.transparent-div {
+  opacity: 0; /* Fade to fully opaque */
+  height: 0;
+  /* animation: fadeOut 0.2s ease-out forwards; */ /* Animation named fadeIn, lasting 1 second, with ease-in timing */
+  /* visibility: hidden; */
+  /* opacity: 1; Start with the div being transparent */
+  /* animation: fadeOut 1s ease-in forwards; Animation named fadeIn, lasting 1 second, with ease-in timing */
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0; /* Fade to fully opaque */
+    height: 0;
+  }
+}

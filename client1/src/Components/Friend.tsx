@@ -1,7 +1,8 @@
-import { FormControl, FormLabel, Input, FormErrorMessage, Wrap, Text, Textarea, Flex, List, ListItem, Button, useRadio, Box, HStack, useRadioGroup } from '@chakra-ui/react';
-import { Field, Form, Formik } from 'formik';
+import { useRadioGroup, Wrap, Box, useRadio, Heading } from "@chakra-ui/react";
+import { useAxios } from "../hooks/useAxios";
+import { useEffect, useState } from "react";
 
-const RadioCard = (props) => {
+function RadioCard(props) {
   const { getInputProps, getRadioProps } = useRadio(props);
 
   const input = getInputProps();
@@ -31,31 +32,103 @@ const RadioCard = (props) => {
       </Box>
     </Box>
   );
-};
+}
 
-const Example = () => {
-  const options = ['react', 'vue', 'svelte'];
+const Friend = () => {
+  const [options3, setOptions3] = useState<any[]>([]);
+  const { get } = useAxios();
+  const [visibleData, setVisibleData] = useState<any[]>([]);
+  const [hiddenCategoryList, setHiddenCategoryList] = useState<string[]>([]);
+
+  const handleVisibleData = (hiddenCategoryList: string[], workMemoryList: any[]) => {
+    const newVisibleData = workMemoryList.map((item) => {
+      if (!hiddenCategoryList.includes(item.category)) {
+        return item;
+      } else {
+        return { category: item.category, items: [] };
+      }
+    });
+    setVisibleData(newVisibleData);
+  };
+
+  useEffect(() => {
+    const getItems = async () => {
+      const itemsQuery = await get('/items');
+      const arr = itemsQuery.data;
+      const initialHiddenCategoryList = arr.map((item) => item.category);
+      setHiddenCategoryList(initialHiddenCategoryList);
+      setOptions3(arr);
+      setVisibleData(arr);
+      handleVisibleData(initialHiddenCategoryList, arr);
+    };
+    getItems();
+  }, []);
+
+  const [theChoosenOne, setTheChoosenOne] = useState<any>(null);
+
+  const setSelectedItem = (id: string) => {
+    const allItems = options3.map((item) => item.items).flat();
+    const item = allItems.find((item) => item.id.toString() === id);
+    setTheChoosenOne(item);
+  };
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'framework',
     defaultValue: 'react',
-    onChange: console.log,
+    onChange: setSelectedItem,
   });
+
+  const hadleToggleHideList = (category: string) => {
+    if (hiddenCategoryList.includes(category)) {
+      const newHiddenCategoryList = hiddenCategoryList.filter((c) => c !== category);
+      setHiddenCategoryList(newHiddenCategoryList);
+      handleVisibleData(newHiddenCategoryList, options3);
+    } else {
+      const newHiddenCategoryList = [...hiddenCategoryList, category];
+      setHiddenCategoryList(newHiddenCategoryList);
+      handleVisibleData(newHiddenCategoryList, options3);
+    }
+  };
+
+  interface Item {
+    id: number;
+    name: string;
+    unitSize: number;
+  }
 
   const group = getRootProps();
 
   return (
-    <HStack {...group}>
-      {options.map((value) => {
-        const radio = getRadioProps({ value });
-        return (
-          <RadioCard key={value} {...radio}>
-            {value}
-          </RadioCard>
-        );
-      })}
-    </HStack>
+    <>
+      <Wrap {...group}>
+        {visibleData.map((value, i) => {
+          return (
+            <Wrap key={i}>
+              <Box
+                cursor='pointer'
+                borderRadius='md'
+                boxShadow='md'
+                px={5} py={3}
+                onClick={() => hadleToggleHideList(value.category)}
+                style={{ backgroundColor: hiddenCategoryList.includes(value.category) ? "grey" : "lightBlue" }}>
+                {value.category}
+              </Box>
+              {value.items.map((item: Item) => {
+                const radio = getRadioProps({ value: item.id.toString() });
+                return (
+                  <RadioCard key={item.id.toString()} {...radio}>
+                    {item.name}
+                  </RadioCard>
+                );
+              })
+              }
+            </Wrap>
+          );
+        })}
+      </Wrap>
+      <Heading>{theChoosenOne?.name}</Heading>
+    </>
   );
 };
 
-export default Example;
+export default Friend;

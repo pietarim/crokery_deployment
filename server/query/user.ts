@@ -1,6 +1,5 @@
-import { Model, DataTypes, Sequelize } from 'sequelize';
 import { User } from '../models/user';
-import { User as UserType } from '../types';
+import { UserType } from '../types';
 
 export const getUsers = async () => {
   const users = await User.findOne({
@@ -25,6 +24,11 @@ export const getUser = async (id: number) => {
   return user;
 };
 
+export const getUserByRefreshToken = async (token: string) => {
+  const user = await User.findOne({ where: { refreshToken: token } });
+  return user;
+};
+
 export const getUserByUsername = async (username: string) => {
   const user = await User.findOne({ where: { username: username } });
   return user;
@@ -32,7 +36,8 @@ export const getUserByUsername = async (username: string) => {
 
 export const createUser = async (user: UserType) => {
   const savedUser = await User.create(user);
-  return savedUser;
+  const user2 = await User.findAll({ where: { username: user.username } });
+  return user2;
 };
 
 export const updateUser = async (user: User, id: number) => {
@@ -51,3 +56,28 @@ export const deleteUser = async (id: number) => {
   });
 };
 
+export const addRefreshtoken = async (id: number, token: string) => {
+  await User.update(
+    {
+      refreshToken: token,
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  );
+};
+
+export const removeRefreshtoken = async (id: number) => {
+  await User.update(
+    {
+      refreshToken: null,
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  );
+};

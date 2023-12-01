@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Heading, List, ListItem, Flex, Card } from "@chakra-ui/react";
 import _ from "lodash";
 
@@ -52,8 +52,7 @@ interface RecipeItemCalc {
 type ItemAndTitle = RecipeItemCalc | string;
 type ItemByType = Array<RecipeItemCalc | string>;
 
-const ShoppingList = () => {
-  /* const dispatch = useDispatch(); */
+const ShoppingList = ({ isMobile }: any) => {
   const shoppingList = useSelector((state: AppState) => state.shoppingCart);
 
   const itemsList: RecipesItem[] = shoppingList.items.reduce((acc: RecipesItem[], cur: Recipe) => {
@@ -63,7 +62,6 @@ const ShoppingList = () => {
   }, []);
 
   const ItemsWithSumAmount = itemsList.reduce((acc: RecipeItemCalc[], cur: RecipesItem) => {
-    /* if () */
     if (acc.some((item: RecipeItemCalc) => item.name === cur.name)) {
       acc[acc.findIndex((item: RecipeItemCalc) => item.name === cur.name)].amount += parseFloat(cur.amount);
     } else {
@@ -101,7 +99,6 @@ const ShoppingList = () => {
       itemAmounts[item.name] = parseFloat(item.amount);
     }
   }
-  /* console.log(itemAmounts); */
 
   const itemsWithTitles = itemsList.reduce((acc: any, item: any) => {
     if (!acc.length) {
@@ -135,7 +132,6 @@ const ShoppingList = () => {
         } else {
           return returnItem(i);
         }
-
       });
     }
   };

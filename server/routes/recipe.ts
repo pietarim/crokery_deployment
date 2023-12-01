@@ -2,6 +2,7 @@ import express from 'express';
 import { getIntroduceRecipes, createRecipe, updateRecipe, deleteRecipe, getUsersOwnRecipes } from '../controllers/recipes';
 import { parseString, parseNumber, parseIncredient, parseBoolean } from '../config/utils';
 import { get } from 'http';
+import { userExtractor } from '../middleware/userExtractor';
 
 const router = express.Router();
 
@@ -12,9 +13,11 @@ const router = express.Router();
 router.get('/user', getUsersOwnRecipes);
 router.get('/', getIntroduceRecipes);
 
-router.post('/', async (req, res) => {
+/* router.post('/', userExtractor, async (req, res) => {
   await createRecipe(req, res);
-});
+}); */
+
+router.post('/', userExtractor, createRecipe);
 
 router.put('/:id', async (req, res) => {
   const { id } = req.params;

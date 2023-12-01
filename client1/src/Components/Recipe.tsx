@@ -1,16 +1,9 @@
-import { Card, CardBody, CardFooter, Image, Stack, Heading, Text, Button, Flex, Divider } from '@chakra-ui/react';
+import { Card, CardBody, CardFooter, Image, Heading, Text, Button, Flex, Divider } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
-import { addProduct } from '../redux/modules/shoppingCart';
 
-const Recipe = ({ recipe }: any) => {
+const Recipe = ({ recipe, setDetailedRecipe/* , handleOpenDetailedRecipe */ }: any) => {
   /* const [recipeImage, setRecipeImage] = useState<string | null>(null); */
   const dispatch = useDispatch();
-
-  const handleAddToCart = () => {
-    console.log('add to cart');
-    dispatch(addProduct(recipe));
-  };
-
 
   return (
     <Card
@@ -43,19 +36,15 @@ const Recipe = ({ recipe }: any) => {
                 </Text>
               ))}
             </Card>
-            {/* </div> */}
           </Flex>
         </CardBody>
 
         <CardFooter>
-          <Button variant='solid' colorScheme='blue'>
+          <Button onClick={() => setDetailedRecipe(recipe)} variant='solid' colorScheme='blue'>
             View recipe
           </Button>
           <Button variant='outline' colorScheme='blue'>
             Add to cart
-          </Button>
-          <Button flex='1' variant='ghost' onClick={() => handleAddToCart()} /* leftIcon={<BiLike />} */>
-            Like
           </Button>
         </CardFooter>
       </Flex>

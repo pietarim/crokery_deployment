@@ -1,7 +1,22 @@
 import { Field, Form, Formik } from 'formik';
 import { FormControl, FormErrorMessage, FormLabel, Input, Button } from '@chakra-ui/react';
+/* import { SetUserProp } from '../types'; */
+import { login } from '../services/user';
+import { useAuth } from '../hooks/useAuth';
 
-function LoginForm() {
+/* interface User {
+  username: string;
+  token: string;
+}
+
+type UserState = User | null;
+
+interface setUserProp {
+  setUser: (user: UserState) => void;
+}
+ */
+function LoginForm(/* { setUser }: SetUserProp */) {
+  const { setToken } = useAuth();
   function validateName(value) {
     let error;
     if (!value) {
@@ -18,14 +33,32 @@ function LoginForm() {
     return error;
   }
 
+  const handleLoginSubmit = async (loginData) => {
+    console.log('loginData', loginData);
+    const newLogin = {
+      username: loginData.name,
+      password: loginData.password,
+    };
+    console.log('newLogin', newLogin);
+    const savedLogin = await login(newLogin);
+    /* setUser(savedLogin); */
+    setToken({ token: savedLogin.token, username: savedLogin.username, id: savedLogin.id });
+  };
+
   return (
     <Formik
-
+      initialValues={{ name: '', password: '' }}
       onSubmit={(values, actions) => {
-        setTimeout(() => {
+        const loginData = {
+          name: values.name,
+          password: values.password,
+        };
+        handleLoginSubmit(loginData);
+        actions.setSubmitting(false);
+        /* setTimeout(() => {
           alert(JSON.stringify(values, null, 2));
           actions.setSubmitting(false);
-        }, 1000);
+        }, 1000); */
       }}
     >
       {(props) => (
