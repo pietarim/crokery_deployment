@@ -1,17 +1,18 @@
 import express from 'express';
 import path from 'path';
-import { addImageController } from '../controllers/image';
+import { userExtractor } from '../middleware/userExtractor';
+import { uploadImageController } from '../controllers/image';
 import multer from 'multer';
 
 const router = express.Router();
 
 router.get('/:name', (_req, res) => {
   const { name } = _req.params;
-  const imagePath = path.join(__dirname, `../images/${name}.png`);
+  const imagePath = path.join(__dirname, `../images/${name}.png`); // TODO: handle different file types
   res.sendFile(imagePath);
 });
 
-const storage = multer.diskStorage({
+/* const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, '../images/');
   },
@@ -21,8 +22,8 @@ const storage = multer.diskStorage({
 });
 
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage }); */
 
-router.post('/', upload.single, addImageController);
+router.post('/', userExtractor, uploadImageController);
 
 export default router;

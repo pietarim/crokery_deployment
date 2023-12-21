@@ -1,6 +1,11 @@
 import { useSelector } from "react-redux";
-import { Heading, List, ListItem, Flex, Card } from "@chakra-ui/react";
+import {
+  Heading, List, ListItem, Flex, Card, TableContainer, Table, Thead, Tr, Th, Td, Tbody, Text,
+  Button, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, useDisclosure, DrawerCloseButton
+} from "@chakra-ui/react";
 import _ from "lodash";
+import { addProductById, removeProductById } from "../redux/modules/shoppingCart";
+import { useDispatch } from "react-redux";
 
 interface RecipeToItem {
   amount: string;
@@ -25,6 +30,7 @@ interface Recipe {
   imageUri: string;
   description: string;
   item: RecipeItem[];
+  count: number;
 }
 
 interface ShoppingCartState {
@@ -53,11 +59,13 @@ type ItemAndTitle = RecipeItemCalc | string;
 type ItemByType = Array<RecipeItemCalc | string>;
 
 const ShoppingList = ({ isMobile }: any) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const dispatch = useDispatch();
   const shoppingList = useSelector((state: AppState) => state.shoppingCart);
 
   const itemsList: RecipesItem[] = shoppingList.items.reduce((acc: RecipesItem[], cur: Recipe) => {
     return [...acc, ...cur.item.map((item) => {
-      return { name: item.name, amount: item.recipeToItem.amount, unitSize: item.unitSize, type: item.type };
+      return { name: item.name, amount: parseFloat(item.recipeToItem.amount) * cur.count, unitSize: item.unitSize, type: item.type };
     })];
   }, []);
 
@@ -89,7 +97,6 @@ const ShoppingList = ({ isMobile }: any) => {
     }
   }, []);
 
-  console.log(itemsAndTypes);
 
   const itemAmounts: { [key: string]: number; } = {};
   for (const item of itemsList) {
@@ -100,28 +107,34 @@ const ShoppingList = ({ isMobile }: any) => {
     }
   }
 
-  const itemsWithTitles = itemsList.reduce((acc: any, item: any) => {
-    if (!acc.length) {
-      return [{ ...item,/* : item.type, */ style: 'title', name: "", isTitle: item.type }, { ...item, style: 'item', isTitle: "" }];
-    } else if (acc[acc.length - 1].type === item.type) {
-      return [...acc, { ...item, style: 'item', isTitle: "" }];
-    } else {
-      return [...acc, { ...item, /* item: item.type, */ style: 'title', name: "", isTitle: item.type }, { ...item, style: 'item', isTitle: "" }];
-    }
-  }, []);
-
-  console.log(itemsWithTitles);
-
   const returnTitle = (title: string) => {
     return (
-      <ListItem key={title}>{title}</ListItem>
+      <Thead key={title}>
+        <Tr><Th style={{ backgroundColor: "lightBlue" }}>{title}</Th></Tr>
+      </Thead>
     );
   };
 
   const returnItem = (item: RecipeItemCalc) => {
-    return (
-      <ListItem key={item.name}>{item.name}: {item.amount} {/* {item.unitSize} */}</ListItem>
-    );
+    if (!isMobile) {
+      return (
+        <Tbody key={item.name}>
+          <Tr>
+            <Td>{item.name}</Td>
+            <Td>{item.amount.toFixed(2)}</Td>
+            <Td>amount:  count {Math.ceil(item.amount / parseFloat(item.unitSize))}</Td> </Tr></Tbody>
+      );
+    }
+    else {
+      return (
+        <Tbody key={item.name}>
+          <Tr>
+            <Td>{item.name}</Td>
+            <Td>count {Math.ceil(item.amount / parseFloat(item.unitSize))}</Td>
+          </Tr>
+        </Tbody>
+      );
+    }
   };
 
   const returnItemsAndTitles = () => {
@@ -136,26 +149,83 @@ const ShoppingList = ({ isMobile }: any) => {
     }
   };
 
-  return (
-    <div>
-      <Heading as="h2" size="2xl">
-        Shopping list
-      </Heading>
-      <Flex justifyContent="space-between">
-        <List>
-          {returnItemsAndTitles()}
-        </List>
-        <Card style={{ backgroundColor: '#e6f9ff' }} variant='elevated' minW='175px'>
+  if (!isMobile) {
+    return (
+      <div>
+        <Heading as="h2" size="2xl" color='customeExit.custom'>
+          Shopping list
+        </Heading>
+        <Flex justifyContent="space-between">
+          <TableContainer>
+            <Table>
+              {returnItemsAndTitles()}</Table>
+          </TableContainer>
+          <Card style={{ backgroundColor: '#e6f9ff' }} variant='elevated' minW='175px'>
+            <List>
+              {shoppingList.items.map((item) => (
+                <ListItem key={item.id}>
+                  <Text>{item.name} {item.count}</Text>
+                  <Button
+                    mr='2'
+                    colorScheme="customYellow"
+                    onClick={() => dispatch(addProductById(item.id))}>
+                    +
+                  </Button>
+                  <Button
+                    colorScheme="customGreen"
+                    onClick={() => dispatch(removeProductById(item.id))}>
+                    -
+                  </Button>
+                </ListItem>
+              ))}
+            </List></Card>
+        </Flex>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Button onClick={onOpen}>Open Drawer</Button>
+        <Drawer placement='right' onClose={onClose} isOpen={isOpen}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerHeader borderBottomWidth='1px'>Basic Drawer<DrawerCloseButton /></DrawerHeader>
+            <DrawerBody>
+              <List>
+                {shoppingList.items.map((item) => (
+                  <ListItem key={item.id}>
+                    <Text>{item.name}: {item.count}</Text>
+                    <Button mr='1' colorScheme="customGreen" onClick={() => dispatch(addProductById(item.id))}>+</Button>
+                    <Button colorScheme="customYellow" onClick={() => dispatch(removeProductById(item.id))}>-</Button>
+                  </ListItem>
+                ))}
+              </List>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+        <Heading as="h2" size="2xl" mb='3'>
+          Shopping list
+        </Heading>
+        <Flex justifyContent="space-between">
+          <TableContainer>
+            <Table>
+              {returnItemsAndTitles()}
+            </Table>
+          </TableContainer>
+        </Flex>
+        {/* <Card style={{ backgroundColor: '#e6f9ff' }} variant='elevated' minW='175px'>
           <List>
             {shoppingList.items.map((item) => (
               <ListItem key={item.id}>
-                {item.name}
+                <Text>{item.name}: {item.count}</Text>
+                <Button mr='1' colorScheme="customGreen" onClick={() => dispatch(addProductById(item.id))}>+</Button>
+                <Button colorScheme="customYellow" onClick={() => dispatch(removeProductById(item.id))}>-</Button>
               </ListItem>
             ))}
-          </List></Card>
-      </Flex>
-    </div>
-  );
+          </List></Card> */}
+      </div>
+    );
+  }
 };
 
 export default ShoppingList;

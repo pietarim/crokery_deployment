@@ -3,9 +3,10 @@ import { parseString } from "../config/utils";
 import bcrypt from "bcrypt";
 import { User } from "../models/user";
 import { getUsers } from "../query/user";
+import { NewUser } from "../types";
 
-export const createUser = async (req: any, res: any) => {
-  const { username, password, email } = req.body;
+export const createUser = async (user: NewUser) => {
+  const { username, password, email } = user;
   const parsedUsername = parseString(username);
   const parsedPassword = parseString(password);
   const parsedEmail = parseString(email);
@@ -19,7 +20,7 @@ export const createUser = async (req: any, res: any) => {
     isAdmin: false,
   });
 
-  res.status(200).json(newUser);
+  return newUser;
 };
 
 export const updateUser = async (req: any, res: any) => {

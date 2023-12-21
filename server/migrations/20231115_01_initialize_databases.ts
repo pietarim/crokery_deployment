@@ -221,9 +221,10 @@ export const up = async ({ context: queryInterface }: { context: QueryInterface;
 
 export const down = async ({ context: queryInterface }: { context: QueryInterface; }) => {
   await queryInterface.dropTable('recipeLikes');
+  console.log('How YOU doin?');
   await queryInterface.dropTable('recipeToItems');
+  await queryInterface.dropTable('friends');
   await queryInterface.dropTable('items');
   await queryInterface.dropTable('recipes');
   await queryInterface.dropTable('users');
-  await queryInterface.dropTable('friends');
 };

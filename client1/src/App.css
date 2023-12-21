@@ -64,6 +64,14 @@
   box-sizing: border-box;
 }
 
+.chakra-tabs__tab {
+  color: #888;
+}
+
+.chakra-tabs__tab[data-selected] {
+  color: #646cff;
+}
+
 /* .two-column-list li:last-child .list-item-container,
 .two-column-list li:nth-last-child(2) .list-item-container {
   border-right: none;

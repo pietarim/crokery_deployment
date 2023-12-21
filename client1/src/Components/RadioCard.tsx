@@ -4,7 +4,6 @@ const RadioCard = (props) => {
   const { getInputProps, getCheckboxProps } = useRadio(props);
 
   const input = getInputProps();
-  /* props.setSelected(input.value.name); */
   const checkbox = getCheckboxProps();
 
   return (

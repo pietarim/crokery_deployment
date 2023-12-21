@@ -6,6 +6,8 @@ import { users } from './users';
 import { items } from './items';
 import { descriptions } from './recipeDescriptions';
 import { Friend } from '../models/friend';
+import { createUser } from '../controllers/user';
+import { TokenUser } from '../types';
 
 const sequelize = new Sequelize('postgres://postgres:mysecretpassword@localhost:5432/postgres'); //5432
 
@@ -64,6 +66,12 @@ const init = async () => {
     truncate: true
   });
 
+  await Friend.destroy({
+    where: {
+    },
+    truncate: true
+  });
+
   await Recipe.destroy({
     where: {
     }
@@ -79,7 +87,11 @@ const init = async () => {
     }
   });
 
-  const allUsers = await User.bulkCreate(users);
+  const allUsersPromise: Promise<TokenUser[]> = Promise.all(users.map(async (user) => {
+    return await createUser(user);
+  }));
+
+  const allUsers = await allUsersPromise;
 
   await Friend.create({ user_id1: allUsers[0].id, user_id2: allUsers[1].id });
   await Friend.create({ user_id1: allUsers[0].id, user_id2: allUsers[2].id });
@@ -88,7 +100,7 @@ const init = async () => {
 
   const allItems = await Item.bulkCreate(items);
 
-  const muikutRecipe = await Recipe.create({
+  const muikutRecipe = await Recipe.create({ /* 1 */
     name: "muikut",
     description: descriptions.muikut,
     ownerId: allUsers[1].id,
@@ -102,19 +114,19 @@ const init = async () => {
     amount: "1",
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* korppujauhot */
     recipeId: muikutRecipe.id,
     itemId: allItems[19 - 1].id,
     amount: "0.1",
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* butter */
     recipeId: muikutRecipe.id,
     itemId: allItems[20 - 1].id,
     amount: "0.1",
   });
 
-  const poridgeRecipe = await Recipe.create({
+  const poridgeRecipe = await Recipe.create({ /* 2 */
     name: "puuro",
     description: descriptions.puuro,
     ownerId: allUsers[1].id,
@@ -122,25 +134,25 @@ const init = async () => {
     imageUri: "poridge_for_recipe"
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* butter */
     recipeId: poridgeRecipe.id,
     itemId: allItems[20 - 1].id,
     amount: "0.1",
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* oat */
     recipeId: poridgeRecipe.id,
     itemId: allItems[21 - 1].id,
     amount: "0.1",
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* rice milk */
     recipeId: poridgeRecipe.id,
     itemId: allItems[22 - 1].id,
     amount: "0.1",
   });
 
-  const ribMeal = await Recipe.create({
+  const ribMeal = await Recipe.create({ /* 3 */
     name: "ribs",
     description: descriptions.ribs,
     ownerId: allUsers[2].id,
@@ -150,37 +162,37 @@ const init = async () => {
 
   console.log('ribMeal.id', ribMeal.id);
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* pork ribs */
     recipeId: ribMeal.id,
     itemId: allItems[16 - 1].id,
     amount: "0.3",
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* brocoli */
     recipeId: ribMeal.id,
     itemId: allItems[17 - 1].id,
     amount: "0.2",
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* carrot */
     recipeId: ribMeal.id,
     itemId: allItems[3 - 1].id,
     amount: "0.1",
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* black pepper */
     recipeId: ribMeal.id,
     itemId: allItems[4 - 1].id,
     amount: "0.02",
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* basmati rice */
     recipeId: ribMeal.id,
     itemId: allItems[5 - 1].id,
     amount: "0.3",
   });
 
-  const preMadeLasagna = await Recipe.create({
+  const preMadeLasagna = await Recipe.create({ /* 4 */
     name: "Premade lasagna",
     description: descriptions.preMadeLasagna,
     ownerId: allUsers[3].id,
@@ -196,7 +208,7 @@ const init = async () => {
     amount: "0.5",
   });
 
-  const bread = await Recipe.create({
+  const bread = await Recipe.create({ /* 5 */
     name: "bread",
     description: descriptions.bread,
     ownerId: allUsers[4].id,
@@ -207,26 +219,31 @@ const init = async () => {
   console.log('bread.id', bread.id);
   console.log('allItems[23-1].id', allItems[23 - 1].id);
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* yeast */
     itemId: allItems[23 - 1].id,
     recipeId: bread.id,
     amount: "0.2",
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* salt */
     itemId: allItems[24 - 1].id,
     recipeId: bread.id,
     amount: "0.2",
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* flour */
     itemId: allItems[13 - 1].id,
     recipeId: bread.id,
     amount: "0.4",
   });
 
+  await RecipeToItem.create({ /* olive oil */
+    itemId: allItems[25 - 1].id,
+    recipeId: bread.id,
+    amount: "0.1",
+  });
 
-  const chocolateBar = await Recipe.create({
+  const chocolateBar = await Recipe.create({ /* 6 */
     name: "chocolateBar",
     description: descriptions.chocolateBar,
     ownerId: allUsers[1].id,
@@ -234,13 +251,13 @@ const init = async () => {
     imageUri: "chocolate_bar"
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* chocolate bar */
     itemId: allItems[8 - 1].id,
     recipeId: chocolateBar.id,
     amount: "0.4",
   });
 
-  const salmon = await Recipe.create({
+  const salmon = await Recipe.create({ /* 7 */
     name: "salmon",
     description: descriptions.salmon,
     ownerId: allUsers[2].id,
@@ -248,13 +265,13 @@ const init = async () => {
     imageUri: "salmon_with_rice"
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* salmon */
     itemId: allItems[15 - 1].id,
     recipeId: salmon.id,
     amount: "1",
   });
 
-  await RecipeToItem.create({
+  await RecipeToItem.create({ /* basmati rice */
     itemId: allItems[5 - 1].id,
     recipeId: salmon.id,
     amount: "0.1",
@@ -271,6 +288,167 @@ const init = async () => {
     recipeId: muikutRecipe.id,
   });
 
+  await RecipeLike.create({
+    userId: allUsers[3].id,
+    recipeId: muikutRecipe.id,
+  });
+
+  await RecipeLike.create({
+    userId: allUsers[1].id,
+    recipeId: bread.id,
+  });
+
+  await RecipeLike.create({
+    userId: allUsers[2].id,
+    recipeId: bread.id,
+  });
+
+  const vegeBolognese = await Recipe.create({ /* 8 */
+    name: "Vegetable bolognese",
+    description: descriptions.vegeBolognese,
+    ownerId: allUsers[3].id,
+    global: true,
+    imageUri: "vegetable_bolognese"
+  });
+
+  await RecipeToItem.create({ /* soy granules */
+    itemId: allItems[38 - 1].id,
+    recipeId: vegeBolognese.id,
+    amount: "0.2",
+  });
+
+  await RecipeToItem.create({ /* tomato sauce */
+    itemId: allItems[9 - 1].id,
+    recipeId: vegeBolognese.id,
+    amount: "0.3"
+  });
+
+  await RecipeToItem.create({ /* spaghetti */
+    itemId: allItems[37 - 1].id,
+    recipeId: vegeBolognese.id,
+    amount: "0.2"
+  });
+
+  await RecipeToItem.create({ /* garlic */
+    itemId: allItems[40 - 1].id,
+    recipeId: vegeBolognese.id,
+    amount: "0.05"
+  });
+
+  const eggplantParmesan = await Recipe.create({ /* 9 */
+    name: "Eggplant parmesan",
+    description: descriptions.eggplant_parmesan,
+    ownerId: allUsers[2].id,
+    global: true,
+    imageUri: "eggplant_parmesan"
+  });
+
+  await RecipeToItem.create({ /* eggplant */
+    itemId: allItems[39 - 1].id,
+    recipeId: eggplantParmesan.id,
+    amount: "0.2",
+  });
+
+  await RecipeToItem.create({ /* parmesan_cheese */
+    itemId: allItems[41 - 1].id,
+    recipeId: eggplantParmesan.id,
+    amount: "0.25",
+  });
+
+  await RecipeToItem.create({ /* flour */
+    itemId: allItems[13 - 1].id,
+    recipeId: eggplantParmesan.id,
+    amount: "0.2",
+  });
+
+  await RecipeToItem.create({ /* mozzarella_cheese */
+    itemId: allItems[42 - 1].id,
+    recipeId: eggplantParmesan.id,
+    amount: "0.125",
+  });
+
+  await RecipeToItem.create({ /* basmati rice */
+    itemId: allItems[5 - 1].id,
+    recipeId: eggplantParmesan.id,
+    amount: "0.1",
+  });
+
+  const spaghettiBolognese = await Recipe.create({ /* 10 */
+    name: "Spaghetti bolognese",
+    description: descriptions.spaghetti_bolognese,
+    ownerId: allUsers[1].id,
+    global: true,
+    imageUri: "spaghetti_bolognese"
+  });
+
+  await RecipeToItem.create({ /* tomato sauce */
+    itemId: allItems[9 - 1].id,
+    recipeId: spaghettiBolognese.id,
+    amount: "0.3",
+  });
+
+  await RecipeToItem.create({ /* ground beef */
+    itemId: allItems[43 - 1].id,
+    recipeId: spaghettiBolognese.id,
+    amount: "0.4",
+  });
+
+  await RecipeToItem.create({ /* spaghetti */
+    itemId: allItems[37 - 1].id,
+    recipeId: spaghettiBolognese.id,
+    amount: "0.2",
+  });
+
+  await RecipeToItem.create({ /* garlic */
+    itemId: allItems[40 - 1].id,
+    recipeId: spaghettiBolognese.id,
+    amount: "0.05",
+  });
+
+  const beefStroganoff = await Recipe.create({ /* 11 */
+    name: "Beef stroganoff",
+    description: descriptions.beef_stroganoff,
+    ownerId: allUsers[3].id,
+    global: true,
+    imageUri: "beef_stroganoff"
+  });
+
+  await RecipeToItem.create({ /* beef strips */
+    itemId: allItems[45 - 1].id,
+    recipeId: beefStroganoff.id,
+    amount: "0.4",
+  });
+
+  await RecipeToItem.create({ /* sour cream */
+    itemId: allItems[44 - 1].id,
+    recipeId: beefStroganoff.id,
+    amount: "0.12",
+  });
+
+  await RecipeToItem.create({ /* basmati rice */
+    itemId: allItems[5 - 1].id,
+    recipeId: beefStroganoff.id,
+    amount: "0.2",
+  });
+
+  await RecipeToItem.create({ /* mushrooms */
+    itemId: allItems[46 - 1].id,
+    recipeId: beefStroganoff.id,
+    amount: "0.35",
+  });
+
+  await RecipeToItem.create({ /* garlic */
+    itemId: allItems[40 - 1].id,
+    recipeId: beefStroganoff.id,
+    amount: "0.05",
+  });
+
+  await RecipeToItem.create({ /* onion */
+    itemId: allItems[47 - 1].id,
+    recipeId: beefStroganoff.id,
+    amount: "0.25",
+  });
+
 };
 
 const connectAndinit = async () => {
@@ -281,7 +459,5 @@ const connectAndinit = async () => {
     console.log(error);
   }
 };
-
 connectAndinit();
-
 /* init(); */

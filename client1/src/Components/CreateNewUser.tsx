@@ -2,8 +2,7 @@ import { Field, Form, Formik } from 'formik';
 import { FormControl, FormErrorMessage, FormLabel, Input, Button } from '@chakra-ui/react';
 import { register } from '../services/user';
 
-const CreateNewUser = (/* { setUser }: SetUserProp */) => {/* 
-  const [user, setUser] = useState(null); */
+const CreateNewUser = () => {
 
   function validateUsername(value) {
     let error;

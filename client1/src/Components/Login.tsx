@@ -34,7 +34,6 @@ function LoginForm(/* { setUser }: SetUserProp */) {
   }
 
   const handleLoginSubmit = async (loginData) => {
-    console.log('loginData', loginData);
     const newLogin = {
       username: loginData.name,
       password: loginData.password,

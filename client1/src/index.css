@@ -79,7 +79,7 @@ button:focus-visible {
   z-index: 1;
   height: 100vh;
   width: 100vw;
-  background-color: cadetblue;
+  background-color: rgb(104, 250, 255);
   position: fixed;
   left: 0;
   top: 0;
@@ -88,7 +88,7 @@ button:focus-visible {
 .recipe-content {
   z-index: 2;
   position: relative;
-  background-color: red;
+  /* background-color: red; */
 }
 
 .fade-in-div {
@@ -98,7 +98,7 @@ button:focus-visible {
   z-index: 1;
   height: 100vh;
   width: 100vw;
-  background-color: cadetblue;
+  background-color: #3182ce;
   left: 0;
   top: 0;
   opacity: 0; /* Start with the div being transparent */

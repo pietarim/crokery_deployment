@@ -1,5 +1,5 @@
 import express from 'express';
-import { getIntroduceRecipes, createRecipe, updateRecipe, deleteRecipe, getUsersOwnRecipes } from '../controllers/recipes';
+import { returnMostLikedRecipes, getIntroduceRecipes, createRecipe, updateRecipe, deleteRecipe, getUsersOwnRecipes, likeRecipeController } from '../controllers/recipes';
 import { parseString, parseNumber, parseIncredient, parseBoolean } from '../config/utils';
 import { get } from 'http';
 import { userExtractor } from '../middleware/userExtractor';
@@ -10,12 +10,22 @@ const router = express.Router();
   const recipes = await getRandomRecipes(req, res);
   res.status(200).json(recipes);
 }); */
-router.get('/user', getUsersOwnRecipes);
-router.get('/', getIntroduceRecipes);
+router.get('/introductory', getIntroduceRecipes);
+router.get('/mostliked', returnMostLikedRecipes);
+router.get('/user', userExtractor, getUsersOwnRecipes);
+router.post('/introductory', getIntroduceRecipes);
+/* async (req, res) => {
+  const receivedRecipeIds = req.body.recipeId;
+  const parsedRecipeIds = parseNumber(receivedRecipeIds);
+  const recipes = await getRandomRecipes(parsedRecipeIds);
+  res.status(200).json(recipes);
+} */
 
 /* router.post('/', userExtractor, async (req, res) => {
   await createRecipe(req, res);
 }); */
+
+router.put('/like/:id', userExtractor, likeRecipeController);
 
 router.post('/', userExtractor, createRecipe);
 
@@ -44,14 +54,6 @@ router.put('/:id', async (req, res) => {
   res.status(200).json({ message: 'Recipe updated' });
 });
 
-router.delete('/:id', async (req, res, next) => {
-  const { id } = req.params;
-  const { userId } = req.body;
-  const parsedId = parseString(id);
-  const parsedUserId = parseNumber(userId);
-
-  await deleteRecipe(parsedId, parsedUserId);
-  res.status(200).json({ message: 'Recipe deleted' });
-});
+router.delete('/:id', userExtractor, deleteRecipe);
 
 export default router;

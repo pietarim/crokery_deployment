@@ -14,6 +14,7 @@ export const userExtractor = (req: RequestWithToken, res: Response, next: NextFu
     const token = authentication.substring(7);
     console.log('token', token);
     const decodedToken = jwt.verify(token, process.env.SECRET as string);
+    console.log('decodedToken', decodedToken);
     req.user = parseUser(decodedToken);
   }
   next();

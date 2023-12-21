@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Tabs, TabList, Tab, TabPanel, TabPanels, Button, Text, Menu, MenuButton, MenuList, MenuItem, IconButton } from "@chakra-ui/react";
+import {
+  Tabs, TabList, Tab, TabPanel, TabPanels, Button, Menu, MenuButton, MenuList,
+  MenuItem, IconButton, Badge
+} from "@chakra-ui/react";
 import { HamburgerIcon } from '@chakra-ui/icons';
 import './App.css';
 import ListRecipes from './Components/ListRecipes';
-import CreateRecipe from "./Components/CreateRecipe";
 import ShoppingList from "./Components/ShoppingList";
 import Login from "./Components/Login";
 import CreateNewUser from './Components/CreateNewUser';
@@ -37,7 +39,6 @@ function App() {
       } catch (err) {
         console.log('not logged in');
       }
-
     };
     getAuthUser();
   }, []);
@@ -60,7 +61,7 @@ function App() {
           case "view":
             return <ListRecipes isMobile={true} />;
           case "create":
-            return <CreateRecipe isMobile={true} />;
+            return <Friend />;
           case "shopping-cart":
             return <ShoppingList isMobile={true} />;
           default:
@@ -89,15 +90,17 @@ function App() {
     } else if (!isMobileView) {
       return (
         <div>
-          <Tabs variant='enclosed'>
-            <TabList>
-              <Tab>Discover recipes</Tab>
-              <Tab>My recipes</Tab>
-              <Tab>Create recipe</Tab>
-              <Tab>Shopping cart</Tab>
-              <Tab>Friends</Tab>
-              <Text>User: {token.username} logged in</Text>
-              <Button onClick={() => handleLogout()}>Log out</Button>
+          <Tabs variant='enclosed' colorScheme='customYellow'>
+            <TabList style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Tab>Discover recipes</Tab>
+                <Tab>Create recipe</Tab>
+                <Tab>Shopping list</Tab>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Badge fontSize='0.8em' colorScheme='blue' mr='2' variant='solid' >User: {token.username} logged in</Badge>
+                <Button colorScheme='customeExit' onClick={() => handleLogout()}>Log out</Button>
+              </div>
             </TabList>
 
             <TabPanels>
@@ -105,16 +108,10 @@ function App() {
                 <ListRecipes isMobile={false} />
               </TabPanel>
               <TabPanel>
-                <p>two!</p>
-              </TabPanel>
-              <TabPanel>
-                {/* <CreateRecipe /> */}
+                <Friend />
               </TabPanel>
               <TabPanel>
                 <ShoppingList />
-              </TabPanel>
-              <TabPanel>
-                <Friend />
               </TabPanel>
             </TabPanels>
           </Tabs>

@@ -58,3 +58,10 @@ export interface TokenUser {
   username: string;
   email: string;
 }
+
+export interface NewUser {
+  username: string;
+  email: string;
+  password: string;
+  isAdmin: boolean;
+}

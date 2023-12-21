@@ -1,9 +1,10 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize, Op } from 'sequelize';
 import { sequelize } from '../config/db';
-import { Recipe, Item, User } from '../models';
+import { Recipe, Item, User, RecipeLike, RecipeToItem } from '../models';
 import { NewRecipe } from '../types';
 
 const recipesByIds = async (ids: number[]) => {
+  console.log(ids, 'ids');
   return await Recipe.findAll({
     where: {
       id: ids
@@ -13,6 +14,7 @@ const recipesByIds = async (ids: number[]) => {
       'name',
       'description',
       'imageUri',
+      'ownerId',
       [Sequelize.fn('COUNT', Sequelize.col('liked.id')), 'like_count']
     ],
     include: [
@@ -33,143 +35,128 @@ const recipesByIds = async (ids: number[]) => {
         }
       }
     ],
-    group: ['recipe.id', 'item.id', 'item->recipeToItem.id'],
+    group: ['recipe.id', 'item.id', 'item->recipeToItem.id']/* ,
+    raw: true */
   });
 };
 
-export const getRandomRecipes = async () => {
+export const getRecipesImageUri = async (recipeId: number) => {
+  const recipe = await Recipe.findByPk(recipeId);
+  if (!recipe) {
+    throw new Error('recipe not found');
+  }
+  return recipe.imageUri;
+};
+
+export const getRandomRecipes = async (oldIds: number[]) => {
+  console.log(oldIds);
   const randomIds = await Recipe.findAll({
     attributes: ['id'],
     order: sequelize.random(),
-    limit: 5
+    limit: 5,
+    where: { id: { [Op.notIn]: oldIds } }
   });
   const ids = randomIds.map((id: any) => id.id);
-  return await recipesByIds(ids);
-  /* return await Recipe.findAll({
-    where: {
-      name: nameArr
-    },
+  const recipes = await recipesByIds(ids);
+  return { recipes, recipeIds: [...oldIds, ...ids] };
+};
+/* const mostLikedRecipeIds = await Recipe.findAll({
+  order: [['like_count', 'DESC']],
+  attributes: ['id'],
+  limit: 5,
+  offset: (page - 1) * 5,
+}); */
+
+export const getMostLikedRecipes = async (page: number) => {
+  const offsetValue = (page - 1) * 5;
+
+  const mostLikedRecipes = await Recipe.findAll({
     attributes: [
       'id',
-      'name',
-      'description',
-      'imageUri',
-      [Sequelize.fn('COUNT', Sequelize.col('liked.id')), 'like_count']
+      [Sequelize.literal(`(
+        SELECT COUNT(*)
+        FROM "recipeLikes" AS rl
+        WHERE rl."recipeId" = recipe.id
+      )`), 'like_count']
     ],
-    include: [
-      {
-        model: Item,
-        as: 'item',
-        attributes: ['id', 'name', 'unitSize', 'type'],
-        through: {
-          attributes: ['amount']
-        }
-      },
-      {
-        model: User,
-        as: 'liked',
-        attributes: [],
-        through: {
-          attributes: [],
-        }
-      }
-    ],
-    group: ['recipe.id', 'item.id', 'item->recipeToItem.id'],
-    order: sequelize.random()
-  }); */
+    order: [[Sequelize.literal('like_count'), 'DESC']],
+    limit: 5,
+    offset: offsetValue
+  });
+
+  /* console.log(mostLikedRecipes, 'mostLikedRecipes'); */
+
+  const ids = mostLikedRecipes.map(recipe => recipe.id);
+  const mostLikedRecipesById = await recipesByIds(ids);
+  const sortedRecipes = mostLikedRecipesById.sort((a: any, b: any) => b.dataValues.like_count - a.dataValues.like_count);
+  return sortedRecipes;
 };
 
-export const getMostLikedRecipes = async () => {
-  const mostLikedRecipeIds = await Recipe.findAll({
-    order: [['liked', 'DESC']],
+export const getUsersRecipes = async (userId: number, page: number) => {
+  console.log('getUsersRecipes inside query');
+  console.log(userId, ' userId', page, ' page');
+  const ownedRecipes = await Recipe.findAll({
     attributes: ['id'],
-    limit: 5
-  });
-  const ids = mostLikedRecipeIds.map((id: any) => id.id);
-  return await recipesByIds(ids);
-  /* return await Recipe.findAll({
-    where: {
-      id: ids
-    },
-    attributes: [
-      'id',
-      'name',
-      'description',
-      'imageUri',
-      [Sequelize.fn('COUNT', Sequelize.col('liked.id')), 'like_count']
-    ],
-    include: [
-      {
-        model: Item,
-        as: 'item',
-        attributes: ['id', 'name', 'unitSize', 'type'],
-        through: {
-          attributes: ['amount']
-        }
-      },
-      {
-        model: User,
-        as: 'liked',
-        attributes: [],
-        through: {
-          attributes: [],
-        }
-      }
-    ],
-    group: ['recipe.id', 'item.id', 'item->recipeToItem.id'],
-    order: sequelize.random()
-  }); */
-};
-
-
-/* export const getMostLikedRecipes = async () => {
-  const randomNames = await Recipe.findAll({
-    order: [['liked', 'DESC']],
-    attributes: ['name'],
-    limit: 10
-  });
-  const nameArr = randomNames.map((name: any) => name.name);
-  return await Recipe.findAll({
-    where: {
-      name: nameArr
-    },
-    attributes: [
-      'id',
-      'name',
-      'description',
-      'imageUri',
-      [Sequelize.fn('COUNT', Sequelize.col('liked.id')), 'like_count']
-    ],
-    include: [
-      {
-        model: Item,
-        as: 'item',
-        attributes: ['id', 'name', 'unitSize', 'type'],
-        through: {
-          attributes: ['amount']
-        }
-      },
-      {
-        model: User,
-        as: 'liked',
-        attributes: [],
-        through: {
-          attributes: [],
-        }
-      }
-    ],
-    group: ['recipe.id', 'item.id', 'item->recipeToItem.id'],
-  });
-}; */
-
-export const getUsersRecipes = async (userId: number) => {
-  return await Recipe.findAll({
     where: {
       ownerId: userId
+    },
+    limit: 5,
+    offset: (page - 1) * 5,
+  });
+  const ids = ownedRecipes.map(recipe => recipe.id);
+  return await recipesByIds(ids);
+};
+
+export const likeRecipe = async (recipeId: number, userId: number) => {
+  console.log('likeRecipe query');
+  const recipe = await Recipe.findByPk(recipeId);
+  console.log('recipe kysely tehty');
+  const user = await User.findByPk(userId);
+  console.log('user kysely tehty');
+  if (!recipe || !user) {
+    throw new Error('recipe or user not found');
+  }
+  const recipeLike = await RecipeLike.findOne({
+    where: {
+      recipeId: recipeId,
+      userId: userId
     }
   });
+  console.log('recipeLike kysely tehty');
+
+  if (recipeLike) {
+    await recipeLike.destroy();
+    return { liked: false };
+  } else {
+    await RecipeLike.create({
+      recipeId: recipeId,
+      userId: userId
+    });
+    return { liked: true };
+  }
 };
 
 export const createRecipe = async (recipe: NewRecipe) => {
   return await Recipe.create(recipe);
+};
+
+export const removeOwnedRecipe = async (recipeId: number, userId: number) => {
+
+  const transaction = await sequelize.transaction();
+  try {
+    const recipe = await Recipe.findByPk(recipeId);
+    if (!recipe) {
+      throw new Error('404');
+    }
+    if (recipe.ownerId !== userId) {
+      throw new Error('401');
+    }
+    await RecipeToItem.destroy({ where: { recipeId: recipeId } });
+    await RecipeLike.destroy({ where: { recipeId: recipeId } });
+    await recipe.destroy();
+    await transaction.commit();
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
+  }
 };

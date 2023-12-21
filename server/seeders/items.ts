@@ -207,7 +207,189 @@ export const items: NewItem[] = [
     brand: "kotimaista",
     price: 0.99,
     pricePerUnit: 1.98,
+  },
+  {
+    name: "olive oil", /* 25 */
+    type: ItemCategory.Other,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 9.20,
+    pricePerUnit: 18.40,
+  },
+  {
+    name: "Greek yougurt", /* 26 */
+    type: ItemCategory.Dairy,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 1.32,
+    pricePerUnit: 2.64,
+  },
+  {
+    name: "almond", /* 27 */
+    type: ItemCategory.Other,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 2.99,
+    pricePerUnit: 5.98,
+  },
+  {
+    name: "quinoa", /* 28 */
+    type: ItemCategory.Other,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 3.99,
+    pricePerUnit: 7.98,
+  },
+  {
+    name: "spinach", /* 29 */
+    type: ItemCategory.Vegetable,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 1.99,
+    pricePerUnit: 3.98,
+  },
+  {
+    name: "fronzen blueberries", /* 30 */
+    type: ItemCategory.Fruit,
+    unitSize: 0.25,
+    brand: "kotimaista",
+    price: 2.99,
+    pricePerUnit: 11.96,
+  },
+  {
+    name: "sweet potato", /* 31 */
+    type: ItemCategory.Vegetable,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 1.99,
+    pricePerUnit: 3.98,
+  },
+  {
+    name: "avocado", /* 32 */
+    type: ItemCategory.Fruit,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 1.99,
+    pricePerUnit: 3.98,
+  },
+  {
+    name: "chia seeds", /* 33 */
+    type: ItemCategory.Other,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 2.99,
+    pricePerUnit: 5.98,
+  },
+  {
+    name: "tofu", /* 34 */
+    type: ItemCategory.Other,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 1.99,
+    pricePerUnit: 3.98,
+  },
+  {
+    name: "honey", /* 35 */
+    type: ItemCategory.Other,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 3.99,
+    pricePerUnit: 7.98,
+  },
+  {
+    name: "eggs", /* 36 */
+    type: ItemCategory.Other,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 1.99,
+    pricePerUnit: 3.98,
+  },
+  {
+    name: "spaghetti", /* 37 */
+    type: ItemCategory.Other,
+    unitSize: 0.5,
+    brand: "barilla",
+    price: 1.65,
+    pricePerUnit: 3.3,
+  },
+  {
+    name: "soy granules", /* 38 */
+    type: ItemCategory.Other,
+    unitSize: 0.5,
+    brand: "vegesun",
+    price: 2.99,
+    pricePerUnit: 5.98,
+  },
+  {
+    name: "eggplant", /* 39 */
+    type: ItemCategory.Vegetable,
+    unitSize: 0.5,
+    brand: "kotimaista",
+    price: 1.99,
+    pricePerUnit: 3.98,
+  },
+  {
+    name: "garlic", /* 40 */
+    type: ItemCategory.Vegetable,
+    unitSize: 0.25,
+    brand: "kotimaista",
+    price: 0.99,
+    pricePerUnit: 3.96,
+  },
+  {
+    name: "parmesan_cheese", /* 41 */
+    type: ItemCategory.Dairy,
+    unitSize: 0.25,
+    brand: "kotimaista",
+    price: 4.99,
+    pricePerUnit: 19.96,
+  },
+  {
+    name: "mozzarella_cheese", /* 42 */
+    type: ItemCategory.Dairy,
+    unitSize: 0.125,
+    brand: "castelli",
+    price: 3.25,
+    pricePerUnit: 26,
+  },
+  {
+    name: "ground beef", /* 43 */
+    type: ItemCategory.Meat,
+    unitSize: 0.4,
+    brand: "atria",
+    price: 3.99,
+    pricePerUnit: 9.975,
+  },
+  {
+    name: "sour cream", /* 44 */
+    type: ItemCategory.Dairy,
+    unitSize: 0.12,
+    brand: "kotimaista",
+    price: 1.15,
+    pricePerUnit: 9.58,
+  },
+  {
+    name: "beef strips", /* 45 */
+    type: ItemCategory.Meat,
+    unitSize: 0.4,
+    brand: "farmhouse",
+    price: 7.15,
+    pricePerUnit: 17.88,
+  },
+  {
+    name: "mushrooms", /* 46 */
+    type: ItemCategory.Vegetable,
+    unitSize: 0.35,
+    brand: "champ",
+    price: 4.59,
+    pricePerUnit: 13.11,
+  },
+  {
+    name: "onion", /* 47 */
+    type: ItemCategory.Vegetable,
+    unitSize: 1,
+    brand: "kotimaista",
+    price: 1.49,
+    pricePerUnit: 1.49,
   }
-
-
 ];
