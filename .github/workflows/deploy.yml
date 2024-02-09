@@ -1,0 +1,50 @@
+#name: Deploy to Digital Ocean
+
+#on:
+#  push:
+#    branches:
+#      - main
+#jobs:
+#  build-and-deploy:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Set up node
+#        uses: actions/setup-node@v2
+#        with:
+#          node-version: '18'
+#
+#      - name: Build backend
+#        run: |
+#          echo "Go to /server"
+#          cd server
+#          echo "Install dependencies"
+#          npm install
+#          echo "Build backend"
+#          ls node_modules/@types
+#          npm run build
+#          cp -R dist build/
+#          cp package.json build/
+#          cp package-lock.json build/
+#          cd build
+#          dir
+
+#      - name: Zip backend
+#        run: |
+#          cd server/build
+#          pwd
+#          dir
+#          zip -r ../../backend.zip .
+#          dir
+
+#      - name: unzip process
+#        run: unzip -l backend.zip
+
+#      - name: Deploy application to Digital Ocean
+#        run: |
+#          ssh -o StrictHostKeyChecking=no ${{ secret.USERNAME }}@${{ secrets.HOST }} << 'EOF'
+#            cd ${{ secrets.DEPLOY_PATH }}
+#            git pull origin main
+#            npm install
+#            pm2 restart all
