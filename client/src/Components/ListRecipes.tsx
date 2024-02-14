@@ -6,7 +6,6 @@ import DetailedRecipe from './DetailedRecipe';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAxios } from '../hooks/useAxios';
 import { DbRecipe } from '../types';
-import { NotificationProvider } from '../context/NotificationContext';
 
 interface ListRecipesProps {
   isMobile: boolean;
@@ -155,43 +154,41 @@ const ListRecipes = ({ isMobile }: ListRecipesProps) => {
   };
 
   return (
-    <NotificationProvider>
-      <div>
-        {getTitleAndOrder()}
-        <div className={fadeIn ? "fade-in-div" : "transparent-div"}>
-          <DetailedRecipe
-            detailedRecipe={detailedRecipe}
-            setFadeIn={setFadeIn}
-            setDetailedRecipe={setDetailedRecipe}
-            isMobile={isMobile}
-            recipe={recipe}
-            setRecipe={setRecipe}
-          />
-        </div>
-        <Divider style={{ marginTop: '10px', color: 'black' }} />
-        {recipeErrorMessage && <Heading as='h2' size='2xl' textAlign="center" flex="1">
-          {recipeErrorMessage}
-        </Heading>}
-        {recipe &&
-          <InfiniteScroll
-            dataLength={recipe.length}
-            next={() => {
-              getRecipes(recipeOrder);
-            }}
-            hasMore={hasMore}
-            loader={<h4>Loading...</h4>}
-            endMessage={
-              <p style={{ textAlign: 'center' }}>
-                <b>All recipes queried</b>
-              </p>
-            }
-          >
-            {recipe.length && recipe.map((recipe: DbRecipe) => (
-              <Recipe key={recipe.id} recipe={recipe} setDetailedRecipe={setDetailedRecipe} />
-            ))}
-          </InfiniteScroll>}
+    <div>
+      {getTitleAndOrder()}
+      <div className={fadeIn ? "fade-in-div" : "transparent-div"}>
+        <DetailedRecipe
+          detailedRecipe={detailedRecipe}
+          setFadeIn={setFadeIn}
+          setDetailedRecipe={setDetailedRecipe}
+          isMobile={isMobile}
+          recipe={recipe}
+          setRecipe={setRecipe}
+        />
       </div>
-    </NotificationProvider>
+      <Divider style={{ marginTop: '10px', color: 'black' }} />
+      {recipeErrorMessage && <Heading as='h2' size='2xl' textAlign="center" flex="1">
+        {recipeErrorMessage}
+      </Heading>}
+      {recipe &&
+        <InfiniteScroll
+          dataLength={recipe.length}
+          next={() => {
+            getRecipes(recipeOrder);
+          }}
+          hasMore={hasMore}
+          loader={<h4>Loading...</h4>}
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              <b>All recipes queried</b>
+            </p>
+          }
+        >
+          {recipe.length && recipe.map((recipe: DbRecipe) => (
+            <Recipe key={recipe.id} recipe={recipe} setDetailedRecipe={setDetailedRecipe} />
+          ))}
+        </InfiniteScroll>}
+    </div>
   );
 };
 

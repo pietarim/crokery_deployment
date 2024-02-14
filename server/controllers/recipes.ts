@@ -75,7 +75,7 @@ export const createRecipe = async (req: any, res: any) => {
       description: parsedDescription,
       ownerId: parsedOwnerId,
       global: parsedGlobal,
-      imageUri: imageUri.split('.')[0]
+      imageUri: imageUri ? imageUri.split('.')[0] : null
     }, { transaction });
 
     const itemList: NewRecipeToItem[] = parsedIncredients.map(
@@ -91,6 +91,7 @@ export const createRecipe = async (req: any, res: any) => {
     res.status(201).send('Recipe created');
 
   } catch (error) {
+    console.log(error);
     await transaction.rollback();
     throw new Error('Saving recipe failed');
   }

@@ -1,50 +1,79 @@
-#name: Deploy to Digital Ocean
+name: Deploy to Digital Ocean
 
-#on:
-#  push:
-#    branches:
-#      - main
-#jobs:
-#  build-and-deploy:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#
-#      - name: Set up node
-#        uses: actions/setup-node@v2
-#        with:
-#          node-version: '18'
-#
-#      - name: Build backend
-#        run: |
-#          echo "Go to /server"
-#          cd server
-#          echo "Install dependencies"
-#          npm install
-#          echo "Build backend"
-#          ls node_modules/@types
-#          npm run build
-#          cp -R dist build/
-#          cp package.json build/
-#          cp package-lock.json build/
-#          cd build
-#          dir
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
-#      - name: Zip backend
-#        run: |
-#          cd server/build
-#          pwd
-#          dir
-#          zip -r ../../backend.zip .
-#          dir
+      - name: Set up node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
 
-#      - name: unzip process
-#        run: unzip -l backend.zip
+      - name: Build client
+        run: |
+          echo "Go to /client"
+          cd client
+          echo "Install dependencies"
+          npm install
+          echo "Build client"
+          npm run build
 
-#      - name: Deploy application to Digital Ocean
-#        run: |
-#          ssh -o StrictHostKeyChecking=no ${{ secret.USERNAME }}@${{ secrets.HOST }} << 'EOF'
-#            cd ${{ secrets.DEPLOY_PATH }}
-#            git pull origin main
-#            npm install
-#            pm2 restart all
+      - name: Build backend
+        run: |
+          pwd
+          echo "Go to /server"
+          cd server
+          pwd
+          echo "Install dependencies"
+          npm install
+          echo "Build backend"
+          ls node_modules/@types
+          npm run build
+          cp -R ../client/dist build/
+          cp package.json build/
+          cp package-lock.json build/
+          rm -rf build/node_modules
+          echo DATABASE_URL=${{ secrets.DATABASE_URL_PRODUCTION }} > build/.env
+          echo PORT=${{ secrets.PORT }} >> build/.env
+          echo SECRET=${{ secrets.SECRET }} >> build/.env
+          echo SERVER_URL=https://grocerylist.today >> build/.env
+          echo "juuri ennen build echo"
+          ls -R -a build/
+
+      - name: Deploy to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_URL }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: 'server/build/*'
+          target: '/home/page/temp'
+
+      - name: Execute Deployment Commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_URL }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/page/www
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            echo "ennen pwd"
+            pwd
+            rm -rf /home/page/www/* && mv /home/page/temp/server/build/* /home/page/www/
+            rm -rf /home/page/temp
+            echo DATABASE_URL=${{ secrets.DATABASE_URL_PRODUCTION }} > .env
+            echo PORT=${{ secrets.PORT }} >> .env
+            echo SECRET=${{ secrets.SECRET }} >> .env
+            echo SERVER_URL=https://grocerylist.today >> .env
+            cp ../ecosystem/ecosystem.config.js ./
+            ls
+            npm install
+            pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js

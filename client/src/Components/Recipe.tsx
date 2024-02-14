@@ -3,7 +3,7 @@ import {
 } from '@chakra-ui/react';
 import { addProduct } from '../redux/modules/shoppingCart';
 import { useDispatch } from 'react-redux';
-import { useNotification } from '../hooks/useNotofication';
+import { useNotification } from '../hooks/useNotification';
 import { Item, DbRecipe } from '../types';
 import { base_url } from '../config';
 

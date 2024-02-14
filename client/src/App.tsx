@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   Tabs, TabList, Tab, TabPanel, TabPanels, Button, Menu, MenuButton, MenuList,
-  MenuItem, IconButton, Badge
+  MenuItem, IconButton, Badge, Flex
 } from "@chakra-ui/react";
 import { HamburgerIcon } from '@chakra-ui/icons';
 import './App.css';
@@ -27,15 +27,14 @@ function App() {
         setIsMobileView(false);
       }
     };
-    window.addEventListener('resize', handleResize); // TODO is this doing anything?
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
     const getAuthUser = async () => {
       try {
         const user = await get('/auth/access-token', { withCredentials: true });
-        setToken({ token: user.data.token, username: user.data.username, id: user.data.id }); // handle error
+        setToken({ token: user.data.token, username: user.data.username, id: user.data.id });
       } catch (err) {
         console.log('not logged in');
       }
@@ -50,10 +49,21 @@ function App() {
 
   if (!token) {
     return (
-      <div>
-        <Login />
-        <CreateNewUser />
-      </div>
+      <Flex align='center' justify='center'>
+        <Tabs isFitted variant='enclosed' colorScheme='customYellow' width={{ md: '600px' }}>
+          <TabList>
+            <Tab>Login</Tab>
+            <Tab>Register</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <Login />
+            </TabPanel>
+            <TabPanel>
+              <CreateNewUser />
+            </TabPanel>
+          </TabPanels>
+        </Tabs></Flex>
     );
   } else {
     if (isMobileView) {

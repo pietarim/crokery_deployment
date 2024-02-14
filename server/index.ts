@@ -1,5 +1,6 @@
 require('express-async-errors');
 import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import config from './config/config';
 import { userRouter, recipeRouter, itemRouter, imageRouter, authRouter } from './routes';
@@ -10,7 +11,6 @@ import path from 'path';
 
 const { Model, DataTypes, Sequelize, QueryTypes } = require('sequelize');
 
-dotenv.config();
 const app = express();
 app.use(cookieParser());
 const port = config.port;
@@ -41,8 +41,9 @@ const main = async () => {
 main();
 
 const url = config.url;
+console.log(`Tässä on url suoraan .env filestä: ${process.env.SERVER_URL}`);
 
-const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:3001', 'http://localhost:5173', url];
+const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:3001', 'http://localhost:5173', url, 'https://grocerylist.today'];
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -74,4 +75,5 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  console.log(`Tässä on url jos toimii: ${url}`);
 });

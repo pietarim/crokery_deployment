@@ -68,13 +68,10 @@ const ShoppingList = ({ isMobile }: ShoppingListProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
   let shoppingList = useSelector((state: AppState) => state.shoppingCart);
-  console.log('shoppingList from state: ', shoppingList); // TODO: remove
   if (!shoppingList.items.length) {
-    console.log('localStoragesta haku'); // TODO: remove
     shoppingList = localStorage.getItem('shoppingCart')
       ? JSON.parse(localStorage.getItem('shoppingCart') || '{}') : { items: [] };
   }
-  console.log('shoppingList: ', shoppingList); // TODO: remove
 
   if (!shoppingList.items.length) {
     return (
@@ -136,37 +133,6 @@ const ShoppingList = ({ isMobile }: ShoppingListProps) => {
     }
   }
 
-  /* const returnTitle = (title: string) => {
-    console.log(title); // TODO: remove
-    return (
-      <Tr key={title}>
-        <Th style={{ backgroundColor: "lightBlue" }}>{title}</Th>
-      </Tr>
-    );
-  };
-
-  const returnItem = (item: RecipeItemCalc) => {
-    console.log('name: ', item.name, ' ', 'amount: ', item.amount, ' ', 'unitSize: ', item.unitSize, ' calculation: ', Math.ceil(item.amount / parseFloat(item.unitSize))); // TODO: remove 
-    if (!isMobile) {
-      return (
-        <Tr key={item.name}>
-          <Td>{item.name}</Td>
-          <Td>{item.amount.toFixed(2)}</Td>
-          <Td>amount: count {Math.ceil(item.amount / parseFloat(item.unitSize))}</Td> </Tr>
-      );
-    }
-    else {
-      return (
-        <Tbody key={item.name}>
-          <Tr>
-            <Td>{item.name}</Td>
-            <Td>count {Math.ceil(item.amount / parseFloat(item.unitSize))}</Td>
-          </Tr>
-        </Tbody>
-      );
-    }
-  };
- */
   const returnItemsAndTitles = () => {
     {
       return itemsAndTypes.map((i: ItemAndTitle) => {
@@ -174,8 +140,6 @@ const ShoppingList = ({ isMobile }: ShoppingListProps) => {
           return (<Tr key={i}>
             <Th>{i || "tittle not found"}</Th>
           </Tr>);
-
-          /* return returnTitle(i); */
         } else {
           if (!isMobile) {
             return (
@@ -185,12 +149,6 @@ const ShoppingList = ({ isMobile }: ShoppingListProps) => {
                 <Td>amount: count {Math.ceil(i.amount / parseFloat(i.unitSize)) || "count not found"}</Td>
               </Tr>
             );
-            /* return (
-              <Tr key={n}>
-                <Th>malformated info</Th>
-              </Tr>
-            ); */
-            /* } */
           }
           else {
             return (
@@ -202,12 +160,6 @@ const ShoppingList = ({ isMobile }: ShoppingListProps) => {
               </Tbody>
             );
           }
-          /* return (<Tr key={n}>
-            <Td>nimi</Td>
-            <Td>sukunimi</Td>
-            <Td>Social credit score</Td>
-          </Tr>); */
-          /* return returnItem(i); */
         }
       });
     }

@@ -22,7 +22,9 @@ export const errorHandler: ErrorRequestHandler = (error: ErrorWithMessage, _req:
     return res.status(401).json({
       error: 'invalid token',
     });
-  } return res.status(500).json({
+  }
+  console.log('error.message', error.message);
+  return res.status(500).json({
     error: 'Something went wrong',
   });
   next(error);

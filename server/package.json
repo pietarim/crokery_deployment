@@ -11,7 +11,9 @@
     "dev": "nodemon --exec cross-env NODE_ENV=development NODE_ENV=development ts-node ./index.ts",
     "local:db": "docker run -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 postgres",
     "db:dev-data": "ts-node seeders/devInitQueries.ts",
-    "db:rollback": "ts-node seeders/rollBackMigrations.ts"
+    "db:rollback": "ts-node seeders/rollBackMigrations.ts",
+    "db:migrate:prod": "node script/startMigration.js",
+    "seed:items:prod": "node script/seedProductionItems.js"
   },
   "author": "Pietari Murtomäki",
   "license": "SEE LICENSE IN readme.md",

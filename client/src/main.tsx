@@ -7,13 +7,16 @@ import store from './redux/store';
 import { Provider } from 'react-redux';
 import { AuthProvider } from './context/AuthContext';
 import { theme } from './theme';
+import { NotificationProvider } from './context/NotificationContext.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <Provider store={store}>
         <AuthProvider>
-          <App />
+          <NotificationProvider>
+            <App />
+          </NotificationProvider>
         </AuthProvider>
       </Provider>
     </ChakraProvider>
