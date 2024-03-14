@@ -7,14 +7,13 @@ export enum ItemCategory {
   Other = 'other',
   Spice = 'spice',
   Premade = 'premade',
-  FrozenPremade = 'frozen_premade',
+  FrozenPremade = 'frozen premade',
   Candy = 'candy',
   Sauce = 'sauce',
   Fish = 'fish',
   Seafood = 'seafood',
   Baking = 'baking',
   Ice_cream = 'ice cream',
-  Frozen_prem = 'frozen_prem'
 }
 
 export interface NewRecipesItem {

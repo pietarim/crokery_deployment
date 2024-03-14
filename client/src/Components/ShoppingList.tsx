@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Heading, List, ListItem, Flex, Card, TableContainer, Table, Tr, Th, Td, Tbody, Text,
   Button, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, useDisclosure, DrawerCloseButton,
@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/react";
 import _ from "lodash";
 import { addProductById, removeProductById } from "../redux/modules/shoppingCart";
-import { useDispatch } from "react-redux";
+import { useWidth } from "../hooks/useWidth";
 
 interface RecipeToItem {
   amount: string;
@@ -60,18 +60,11 @@ interface RecipeItemCalc {
 type ItemAndTitle = RecipeItemCalc | string;
 type ItemByType = Array<RecipeItemCalc | string>;
 
-interface ShoppingListProps {
-  isMobile: boolean;
-}
-
-const ShoppingList = ({ isMobile }: ShoppingListProps) => {
+const ShoppingList = () => {
+  const isMobile = useWidth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
-  let shoppingList = useSelector((state: AppState) => state.shoppingCart);
-  if (!shoppingList.items.length) {
-    shoppingList = localStorage.getItem('shoppingCart')
-      ? JSON.parse(localStorage.getItem('shoppingCart') || '{}') : { items: [] };
-  }
+  const shoppingList = useSelector((state: AppState) => state.shoppingCart);
 
   if (!shoppingList.items.length) {
     return (
@@ -123,7 +116,6 @@ const ShoppingList = ({ isMobile }: ShoppingListProps) => {
     }
   }, []);
 
-
   const itemAmounts: { [key: string]: number; } = {};
   for (const item of itemsList) {
     if (itemAmounts[item.name]) {
@@ -137,9 +129,10 @@ const ShoppingList = ({ isMobile }: ShoppingListProps) => {
     {
       return itemsAndTypes.map((i: ItemAndTitle) => {
         if (typeof i === 'string') {
-          return (<Tr key={i}>
-            <Th>{i || "tittle not found"}</Th>
-          </Tr>);
+          return (
+            <Tr key={i}>
+              <Th>{i || "tittle not found"}</Th>
+            </Tr>);
         } else {
           if (!isMobile) {
             return (
@@ -149,15 +142,12 @@ const ShoppingList = ({ isMobile }: ShoppingListProps) => {
                 <Td>amount: count {Math.ceil(i.amount / parseFloat(i.unitSize)) || "count not found"}</Td>
               </Tr>
             );
-          }
-          else {
+          } else {
             return (
-              <Tbody key={i.name}>
-                <Tr>
-                  <Td>{i.name}</Td>
-                  <Td>count {Math.ceil(i.amount / parseFloat(i.unitSize))}</Td>
-                </Tr>
-              </Tbody>
+              <Tr key={i.name}>
+                <Td>{i.name}</Td>
+                <Td>count {Math.ceil(i.amount / parseFloat(i.unitSize))}</Td>
+              </Tr>
             );
           }
         }
@@ -180,14 +170,14 @@ const ShoppingList = ({ isMobile }: ShoppingListProps) => {
                 {returnItemsAndTitles()}</Tbody>
             </Table>
           </TableContainer>
-          <Card style={{ backgroundColor: '#e6f9ff' }} variant='elevated' minW='175px'>
+          <Card style={{ backgroundColor: '#e2e6e9' /* '#e6f9ff' */ }} variant='elevated' minW='175px'>
             <List>
               {shoppingList.items.map((item) => (
                 <ListItem key={item.id}>
                   <Text>{item.name} {item.count}</Text>
                   <Button
                     mr='2'
-                    colorScheme="customYellow"
+                    colorScheme="anotherCustomYellow"
                     onClick={() => dispatch(addProductById(item.id))}>
                     +
                   </Button>

@@ -18,7 +18,11 @@ export const useAxios = () => {
     try {
       const response = await axios.get(`${baseURL}/auth/access-token`, { withCredentials: true });
       const newAccessToken = response.data;
-      setToken({ token: newAccessToken.token, username: newAccessToken.username, id: newAccessToken.id });
+      setToken({
+        token: newAccessToken.token,
+        username: newAccessToken.username,
+        id: newAccessToken.id
+      });
       return newAccessToken.token;
     } catch (error) {
       console.error('Error refreshing access token', error);

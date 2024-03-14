@@ -16,9 +16,21 @@ interface ShoppingCartState {
   items: RecipeItem[];
 }
 
-const initialState: ShoppingCartState = {
-  items: [],
+const getInitialState = (): ShoppingCartState => {
+  const shoppingCart = localStorage.getItem('shoppingCart');
+  if (shoppingCart) {
+    try {
+      const parsedShoppingCart: ShoppingCartState = JSON.parse(shoppingCart);
+      return parsedShoppingCart;
+    } catch (error) {
+      console.error('Error parsing shopping cart from local storage', error);
+      return { items: [] };
+    }
+  }
+  return { items: [] };
 };
+
+const initialState: ShoppingCartState = getInitialState();
 
 const setLocalStorage = (state: ShoppingCartState) => {
   localStorage.setItem('shoppingCart', JSON.stringify(state));
@@ -68,7 +80,7 @@ const shoppingCartSlice = createSlice({
         state.items = state.items.filter(item => item.id !== action.payload);
       }
       setLocalStorage(state);
-    },
+    }
   },
 });
 

@@ -4,7 +4,7 @@ import {
   MenuItem, IconButton, Badge, Flex
 } from "@chakra-ui/react";
 import { HamburgerIcon } from '@chakra-ui/icons';
-import './App.css';
+/* import './App.css'; */
 import ListRecipes from './Components/ListRecipes';
 import ShoppingList from "./Components/ShoppingList";
 import Login from "./Components/Login";
@@ -12,12 +12,15 @@ import CreateNewUser from './Components/CreateNewUser';
 import { useAxios } from './hooks/useAxios';
 import { useAuth } from './hooks/useAuth';
 import CreateRecipe from './Components/CreateRecipe';
+import { useNotification } from './hooks/useNotification';
 
 function App() {
   const { setToken, token } = useAuth();
   const { get } = useAxios();
   const [isMobileView, setIsMobileView] = useState(false);
   const [mobileRoute, setMobileRoute] = useState<string>('');
+
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     const handleResize = () => {
@@ -43,8 +46,14 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleLogout = () => {
-    setToken(null);
+  const handleLogout = async () => {
+    try {
+      await get('/auth/logout', { withCredentials: true });
+      setToken(null);
+    }
+    catch {
+      showNotification('Failed to log out', 'error');
+    }
   };
 
   if (!token) {
@@ -70,13 +79,13 @@ function App() {
       const returnMobileRoute = () => {
         switch (mobileRoute) {
           case "view":
-            return <ListRecipes isMobile={true} />;
+            return <ListRecipes />;
           case "create":
             return <CreateRecipe />;
           case "shopping-cart":
-            return <ShoppingList isMobile={true} />;
+            return <ShoppingList />;
           default:
-            return <ListRecipes isMobile={true} />;
+            return <ListRecipes />;
         }
       };
       return (
@@ -121,7 +130,7 @@ function App() {
               </div>
             </TabList>
 
-            <TabPanels>
+            {/* <TabPanels>
               <TabPanel>
                 <ListRecipes isMobile={false} />
               </TabPanel>
@@ -131,7 +140,7 @@ function App() {
               <TabPanel>
                 <ShoppingList isMobile={false} />
               </TabPanel>
-            </TabPanels>
+            </TabPanels> */}
           </Tabs>
         </div>
       );

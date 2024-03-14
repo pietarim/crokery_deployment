@@ -61,12 +61,12 @@ function LoginForm() {
         <Heading mb={8} mt={6}>Log in</Heading>
         <Formik
           initialValues={{ name: '', password: '' }}
-          onSubmit={(values, actions) => {
+          onSubmit={async (values, actions) => {
             const loginData = {
               name: values.name,
               password: values.password,
             };
-            handleLoginSubmit(loginData);
+            await handleLoginSubmit(loginData);
             actions.setSubmitting(false);
           }}
         >

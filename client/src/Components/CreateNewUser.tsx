@@ -39,7 +39,12 @@ const CreateNewUser = () => {
   }
 
   const handleCreateNewUserSubmit = async (newUser: NewUser) => {
-    await register(newUser);
+    try {
+      await register(newUser);
+      showNotification('User created', 'success');
+    } catch {
+      showNotification('Error creating user', 'error');
+    }
   };
 
   return (
@@ -48,20 +53,14 @@ const CreateNewUser = () => {
         <Heading mb={8} mt={6}>Register</Heading>
         <Formik
           initialValues={{ username: '', email: '', password: '' }}
-          onSubmit={(values, actions) => {
+          onSubmit={async (values, actions) => {
             const newUser = {
               username: values.username,
               email: values.email,
               password: values.password,
             };
-            try {
-              handleCreateNewUserSubmit(newUser);
-              actions.setSubmitting(false);
-              showNotification('User created', 'success');
-            } catch (error) {
-              actions.setSubmitting(false);
-              showNotification('Error creating user', 'error');
-            }
+            await handleCreateNewUserSubmit(newUser);
+            actions.setSubmitting(false);
           }}
         >
           {(props) => (

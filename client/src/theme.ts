@@ -41,6 +41,20 @@ export const theme = extendTheme({
       900: '#1a4731',
       custom: '#CF9332'
     },
+    anotherCustomYellow: { // #1 on the complementary line yellow harvest gold
+      50: '#f7c26e',
+      100: '#f5b856',
+      200: '#f4ae3e',
+      300: '#f2a426',
+      400: '#f19a0e',
+      500: '#DB8C0D',
+      600: '#c17b0b',
+      700: '#a96c0a',
+      800: '#915c08',
+      900: '#784d07',
+      custom: '#DB8C0D'
+    },
+
     customCoyote: { // #4 on the complementary line
       50: '#B5A07E',
       100: '#AD9570',
@@ -48,9 +62,9 @@ export const theme = extendTheme({
       300: '#987F57',
       400: '#89734F',
       500: '#7A6646',
-      600: '#726042',
-      700: '#69583D',
-      800: '#615138',
+      600: '#51442f' /* '#726042' */,
+      700: '#51442f' /* '#69583D' */,
+      800: '#51442f' /* '#615138' */,
       900: '#584A33',
       custom: '#7A6646'
     },

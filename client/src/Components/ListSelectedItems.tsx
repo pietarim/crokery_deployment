@@ -62,7 +62,7 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
       <Flex direction='column'>
         <Flex direction='row' align='center' justify='center' mt='3'>
           <Text style={{
-            backgroundColor: customYellow,
+            backgroundColor: '#466C8F' /* customYellow */,
             margin: '3px',
             borderRadius: '20px',
             display: 'inline-block',
@@ -70,15 +70,17 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
           }}>{selectedItem ? selectedItem.name : 'pick item'}</Text>
           {numberImput()}
         </Flex>
-        <Button
-          colorScheme='customeExit'
-          variant='outline'
-          isDisabled={(!selectedItem || itemAmount === '0.00') ? true : false}
-          onClick={() => addItemsToArr(true)}
-          mt='5'
-        >
-          Add item
-        </Button>
+        <Flex /* direction='row' */ /* align='center' */ justify='center' /* mt='3' */>
+          <Button
+            width='auto'
+            colorScheme='customeExit'
+            variant='outline'
+            isDisabled={(!selectedItem || itemAmount === '0.00') ? true : false}
+            onClick={() => addItemsToArr(true)}
+            mt='5'
+          >
+            Add item
+          </Button></Flex>
       </Flex>
     );
   } else {
@@ -87,7 +89,7 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
         <List style={{ backgroundColor: "white", borderRadius: '6px', padding: "4px" }}>
           {itemArray.length && itemArray.map((item, id) => {
             return <ListItem
-              style={{ backgroundColor: bgColor, margin: '3px', borderRadius: '20px', display: 'inline-block', padding: '4px' }}
+              style={{ backgroundColor: '#DBBE0D' /* bgColor */, margin: '3px', borderRadius: '20px', display: 'inline-block', padding: '4px' }}
               key={id}>{item.name} {item.amount}
             </ListItem>;
           })}
@@ -96,7 +98,7 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
           <Text
             m='3'
             style={{
-              backgroundColor: customYellow,
+              backgroundColor: '#DB8C0D' /* '#0D7ADB' */ /* customYellow */, /* todo this pretty good */
               borderRadius: '20px',
               display: 'inline-block',
               padding: '4px'

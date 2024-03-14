@@ -38,7 +38,7 @@ Item.init({
       'meat', 'vegetable', 'spice', 'other', 'rice',
       'premade', 'frozen_premade', 'candy', 'sauce',
       'fish', 'seafood', 'dairy', 'fruit', 'baking',
-      'ice cream', 'frozen_prem', 'grain'
+      'ice cream', 'grain'
     ],
     allowNull: false
   },

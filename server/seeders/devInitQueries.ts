@@ -108,7 +108,7 @@ const init = async () => {
     amount: "1",
   });
 
-  await RecipeToItem.create({ /* korppujauhot */
+  await RecipeToItem.create({ /* breadcrumbs */
     recipeId: muikutRecipe.id,
     itemId: allItems[19 - 1].id,
     amount: "0.1",
@@ -191,8 +191,6 @@ const init = async () => {
     global: false,
     imageUri: "lasagna"
   });
-
-  console.log('preMadeLasagna.id', preMadeLasagna.id);
 
   await RecipeToItem.create({
     recipeId: preMadeLasagna.id,

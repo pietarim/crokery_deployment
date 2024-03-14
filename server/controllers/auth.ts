@@ -47,14 +47,14 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const refreshToken = createRefreshToken();
     addRefreshtoken(userFromDb.id, refreshToken);
 
-    const token = jwt.sign(userForToken, process.env.SECRET as string, { expiresIn: '2m' });
+    const accessToken = jwt.sign(userForToken, process.env.SECRET as string, { expiresIn: '2m' });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: false,
       maxAge: 1000 * 60 * 60 * 24 * 7,
       sameSite: 'none'
     });
-    res.status(200).send({ token, username: userFromDb.username, id: userFromDb.id });
+    res.status(200).send({ token: accessToken, username: userFromDb.username, id: userFromDb.id });
   }
 };
 
