@@ -195,6 +195,7 @@ const CreateRecipe = () => {
                   <br />
                   <Button
                     mt={8}
+                    mb={7}
                     colorScheme='customYellow'
                     isLoading={props.isSubmitting}
                     type='submit'

@@ -12,12 +12,15 @@ import CreateNewUser from './Components/CreateNewUser';
 import { useAxios } from './hooks/useAxios';
 import { useAuth } from './hooks/useAuth';
 import CreateRecipe from './Components/CreateRecipe';
+import { useNotification } from './hooks/useNotification';
 
 function App() {
   const { setToken, token } = useAuth();
   const { get } = useAxios();
   const [isMobileView, setIsMobileView] = useState(false);
   const [mobileRoute, setMobileRoute] = useState<string>('');
+
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     const handleResize = () => {
@@ -43,8 +46,14 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleLogout = () => {
-    setToken(null);
+  const handleLogout = async () => {
+    try {
+      await get('/auth/logout', { withCredentials: true });
+      setToken(null);
+    }
+    catch {
+      showNotification('Failed to log out', 'error');
+    }
   };
 
   if (!token) {

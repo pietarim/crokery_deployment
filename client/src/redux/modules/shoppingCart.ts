@@ -16,9 +16,21 @@ interface ShoppingCartState {
   items: RecipeItem[];
 }
 
-const initialState: ShoppingCartState = {
-  items: [],
+const getInitialState = (): ShoppingCartState => {
+  const shoppingCart = localStorage.getItem('shoppingCart');
+  if (shoppingCart) {
+    try {
+      const parsedShoppingCart: ShoppingCartState = JSON.parse(shoppingCart);
+      return parsedShoppingCart;
+    } catch (error) {
+      console.error('Error parsing shopping cart from local storage', error);
+      return { items: [] };
+    }
+  }
+  return { items: [] };
 };
+
+const initialState: ShoppingCartState = getInitialState();
 
 const setLocalStorage = (state: ShoppingCartState) => {
   localStorage.setItem('shoppingCart', JSON.stringify(state));
@@ -37,6 +49,7 @@ const shoppingCartSlice = createSlice({
         const newItem = { ...action.payload, count: 1 };
         state.items.push(newItem);
       }
+      console.log(JSON.parse(JSON.stringify(state))); // TODO remove
       setLocalStorage(state);
     },
     removeProduct(state, action) {
@@ -51,7 +64,7 @@ const shoppingCartSlice = createSlice({
     },
     addProductById(state, action) {
       const index = state.items.findIndex(item => item.id === action.payload);
-      if (index !== -1) {
+      if (index !== -1) { // TODO can it never be -1?
         state.items[index].count += 1;
       } else {
         const newItem = { ...action.payload, count: 1 };
@@ -68,7 +81,7 @@ const shoppingCartSlice = createSlice({
         state.items = state.items.filter(item => item.id !== action.payload);
       }
       setLocalStorage(state);
-    },
+    }
   },
 });
 

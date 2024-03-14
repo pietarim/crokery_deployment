@@ -108,7 +108,7 @@ const init = async () => {
     amount: "1",
   });
 
-  await RecipeToItem.create({ /* korppujauhot */
+  await RecipeToItem.create({ /* breadcrumbs */
     recipeId: muikutRecipe.id,
     itemId: allItems[19 - 1].id,
     amount: "0.1",

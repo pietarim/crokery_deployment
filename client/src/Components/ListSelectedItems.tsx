@@ -70,15 +70,17 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
           }}>{selectedItem ? selectedItem.name : 'pick item'}</Text>
           {numberImput()}
         </Flex>
-        <Button
-          colorScheme='customeExit'
-          variant='outline'
-          isDisabled={(!selectedItem || itemAmount === '0.00') ? true : false}
-          onClick={() => addItemsToArr(true)}
-          mt='5'
-        >
-          Add item
-        </Button>
+        <Flex /* direction='row' */ /* align='center' */ justify='center' /* mt='3' */>
+          <Button
+            width='auto'
+            colorScheme='customeExit'
+            variant='outline'
+            isDisabled={(!selectedItem || itemAmount === '0.00') ? true : false}
+            onClick={() => addItemsToArr(true)}
+            mt='5'
+          >
+            Add item
+          </Button></Flex>
       </Flex>
     );
   } else {

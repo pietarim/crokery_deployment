@@ -3,7 +3,7 @@ import { NewItem, ItemCategory } from "../types";
 
 export const items: NewItem[] = [
   {
-    name: "muikut", /* 1 */
+    name: "vendaces", /* 1 */
     type: ItemCategory.Fish,
     unitSize: 0.15,
     brand: "kotimaista",
@@ -147,7 +147,7 @@ export const items: NewItem[] = [
     pricePerUnit: 74.75,
   },
   {
-    name: "korppujauho", /* 19 */
+    name: "breadcrumbs", /* 19 */
     type: ItemCategory.Other,
     unitSize: 0.4,
     brand: "kotimaista",

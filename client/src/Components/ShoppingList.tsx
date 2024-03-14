@@ -67,11 +67,7 @@ interface ShoppingListProps {
 const ShoppingList = ({ isMobile }: ShoppingListProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
-  let shoppingList = useSelector((state: AppState) => state.shoppingCart);
-  if (!shoppingList.items.length) {
-    shoppingList = localStorage.getItem('shoppingCart')
-      ? JSON.parse(localStorage.getItem('shoppingCart') || '{}') : { items: [] };
-  }
+  const shoppingList = useSelector((state: AppState) => state.shoppingCart);
 
   if (!shoppingList.items.length) {
     return (
