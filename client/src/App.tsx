@@ -4,7 +4,7 @@ import {
   MenuItem, IconButton, Badge, Flex
 } from "@chakra-ui/react";
 import { HamburgerIcon } from '@chakra-ui/icons';
-import './App.css';
+/* import './App.css'; */
 import ListRecipes from './Components/ListRecipes';
 import ShoppingList from "./Components/ShoppingList";
 import Login from "./Components/Login";
@@ -130,7 +130,7 @@ function App() {
               </div>
             </TabList>
 
-            <TabPanels>
+            {/* <TabPanels>
               <TabPanel>
                 <ListRecipes isMobile={false} />
               </TabPanel>
@@ -140,7 +140,7 @@ function App() {
               <TabPanel>
                 <ShoppingList isMobile={false} />
               </TabPanel>
-            </TabPanels>
+            </TabPanels> */}
           </Tabs>
         </div>
       );

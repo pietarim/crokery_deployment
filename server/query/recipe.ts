@@ -70,7 +70,7 @@ export const getMostLikedRecipes = async (page: number) => {
         WHERE rl."recipeId" = recipe.id
       )`), 'like_count']
     ],
-    order: [[Sequelize.literal('like_count'), 'DESC']],
+    order: [[Sequelize.literal('like_count'), 'DESC'], ['id', 'ASC']],
     limit: 5,
     offset: offsetValue
   });
@@ -89,6 +89,7 @@ export const getUsersRecipes = async (userId: number, page: number) => {
     },
     limit: 5,
     offset: (page - 1) * 5,
+    order: [['id', 'ASC']]
   });
   const ids = ownedRecipes.map(recipe => recipe.id);
   return await recipesByIds(ids);

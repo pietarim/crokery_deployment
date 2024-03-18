@@ -4,15 +4,12 @@ import axios from 'axios';
 import { Heading, Divider, Select, Flex } from '@chakra-ui/react';
 import DetailedRecipe from './DetailedRecipe';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useAxios } from '../hooks/useAxios';
+import { useAxios, useWidth } from '../hooks';
 import { DbRecipe } from '../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { setRecipes, addRecipes } from '../redux/modules/recipes';
 
-interface ListRecipesProps {
-  isMobile: boolean;
-}
-
-const ListRecipes = ({ isMobile }: ListRecipesProps) => {
-  const [recipe, setRecipe] = useState<DbRecipe[]>([]);
+const ListRecipes = () => {
   const [fadeIn, setFadeIn] = useState(false);
   const [detailedRecipe, setDetailedRecipe] = useState<DbRecipe | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,7 +18,15 @@ const ListRecipes = ({ isMobile }: ListRecipesProps) => {
   const [recipeErrorMessage, setRecipeErrorMessage] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
 
+  interface AppState {
+    recipe: DbRecipe[];
+  }
+
+  const isMobile = useWidth();
   const { get, post } = useAxios();
+  const dispatch = useDispatch();
+  const recipe = useSelector((state: AppState) => state.recipe);
+
   const getRecipes = async (newOrder: string) => {
     switch (newOrder) {
       case 'shuffle':
@@ -30,13 +35,13 @@ const ListRecipes = ({ isMobile }: ListRecipesProps) => {
           if (recipe.length === 0 || recipeOrder !== "shuffle") {
             const recipeReponse = await get('/recipes/introductory');
             const recipeData = recipeReponse.data;
-            setRecipe(recipeData.recipes);
+            dispatch(setRecipes(recipeData.recipes));
             setIntroducturyRecipeIds(recipeData?.recipeIds);
             setHasMore(recipeData.hasMore);
           } else {
             const recipeResponse = await post('/recipes/introductory', { recipeIds: introducturyRecipeIds });
             const recipeData = recipeResponse.data;
-            setRecipe(recipe.concat(recipeData?.recipes));
+            dispatch(addRecipes(recipeData.recipes));
             setIntroducturyRecipeIds(recipeData?.recipeIds);
             setHasMore(recipeData.hasMore);
           }
@@ -50,13 +55,13 @@ const ListRecipes = ({ isMobile }: ListRecipesProps) => {
           if (recipeOrder !== "mostLiked") {
             const recipeResponse = await get('/recipes/mostliked?page=' + 1);
             const recipeData = recipeResponse.data;
-            setRecipe(recipeData.recipes);
+            dispatch(setRecipes(recipeData.recipes));
             setCurrentPage(2);
             setHasMore(recipeData.hasMore);
           } else if (recipe) {
             const recipeResponse = await get('/recipes/mostLiked?page=' + currentPage);
             const recipeData = recipeResponse.data;
-            setRecipe([...recipe, ...recipeData.recipes]);
+            dispatch(addRecipes(recipeData.recipes));
             setHasMore(recipeData.hasMore);
             setCurrentPage(currentPage + 1);
           }
@@ -76,12 +81,12 @@ const ListRecipes = ({ isMobile }: ListRecipesProps) => {
               return;
             }
             const recipeData = recipeResponse.data;
-            setRecipe(recipeData.recipes);
+            dispatch(setRecipes(recipeData.recipes));
             setCurrentPage(2);
           } else {
             const recipeResponse = await get('/recipes/user?page=' + currentPage);
             const recipeData = recipeResponse.data;
-            setRecipe([...recipe, ...recipeData.recipes]);
+            dispatch(addRecipes(recipeData.recipes));
             setCurrentPage(currentPage + 1);
             setHasMore(recipeData.hasMore);
           }
@@ -90,7 +95,7 @@ const ListRecipes = ({ isMobile }: ListRecipesProps) => {
             if (error.response) {
               const status = error.response.status;
               if (status === 404 && currentPage === 1) {
-                setRecipe([]);
+                dispatch(setRecipes([]));
                 setRecipeErrorMessage("You don't have any recipes yet");
               }
             }
@@ -122,6 +127,7 @@ const ListRecipes = ({ isMobile }: ListRecipesProps) => {
     setCurrentPage(1);
     getRecipes(e.target.value);
     setRecipeOrder(e.target.value);
+    setIntroducturyRecipeIds([]);
   };
 
   const getTitleAndOrder = () => {
@@ -161,9 +167,6 @@ const ListRecipes = ({ isMobile }: ListRecipesProps) => {
           detailedRecipe={detailedRecipe}
           setFadeIn={setFadeIn}
           setDetailedRecipe={setDetailedRecipe}
-          isMobile={isMobile}
-          recipe={recipe}
-          setRecipe={setRecipe}
         />
       </div>
       <Divider style={{ marginTop: '10px', color: 'black' }} />

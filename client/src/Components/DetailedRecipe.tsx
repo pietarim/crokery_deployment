@@ -1,25 +1,21 @@
 import { Card, CardBody, CardFooter, Image, CloseButton, Heading, Text, Button, Flex, Divider } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
-import { useDispatch } from 'react-redux';
-import { useAxios } from '../hooks/useAxios';
-import { useAuth } from '../hooks/useAuth';
+import { useAxios, useAuth, useWidth } from '../hooks';
 import { addProduct } from '../redux/modules/shoppingCart';
 import { DbRecipe } from '../types';
-/* import { base_url } from '../config'; */
+import { useDispatch } from 'react-redux';
+import { deleteRecipe } from '../redux/modules/recipes';
+import { base_url } from '../config';
 
 interface DetailedRecipeProps {
   detailedRecipe: DbRecipe | null;
   setDetailedRecipe: (recipe: DbRecipe | null) => void | null;
-  isMobile: boolean;
-  recipe: DbRecipe[];
-  setRecipe: (recipe: DbRecipe[]) => void;
   setFadeIn: (fadeIn: boolean) => void;
 }
 
-const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe, isMobile, recipe, setRecipe }: DetailedRecipeProps) => {
+const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipeProps) => {
 
-  const base_url = import.meta.env.VITE_API_URI || 'http://localhost:30001/api';
-
+  const isMobile = useWidth();
   const { put, deleteReq } = useAxios();
   const { token } = useAuth();
   const dispatch = useDispatch();
@@ -45,8 +41,7 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe, isMobile, recipe, s
   const handleRemove = async () => {
     try {
       await deleteReq(`/recipes/${detailedRecipe.id}`);
-      const newRecipes = recipe.filter((r) => r.id !== detailedRecipe.id);
-      setRecipe(newRecipes);
+      dispatch(deleteRecipe(detailedRecipe.id));
       setDetailedRecipe(null);
     } catch (error) {
       console.log(error);
@@ -63,7 +58,7 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe, isMobile, recipe, s
         direction={{ base: 'column', sm: 'row' }}
         overflow='hidden'
         variant='elevated'
-        style={{ marginTop: '1rem', marginBottom: '1rem' }}
+        style={{ marginTop: '4rem', marginBottom: '1rem' }}
       >
         <Flex className="recipe-content" direction="column" justify="space-between" flex="1">
           <CardBody>

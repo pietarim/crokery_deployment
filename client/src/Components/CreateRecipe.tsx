@@ -132,7 +132,7 @@ const CreateRecipe = () => {
       </Heading>
       <Divider mb='2' style={{ marginTop: '10px', color: 'black' }} />
       <Flex justify={'center'}>
-        <Card mb='2' variant='filled' width={{ base: "100%", md: "480px" }}>
+        <Card mb='2' variant='filled' style={{ backgroundColor: '#e2e6e9' }} width={{ base: "100%", md: "480px" }}>
           <CardBody>
             <Formik
               initialValues={{ name: '', description: '', public: false }}
@@ -196,7 +196,7 @@ const CreateRecipe = () => {
                   <Button
                     mt={8}
                     mb={7}
-                    colorScheme='customYellow'
+                    colorScheme='customeExit'
                     isLoading={props.isSubmitting}
                     type='submit'
                   >
