@@ -12,22 +12,18 @@ import {
 import { removeImage } from './image';
 
 export const getUsersOwnRecipes = async (req: any, res: any) => {
-  console.log('getUsersOwnRecipes');
   const userId = req.user.id;
   const page = parseInt(req.query.page);
   const recipes = await getUsersRecipes(userId, page);
   const recipeCount = await Recipe.count();
   if (recipeCount > page * 5) {
-    console.log('getUsersOwnRecipes hasMore true');
     res.json({ recipes, hasMore: true });
   } else {
-    console.log('getUsersOwnRecipes hasMore false');
     res.json({ recipes, hasMore: false });
   }
 };
 
 export const getIntroduceRecipes = async (req: any, res: any) => {
-  console.log('getIntroduceRecipes');
   const { recipeIds } = req.body;
   const idArray = recipeIds ? recipeIds : [];
   const recipes = await getRandomRecipes(idArray);
@@ -35,10 +31,8 @@ export const getIntroduceRecipes = async (req: any, res: any) => {
   const newRecipeIds = recipes.recipes.map((recipe: any) => recipe.id);
   const recipeIdsToReturn = [...idArray, ...newRecipeIds];
   if (recipeCount > recipeIdsToReturn.length) {
-    console.log('getIntroduceRecipes hasMore true');
     res.json({ ...recipes, hasMore: true, recipeIds: recipeIdsToReturn });
   } else {
-    console.log('getIntroduceRecipes hasMore false');
     res.json({ ...recipes, hasMore: false, recipeIds: recipeIdsToReturn });
   }
 };
@@ -49,16 +43,13 @@ export const returnMostLikedRecipes = async (req: any, res: any) => {
   const recipeCount = await Recipe.count();
   recipes.sort((a: any, b: any) => b.dataValues.like_count - a.dataValues.like_count);
   if (recipeCount > page * 5) {
-    console.log('returnMostLikedRecipes hasMore true');
     res.json({ recipes, hasMore: true });
   } else {
-    console.log('returnMostLikedRecipes hasMore false');
     res.json({ recipes, hasMore: false });
   }
 };
 
 export const likeRecipeController = async (req: any, res: any) => {
-  console.log('likeRecipeController');
   const recipeId = req.params.id;
   const userId = req.user.id;
   return await likeRecipe(recipeId, userId);
@@ -66,9 +57,6 @@ export const likeRecipeController = async (req: any, res: any) => {
 
 export const createRecipe = async (req: any, res: any) => {
   const { name, description, global, incredients, imageUri } = req.body;
-  console.log(111111);
-  console.log(req.body);
-  console.log(111111);
   const ownerId = req.user.id;
   const transaction = await sequelize.transaction();
 
@@ -103,17 +91,14 @@ export const createRecipe = async (req: any, res: any) => {
     res.status(201).send('Recipe created');
 
   } catch (error) {
-    console.log(error);
     await transaction.rollback();
     throw new Error('Saving recipe failed');
-    /* res.status(500).send('Something went wrong'); */
   }
 };
 
 export const deleteRecipe = async (req: any, res: any) => {
   const { id } = req.params;
   const recipeId = parseInt(id);
-  console.log(recipeId, " recipeId");
   const userId = req.user.id;
   if (!recipeId || !userId) {
     throw new Error('404');
@@ -146,9 +131,6 @@ export const updateRecipe = async (recipe: NewRecipe, id: number, ingredients: a
   try {
     await createRecipeToItems(ingredientsToAdd, transaction);
     await deleteRecipeToItems(ingredientsToRemove, transaction);
-
-    /* const recipeToItemToRemove = recipesToItems.filter((item: any) => item.itemId !== incredients.id);
-    const recipeToItemToAdd = incredients.filter((item: any) => item.id !== ); */
 
     await Recipe.update(recipe, {
       where: {

@@ -2,11 +2,7 @@ import config from '../config/config';
 const { Sequelize } = require('sequelize');
 const { Umzug, SequelizeStorage } = require('umzug');
 
-console.log('anything');
-
-const sequelize = new Sequelize(config.development.databaseUrl);
-
-console.log('another one');
+const sequelize = new Sequelize(config.databaseUrl);
 
 const migrationConf = {
   migrations: {

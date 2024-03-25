@@ -15,17 +15,35 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage }).single('image');
+const imageFilter = (_req: Request, file: any, cb: any) => {
+  if (!file.originalname.match(/\.(png)$/)) {
+    return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
+
+const upload = multer({ storage: storage, fileFilter: imageFilter }).single('image');
+
+export const getImage = async (_req: Request, res: Response) => {
+
+  const imageExtensions = ['.png', '.jpg', '.jpeg'];
+
+  const { name } = _req.params;
+  for (const extension of imageExtensions) {
+    const imagePath = path.join(__dirname, `../images/${name}${extension}`);
+    if (fs.existsSync(imagePath)) {
+      res.sendFile(imagePath);
+      return;
+    }
+  }
+  res.status(404).send({ error: 'Image not found' });
+};
 
 export const uploadImageController = async (req: Request, res: Response) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
-      console.log(err);
       throw new Error('Multer error');
-      /* res.status(500).send('Something went wrong'); */
     } else if (err) {
-      console.log(err);
-      /* res.status(500).send('Something went wrong'); */
       throw new Error('Something went wrong');
     } if (req.file) {
       res.status(201).send({ imageUri: req.file.filename });
@@ -42,32 +60,4 @@ export const removeImage = async (name: string) => {
       throw new Error('Something went wrong');
     }
   });
-}
-
-
-/* export const addImageController = async (req: Request, res: Response) => {
-  const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, '../images');
-    },
-    filename: function (_req, file, cb) {
-      cb(null, file.originalname);
-    }
-  });
-
-  const upload = multer({ storage }).single('image');
-
-  upload(req, res, function (err) {
-    if (err instanceof multer.MulterError) {
-      console.log(err);
-      throw new Error('Multer error');
-      res.status(500).send('Something went wrong');
-    } else if (err) {
-      console.log(err);
-      res.status(500).send('Something went wrong');
-      throw new Error('Something went wrong');
-    } else {
-      res.status(201).send('Image uploaded');
-    }
-  });
-}; */
+};

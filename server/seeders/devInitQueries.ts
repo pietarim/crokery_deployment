@@ -35,7 +35,6 @@ const connectToDatabase = async () => {
     await runMigrations();
     console.log('connected to the database connected to the database');
   } catch (err) {
-    console.log('err err err err err err');
     console.log(err);
     return process.exit(1);
   }
@@ -160,8 +159,6 @@ const init = async () => {
     imageUri: "ribs"
   });
 
-  console.log('ribMeal.id', ribMeal.id);
-
   await RecipeToItem.create({ /* pork ribs */
     recipeId: ribMeal.id,
     itemId: allItems[16 - 1].id,
@@ -215,9 +212,6 @@ const init = async () => {
     global: true,
     imageUri: "bread"
   });
-
-  console.log('bread.id', bread.id);
-  console.log('allItems[23-1].id', allItems[23 - 1].id);
 
   await RecipeToItem.create({ /* yeast */
     itemId: allItems[23 - 1].id,
@@ -460,4 +454,3 @@ const connectAndinit = async () => {
   }
 };
 connectAndinit();
-/* init(); */

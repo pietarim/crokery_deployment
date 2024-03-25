@@ -6,7 +6,7 @@ interface FriendAtributes {
   user_id2: number;
 }
 
-class Friend extends Model/* <FriendAtributes> implements FriendAtributes */ {
+class Friend extends Model {
   declare user_id1: number;
   declare user_id2: number;
 }

@@ -6,23 +6,19 @@ import { userRouter, recipeRouter, itemRouter, imageRouter, authRouter } from '.
 import cors from 'cors';
 import { errorHandler } from './middleware/errorHandler';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 
 const { Model, DataTypes, Sequelize, QueryTypes } = require('sequelize');
 
 dotenv.config();
 const app = express();
 app.use(cookieParser());
-const port = 3001;
+const port = config.port;
 
-console.log(config.development.port);
+const buildPath = path.join(__dirname, '/dist');
+app.use(express.static(buildPath));
 
-const sequelize = new Sequelize(config.development.databaseUrl, {
-  /* const main = async () => {
-    try {
-      await 
-    }
-  } */
-});
+const sequelize = new Sequelize(config.databaseUrl, {});
 
 const loggerMiddleware = (req: any, res: any, next: any) => {
   console.log(`Request Method: ${req.method}, Endpoint: ${req.path}`);
@@ -42,14 +38,11 @@ const main = async () => {
   }
 };
 
-/* 'http://127.0.0.1:5173/' */
 main();
 
-/* app.use(cors({
-  origin: 'http://localhost:5173/',
-  credentials: true,
-})); */
-const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:3001', 'http://localhost:5173']; // Add more origins as needed
+const url = config.url;
+
+const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:3001', 'http://localhost:5173', url];
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -64,7 +57,6 @@ app.use(cors({
 app.use(express.json());
 app.use(loggerMiddleware);
 app.get('/ping', (_req, res) => {
-  console.log('someone pinged here');
   res.send('pong');
 });
 
@@ -75,6 +67,10 @@ app.use('/api/items', itemRouter);
 app.use('/api/recipeLikes', recipeRouter);
 app.use('/api/auth', authRouter);
 app.use(errorHandler);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(buildPath, 'index.html'));
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

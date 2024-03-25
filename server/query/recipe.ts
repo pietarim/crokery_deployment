@@ -4,7 +4,6 @@ import { Recipe, Item, User, RecipeLike, RecipeToItem } from '../models';
 import { NewRecipe } from '../types';
 
 const recipesByIds = async (ids: number[]) => {
-  console.log(ids, 'ids');
   return await Recipe.findAll({
     where: {
       id: ids
@@ -35,8 +34,7 @@ const recipesByIds = async (ids: number[]) => {
         }
       }
     ],
-    group: ['recipe.id', 'item.id', 'item->recipeToItem.id']/* ,
-    raw: true */
+    group: ['recipe.id', 'item.id', 'item->recipeToItem.id']
   });
 };
 
@@ -49,7 +47,6 @@ export const getRecipesImageUri = async (recipeId: number) => {
 };
 
 export const getRandomRecipes = async (oldIds: number[]) => {
-  console.log(oldIds);
   const randomIds = await Recipe.findAll({
     attributes: ['id'],
     order: sequelize.random(),
@@ -60,12 +57,6 @@ export const getRandomRecipes = async (oldIds: number[]) => {
   const recipes = await recipesByIds(ids);
   return { recipes, recipeIds: [...oldIds, ...ids] };
 };
-/* const mostLikedRecipeIds = await Recipe.findAll({
-  order: [['like_count', 'DESC']],
-  attributes: ['id'],
-  limit: 5,
-  offset: (page - 1) * 5,
-}); */
 
 export const getMostLikedRecipes = async (page: number) => {
   const offsetValue = (page - 1) * 5;
@@ -84,8 +75,6 @@ export const getMostLikedRecipes = async (page: number) => {
     offset: offsetValue
   });
 
-  /* console.log(mostLikedRecipes, 'mostLikedRecipes'); */
-
   const ids = mostLikedRecipes.map(recipe => recipe.id);
   const mostLikedRecipesById = await recipesByIds(ids);
   const sortedRecipes = mostLikedRecipesById.sort((a: any, b: any) => b.dataValues.like_count - a.dataValues.like_count);
@@ -93,8 +82,6 @@ export const getMostLikedRecipes = async (page: number) => {
 };
 
 export const getUsersRecipes = async (userId: number, page: number) => {
-  console.log('getUsersRecipes inside query');
-  console.log(userId, ' userId', page, ' page');
   const ownedRecipes = await Recipe.findAll({
     attributes: ['id'],
     where: {
@@ -108,11 +95,8 @@ export const getUsersRecipes = async (userId: number, page: number) => {
 };
 
 export const likeRecipe = async (recipeId: number, userId: number) => {
-  console.log('likeRecipe query');
   const recipe = await Recipe.findByPk(recipeId);
-  console.log('recipe kysely tehty');
   const user = await User.findByPk(userId);
-  console.log('user kysely tehty');
   if (!recipe || !user) {
     throw new Error('recipe or user not found');
   }
@@ -122,7 +106,6 @@ export const likeRecipe = async (recipeId: number, userId: number) => {
       userId: userId
     }
   });
-  console.log('recipeLike kysely tehty');
 
   if (recipeLike) {
     await recipeLike.destroy();
@@ -141,7 +124,6 @@ export const createRecipe = async (recipe: NewRecipe) => {
 };
 
 export const removeOwnedRecipe = async (recipeId: number, userId: number) => {
-
   const transaction = await sequelize.transaction();
   try {
     const recipe = await Recipe.findByPk(recipeId);

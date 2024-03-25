@@ -1,7 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { getUserByUsername, createUser, addRefreshtoken, getUserByRefreshToken, removeRefreshtoken } from '../query/user';
+import {
+  getUserByUsername, createUser, addRefreshtoken,
+  getUserByRefreshToken, removeRefreshtoken
+} from '../query/user';
 import { parseString } from '../config/utils';
 import crypto from 'crypto';
 
@@ -18,10 +21,6 @@ interface User {
 
 const router = express.Router();
 
-router.get('/me', (_req, res) => {
-  res.send('hello');
-});
-
 const createRefreshToken = () => {
   return crypto.randomBytes(40).toString('hex');
 };
@@ -32,7 +31,6 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     username: parseString(username),
     password: parseString(password),
   };
-  console.log(user);
   const userFromDb = await getUserByUsername(user.username);
   if (!userFromDb) {
     throw new Error('invalid username or password');
@@ -50,7 +48,6 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     addRefreshtoken(userFromDb.id, refreshToken);
 
     const token = jwt.sign(userForToken, process.env.SECRET as string, { expiresIn: '2m' });
-    console.log('tämä refresh token tunkataan eteenpäin', refreshToken);
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: false,
@@ -89,13 +86,8 @@ export const extractUser = (req: RequestWithUser, res: Response, next: NextFunct
 };
 
 export const getAccessToken = async (req: Request, res: Response, next: NextFunction) => {
-  console.log('kysely');
   const refreshToken = req.cookies.refreshToken;
-  console.log('getAccessToken opened getAccessToken opened getAccessToken opened getAccessToken opened ');
-  console.log(refreshToken);
   const user = await getUserByRefreshToken(refreshToken);
-  console.log(user);
-  /* const user = await getUserByUsername(req.user?.username as string); */
   if (!user) {
     throw new Error('invalid token');
   } else {

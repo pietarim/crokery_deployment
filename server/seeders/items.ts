@@ -1,14 +1,3 @@
-/* interface Item {
-  name: string;
-  type: string;
-  unitSize: number;
-  brand: string;
-  price: number;
-  pricePerUnit: number;
-}
-
-type foodType = 'meat' | 'vegetable' | 'spice' | 'other' | 'rice' | 'premade' | 'frozen_premade' | 'candy' | 'sauce' | 'fish' | 'seafood' | 'dairy' | 'fruit' | 'baking' | 'other' | 'ice cream' | 'frozen_prem';
- */
 import { Item } from "../models";
 import { NewItem, ItemCategory } from "../types";
 
@@ -85,7 +74,6 @@ export const items: NewItem[] = [
     price: 2.49,
     pricePerUnit: 8.3,
   },
-  /* 10 bellow */
   {
     name: "shrimp", /* 10 */
     type: ItemCategory.Seafood,
@@ -126,7 +114,6 @@ export const items: NewItem[] = [
     price: 2.99,
     pricePerUnit: 9.97,
   },
-  /* 15 bellow */
   {
     name: "salmon", /* 15 */
     type: ItemCategory.Fish,
@@ -337,7 +324,7 @@ export const items: NewItem[] = [
     pricePerUnit: 3.96,
   },
   {
-    name: "parmesan_cheese", /* 41 */
+    name: "parmesan cheese", /* 41 */
     type: ItemCategory.Dairy,
     unitSize: 0.25,
     brand: "kotimaista",
@@ -345,7 +332,7 @@ export const items: NewItem[] = [
     pricePerUnit: 19.96,
   },
   {
-    name: "mozzarella_cheese", /* 42 */
+    name: "mozzarella cheese", /* 42 */
     type: ItemCategory.Dairy,
     unitSize: 0.125,
     brand: "castelli",

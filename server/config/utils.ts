@@ -66,10 +66,7 @@ export const parseUser = (user: unknown): TokenUser => {
 };
 
 export const parseString = (username: unknown): string => {
-  console.log(username);
-  console.log('parseString');
   if (typeof username === 'string') {
-    console.log('parseString if');
     return username;
   }
   throw new Error('Invalid name');

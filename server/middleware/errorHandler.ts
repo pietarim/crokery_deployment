@@ -1,12 +1,10 @@
 import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 
-interface ErrorWithMessage extends Error { // replace Error with right type
+interface ErrorWithMessage extends Error {
   message: string;
 }
 
 export const errorHandler: ErrorRequestHandler = (error: ErrorWithMessage, _req: Request, res: Response, next: NextFunction) => {
-  console.log('error handler opened');
-  console.log(error.message);
   if (error.message === 'Saving recipe failed') {
     return res.status(500).json({
       error: 'Saving recipe failed',

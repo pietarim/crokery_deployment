@@ -1,0 +1,71 @@
+name: Deploy to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Build backend
+        run: |
+          echo "Go to /server"
+          cd server
+          echo "Install dependencies"
+          npm install
+          echo "Build backend"
+          ls node_modules/@types
+          npm run build
+          cp -R dist build/
+          cp package.json build/
+          cp package-lock.json build/
+          cd build
+          dir
+
+      - name: Zip backend
+        run: |
+          cd server/build
+          pwd
+          dir
+          zip -r ../../backend.zip .
+          dir
+
+      - name: unzip process
+        run: unzip -l backend.zip
+
+      #  - name: unzip process
+      #    run: |
+      #      cd server
+      #      pwd
+      #      dir
+      #      unzip -l backend.zip
+      #- name: Install AWS Elastic Beanstalk CLI
+      #  run: pip install awsebcli
+
+      #      - name: Deploy to AWS Elastic Beanstalk
+      #        env:
+      #          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #          AWS_REGION: 'eu-north-1b'
+      #        run: |
+      #          eb init -p Node.js your-app-name --region $AWS_REGION
+      #          eb deploy Grocery-app-env -l "deploy-${{ github.run_number }}"
+
+      - name: Deploy application to AWS Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v15
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: 'Grocery-app'
+          environment_name: 'Grocery-app-env'
+          version_label: 'real_version_deploy-${{ github.run_number }}'
+          region: 'eu-north-1'
+          deployment_package: 'backend.zip'

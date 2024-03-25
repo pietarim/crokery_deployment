@@ -37,12 +37,6 @@ const transformItems = (items: any) => {
     category,
     items: groupedByType[category].map((item: any) => (item))
   }));
-
-  // Transform the grouped items into the desired structure
-  /* return Object.keys(groupedByType).map(category => ({
-    category,
-    items: groupedByType[category].map((item) => (item))
-  })); */
 };
 
 export const getAllItems = async (_req: Request, res: Response, next: NextFunction) => {
