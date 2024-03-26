@@ -2,6 +2,7 @@ import { Field, Form, Formik } from 'formik';
 import { FormControl, FormErrorMessage, FormLabel, Input, Button } from '@chakra-ui/react';
 import { login } from '../services/user';
 import { useAuth } from '../hooks/useAuth';
+import { useNotification } from '../hooks/useNotofication';
 
 interface FieldProps {
   field: {
@@ -17,6 +18,8 @@ interface FieldProps {
 }
 
 function LoginForm() {
+  const { showNotification } = useNotification();
+
   const { setToken } = useAuth();
   function validateName(value: string) {
     let error;
@@ -44,8 +47,12 @@ function LoginForm() {
       username: loginData.name,
       password: loginData.password,
     };
-    const savedLogin = await login(newLogin);
-    setToken({ token: savedLogin.token, username: savedLogin.username, id: savedLogin.id });
+    try {
+      const savedLogin = await login(newLogin);
+      setToken({ token: savedLogin.token, username: savedLogin.username, id: savedLogin.id });
+    } catch (error) {
+      showNotification('Wrong username or password', 'error');
+    }
   };
 
   return (

@@ -10,7 +10,7 @@ interface Notification {
 }
 
 interface NotificationContextType {
-  notification: Notification | null;
+  /* notification: Notification | null; */
   showNotification: (message: string, type?: NotificationType, duration?: number) => void;
 }
 
@@ -27,7 +27,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode; }) => 
   }, []);
 
   return (
-    <NotificationContext.Provider value={{ notification, showNotification }}>
+    <NotificationContext.Provider value={{ showNotification }}>
       {children}
       {notification && <NotificationComponent {...notification} />}
     </NotificationContext.Provider>
@@ -66,7 +66,7 @@ const NotificationComponent: React.FC<NotificationProps> = ({ message, type = 'i
 
   const backgroundColor = colors[type] || 'info';
   return (
-    <Card style={{ position: 'fixed', bottom: '10%', left: '50%', transform: 'translateX(-50%)', backgroundColor: backgroundColor }}>
+    <Card style={{ position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)', backgroundColor: backgroundColor }}>
       <Flex
         color='white'
         alignItems={'center'}

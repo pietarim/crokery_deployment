@@ -2,8 +2,11 @@ import { Field, Form, Formik } from 'formik';
 import { FormControl, FormErrorMessage, FormLabel, Input, Button } from '@chakra-ui/react';
 import { register } from '../services/user';
 import { FormikProps } from '../types';
+import { useNotification } from '../hooks/useNotofication';
 
 const CreateNewUser = () => {
+
+  const { showNotification } = useNotification();
 
   function validateUsername(value: string) {
     let error;
@@ -48,11 +51,14 @@ const CreateNewUser = () => {
           email: values.email,
           password: values.password,
         };
-        handleCreateNewUserSubmit(newUser);
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
+        try {
+          handleCreateNewUserSubmit(newUser);
           actions.setSubmitting(false);
-        }, 1000);
+          showNotification('User created', 'success');
+        } catch (error) {
+          actions.setSubmitting(false);
+          showNotification('Error creating user', 'error');
+        }
       }}
     >
       {(props) => (
@@ -60,7 +66,7 @@ const CreateNewUser = () => {
           <Field name='username' validate={validateUsername}>
             {({ field, form }: FormikProps) => (
               <FormControl isInvalid={!!form.errors.username && form.touched.username}>
-                <FormLabel>First username</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <Input {...field} placeholder='username' />
                 <FormErrorMessage>{form.errors.username}</FormErrorMessage>
               </FormControl>
@@ -69,7 +75,7 @@ const CreateNewUser = () => {
           <Field name='email' validate={validateEmail}>
             {({ field, form }: FormikProps) => (
               <FormControl isInvalid={!!form.errors.email && form.touched.email}>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <Input {...field} placeholder='email' />
                 <FormErrorMessage>{form.errors.email}</FormErrorMessage>
               </FormControl>

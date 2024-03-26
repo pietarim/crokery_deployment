@@ -76,12 +76,9 @@ const CreateRecipe = () => {
       try {
         const itemsQuery = await get('/items');
         const arr = itemsQuery.data;
-        console.log(arr); // TODO remove
         if (!arr.length) {
-          console.log('no items');
           return;
         } else if (arr.length) {
-          console.log('arr.length:', arr.length);
           const initialHiddenCategoryList = arr.map((item: DbItem) => item.category);
           setHiddenCategoryList(initialHiddenCategoryList);
           setOptions(arr);
@@ -349,14 +346,14 @@ const CreateRecipe = () => {
               >
                 {value.category}
               </Box>
-              {value.items.length && value.items.map((item: WorkMemryItem) => {
+              {value.items.length ? value.items.map((item: WorkMemryItem) => {
                 const radio = getRadioProps({ value: item.id.toString() });
                 return (
                   <RadioCard key={item.id.toString()} {...radio}>
                     {item.name}
                   </RadioCard>
                 );
-              })
+              }) : null
               }
             </Wrap>
           );

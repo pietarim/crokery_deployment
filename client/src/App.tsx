@@ -27,15 +27,14 @@ function App() {
         setIsMobileView(false);
       }
     };
-    window.addEventListener('resize', handleResize); // TODO is this doing anything?
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
     const getAuthUser = async () => {
       try {
         const user = await get('/auth/access-token', { withCredentials: true });
-        setToken({ token: user.data.token, username: user.data.username, id: user.data.id }); // handle error
+        setToken({ token: user.data.token, username: user.data.username, id: user.data.id });
       } catch (err) {
         console.log('not logged in');
       }

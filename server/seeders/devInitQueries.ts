@@ -58,29 +58,24 @@ const init = async () => {
     },
     truncate: true
   });
-
   await RecipeToItem.destroy({
     where: {
     },
     truncate: true
   });
-
   await Friend.destroy({
     where: {
     },
     truncate: true
   });
-
   await Recipe.destroy({
     where: {
     }
   });
-
   await Item.destroy({
     where: {
     }
   });
-
   await User.destroy({
     where: {
     }

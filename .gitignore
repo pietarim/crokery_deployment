@@ -5,3 +5,4 @@ dev-notes.txt
 /server/.env.production
 .env.development
 client/dist/
+commits.txt
