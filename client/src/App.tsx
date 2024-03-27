@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   Tabs, TabList, Tab, TabPanel, TabPanels, Button, Menu, MenuButton, MenuList,
-  MenuItem, IconButton, Badge
+  MenuItem, IconButton, Badge, Flex
 } from "@chakra-ui/react";
 import { HamburgerIcon } from '@chakra-ui/icons';
 import './App.css';
@@ -49,10 +49,21 @@ function App() {
 
   if (!token) {
     return (
-      <div>
-        <Login />
-        <CreateNewUser />
-      </div>
+      <Flex align='center' justify='center'>
+        <Tabs isFitted variant='enclosed' colorScheme='customYellow' width={{ md: '600px' }}>
+          <TabList>
+            <Tab>Login</Tab>
+            <Tab>Register</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <Login />
+            </TabPanel>
+            <TabPanel>
+              <CreateNewUser />
+            </TabPanel>
+          </TabPanels>
+        </Tabs></Flex>
     );
   } else {
     if (isMobileView) {

@@ -22,11 +22,10 @@ const runMigrations = async () => {
 };
 
 const migrateDatabase = async () => {
-  console.log('connecting to the database connecting to the database');
   try {
     await sequelize.authenticate();
+    console.log('connected to the database');
     await runMigrations();
-    console.log('connected to the database connected to the database');
   } catch (err) {
     console.log(err);
     return process.exit(1);

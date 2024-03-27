@@ -1,9 +1,1 @@
-POST https://grocerylist.today/api/auth/register HTTP/1.1
-content-type: application/json
-
-{
-    "username": "test",
-    "email": "salis@gmail.com",
-    "passwordHash": "test",
-    "isAdmin": "false"
-}
+GET http://localhost:3001/api/users

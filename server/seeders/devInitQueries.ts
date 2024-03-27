@@ -9,7 +9,7 @@ import { Friend } from '../models/friend';
 import { createUser } from '../controllers/user';
 import { TokenUser } from '../types';
 
-const sequelize = new Sequelize('postgres://postgres:mysecretpassword@localhost:5432/postgres'); //5432
+const sequelize = new Sequelize('postgres://postgres:mysecretpassword@localhost:5432/postgres');
 
 const migrationConf = {
   migrations: {
@@ -29,11 +29,11 @@ const runMigrations = async () => {
 };
 
 const connectToDatabase = async () => {
-  console.log('connecting to the database connecting to the database');
+  console.log('connecting to the database');
   try {
     await sequelize.authenticate();
+    console.log('connected to the database');
     await runMigrations();
-    console.log('connected to the database connected to the database');
   } catch (err) {
     console.log(err);
     return process.exit(1);

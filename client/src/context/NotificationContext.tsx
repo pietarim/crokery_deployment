@@ -10,7 +10,6 @@ interface Notification {
 }
 
 interface NotificationContextType {
-  /* notification: Notification | null; */
   showNotification: (message: string, type?: NotificationType, duration?: number) => void;
 }
 
@@ -19,11 +18,11 @@ export const NotificationContext = createContext<NotificationContextType | null>
 export const NotificationProvider = ({ children }: { children: ReactNode; }) => {
   const [notification, setNotification] = useState<Notification | null>(null);
 
-  const showNotification = useCallback((message: string, type: NotificationType = 'info') => {
+  const showNotification = useCallback((message: string, type: NotificationType = 'info', duration: number = 3000) => {
     setNotification({ message, type });
     setTimeout(() => {
       setNotification(null);
-    }, 3000);
+    }, duration);
   }, []);
 
   return (
@@ -66,7 +65,13 @@ const NotificationComponent: React.FC<NotificationProps> = ({ message, type = 'i
 
   const backgroundColor = colors[type] || 'info';
   return (
-    <Card style={{ position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)', backgroundColor: backgroundColor }}>
+    <Card style={{
+      position: 'fixed',
+      top: '10%',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      backgroundColor: backgroundColor
+    }}>
       <Flex
         color='white'
         alignItems={'center'}

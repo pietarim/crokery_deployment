@@ -1,5 +1,5 @@
 import multer from 'multer';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
 
@@ -39,16 +39,16 @@ export const getImage = async (_req: Request, res: Response) => {
   res.status(404).send({ error: 'Image not found' });
 };
 
-export const uploadImageController = async (req: Request, res: Response) => {
+export const uploadImageController = async (req: Request, res: Response, next: NextFunction) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
-      throw new Error('Multer error');
+      return next(new Error('Multer error'));
     } else if (err) {
-      throw new Error('Something went wrong');
+      return next(new Error('Something went wrong'));
     } if (req.file) {
       res.status(201).send({ imageUri: req.file.filename });
     } else {
-      throw new Error('Something went wrong');
+      return next(new Error('Something went wrong'));
     }
   });
 };
