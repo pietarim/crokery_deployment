@@ -32,6 +32,7 @@ PORT=3001 (if you use different port you need to set it to /grocery-list/client/
 SECRET=YOU_ARE_FREE_TO_SET_JWT_SECRET_STRING_HERE
 DATABASE_URL=postgres://postgres:mysecretpassword@localhost:5432/postgres
 SERVER_URL=http://localhost:3001
+CLIENT_URL=http://localhost:5173 (this is not neccessary backend will default to http://localhost:5173 if not given)
 ```
 
 Set up databese:

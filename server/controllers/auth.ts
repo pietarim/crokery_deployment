@@ -6,6 +6,7 @@ import {
   getUserByRefreshToken, removeRefreshtoken
 } from '../query/user';
 import { parseString } from '../config/utils';
+import config from '../config/config';
 import crypto from 'crypto';
 
 interface RequestWithUser extends Request {
@@ -49,10 +50,11 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
     const accessToken = jwt.sign(userForToken, process.env.SECRET as string, { expiresIn: '2m' });
     res.cookie('refreshToken', refreshToken, {
+      domain: config.clientUrl,
       httpOnly: true,
       secure: false,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      sameSite: 'none'
+      sameSite: 'strict'
     });
     res.status(200).send({ token: accessToken, username: userFromDb.username, id: userFromDb.id });
   }
