@@ -1,4 +1,4 @@
-import multer from 'multer';
+import multer, { FileFilterCallback } from 'multer';
 import { Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
@@ -15,9 +15,9 @@ const storage = multer.diskStorage({
   }
 });
 
-const imageFilter = (_req: Request, file: any, cb: any) => {
-  if (!file.originalname.match(/\.(png)$/)) {
-    return cb(new Error('Only image files are allowed!'), false);
+const imageFilter = (_req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+  if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+    return cb(null, false);
   }
   cb(null, true);
 };

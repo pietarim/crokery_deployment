@@ -1,10 +1,19 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/db';
 
+const ItemTypeValues = [
+  'meat', 'vegetable', 'spice', 'other', 'rice',
+  'premade', 'frozen_premade', 'candy', 'sauce',
+  'fish', 'seafood', 'dairy', 'fruit', 'baking',
+  'ice cream', 'grain'
+] as const;
+
+export type ItemType = typeof ItemTypeValues[number];
+
 interface ItemAttributes {
   id: number;
   name: string;
-  type: string;
+  type: ItemType;
   unitSize: number;
   brand: string;
   price: number;
@@ -16,7 +25,7 @@ type ItemCreationAttributes = Optional<ItemAttributes, 'id'>;
 class Item extends Model<ItemAttributes, ItemCreationAttributes> {
   declare id: number;
   declare name: string;
-  declare type: string;
+  declare type: ItemType;
   declare unitSize: number;
   declare brand: string;
   declare price: number;
@@ -34,12 +43,7 @@ Item.init({
   },
   type: {
     type: DataTypes.ENUM,
-    values: [
-      'meat', 'vegetable', 'spice', 'other', 'rice',
-      'premade', 'frozen_premade', 'candy', 'sauce',
-      'fish', 'seafood', 'dairy', 'fruit', 'baking',
-      'ice cream', 'grain'
-    ],
+    values: ItemTypeValues,
     allowNull: false
   },
   unitSize: {

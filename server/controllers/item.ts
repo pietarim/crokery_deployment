@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { createItem, getItems, updateItemQuery } from '../query/item';
 import { parseString, parseNumber, parseCategory } from '../config/utils';
-import { Item } from '../models';
+import { Item, ItemType } from '../models';
 
 const parseRecipeItem = (item: any) => {
   const { name, unitSize, brand, price, type } = item;
@@ -22,8 +22,23 @@ const parseRecipeItem = (item: any) => {
   };
 };
 
-const transformItems = (items: any) => {
-  const groupedByType = items.reduce((acc: any, item: any) => {
+interface PlaneItem {
+  name: string;
+  unitSize: number;
+  brand: string;
+  price: number;
+  pricePerUnit: number;
+  type: ItemType;
+}
+
+type NoTypeItem = Omit<PlaneItem, 'type'>;
+
+type GroceryInventory = {
+  [K in ItemType]: NoTypeItem[]
+};
+
+const transformItems = (items: PlaneItem[]) => {
+  const groupedByType = items.reduce((acc: GroceryInventory, item: PlaneItem) => {
     const itemsType = item.type;
     if (!acc[itemsType]) {
       acc[itemsType] = [];
@@ -31,12 +46,15 @@ const transformItems = (items: any) => {
     const { type: type, ...rest } = item;
     acc[itemsType].push(rest);
     return acc;
-  }, {});
+  }, {} as GroceryInventory);
 
-  return Object.keys(groupedByType).map(category => ({
-    category,
-    items: groupedByType[category].map((item: any) => (item))
-  }));
+  return Object.keys(groupedByType).map(category => {
+    const categoryKey = category as ItemType;
+    return {
+      category: categoryKey,
+      items: groupedByType[categoryKey]
+    };
+  });
 };
 
 export const getAllItems = async (_req: Request, res: Response, next: NextFunction) => {
