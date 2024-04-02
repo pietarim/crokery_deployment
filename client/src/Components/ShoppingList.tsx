@@ -7,10 +7,8 @@ import {
 import _ from "lodash";
 import { addProductById, removeProductById } from "../redux/modules/shoppingCart";
 import { useWidth } from "../hooks/useWidth";
+import { RecipeToItem } from "../types";
 
-interface RecipeToItem {
-  amount: string;
-}
 
 interface RecipeItem {
   id: number;

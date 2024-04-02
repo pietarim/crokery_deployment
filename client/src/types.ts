@@ -1,14 +1,3 @@
-export interface LoggedInUser {
-  username: string;
-  token: string;
-}
-
-export type LoggedInUserState = LoggedInUser | null;
-
-export interface LoggedInUserProp {
-  user: LoggedInUserState;
-}
-
 export interface Recipe {
   id: number;
   name: string;
@@ -102,25 +91,11 @@ export interface WorkMemorySelection {
   items: WorkMemryItem[];
 }
 
-interface RecipeToItem {
+export interface RecipeToItem {
   amount: string;
 }
 
 export interface DbRecipe extends Recipe {
   like_count: number;
   item: Item[];
-}
-
-
-export type RecipeToSave = Omit<Recipe, 'id' | 'ownerId'>;
-
-interface User {
-  username: string;
-  token: string;
-}
-
-type UserState = User | null;
-
-export interface SetUserProp {
-  setUser: (user: UserState) => void;
 }

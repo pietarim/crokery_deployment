@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { Recipe, RecipeToSave } from '../types';
+import { Recipe } from '../types';
+
+type RecipeToSave = Omit<Recipe, 'id' | 'ownerId'>;
 
 export const getRandomRecipes = async () => {
   const response = await axios.get('http://localhost:3001/api/recipes');
