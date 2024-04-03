@@ -10,8 +10,15 @@ import {
   getRecipesImageUri
 } from '../query/recipe';
 import { removeImage } from './image';
+import { Request, Response } from 'express';
+import { TokenUser } from '../types';
 
-export const getUsersOwnRecipes = async (req: any, res: any) => {
+interface UserRecipeRequest extends Request {
+  user: TokenUser;
+  query: { page: string; };
+}
+
+export const getUsersOwnRecipes = async (req: UserRecipeRequest, res: Response) => {
   const userId = req.user.id;
   const page = parseInt(req.query.page);
   const recipes = await getUsersRecipes(userId, page);
@@ -23,13 +30,16 @@ export const getUsersOwnRecipes = async (req: any, res: any) => {
   }
 };
 
-export const getIntroduceRecipes = async (req: any, res: any) => {
+interface IntroduceRecipesRequest extends Request {
+  body: { recipeIds: number[]; };
+}
+
+export const getIntroduceRecipes = async (req: Request, res: Response) => {
   const { recipeIds } = req.body;
-  const idArray = recipeIds ? recipeIds : [];
-  const recipes = await getRandomRecipes(idArray);
+  const recipes = await getRandomRecipes(recipeIds);
   const recipeCount = await Recipe.count();
-  const newRecipeIds = recipes.recipes.map((recipe: any) => recipe.id);
-  const recipeIdsToReturn = [...idArray, ...newRecipeIds];
+  const newRecipeIds = recipes.recipes.map((recipe) => recipe.id);
+  const recipeIdsToReturn = [...recipeIds, ...newRecipeIds];
   if (recipeCount > recipeIdsToReturn.length) {
     res.json({ ...recipes, hasMore: true, recipeIds: recipeIdsToReturn });
   } else {
@@ -37,10 +47,15 @@ export const getIntroduceRecipes = async (req: any, res: any) => {
   }
 };
 
-export const returnMostLikedRecipes = async (req: any, res: any) => {
+interface MostLikedRecipesRequest extends Request {
+  query: { page: string; };
+}
+
+export const returnMostLikedRecipes = async (req: MostLikedRecipesRequest, res: Response) => {
   const page = parseInt(req.query.page);
   const recipes = await getMostLikedRecipes(page);
   const recipeCount = await Recipe.count();
+  console.log(recipes);
   recipes.sort((a: any, b: any) => b.dataValues.like_count - a.dataValues.like_count);
   if (recipeCount > page * 5) {
     res.json({ recipes, hasMore: true });

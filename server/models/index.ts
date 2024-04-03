@@ -1,4 +1,4 @@
-import { Item, ItemType } from './item';
+import { Item, ItemType, ItemCategory } from './item';
 import { Recipe } from './recipe';
 import { RecipeToItem } from './recipeToItem';
 import { User } from './user';
@@ -18,4 +18,4 @@ User.belongsToMany(User, { through: Friend, as: 'friendsReverse', foreignKey: 'u
 Recipe.hasMany(RecipeLike, { foreignKey: 'recipeId', as: 'recipeLikes' });
 RecipeLike.belongsTo(Recipe, { foreignKey: 'recipeId' });
 
-export { Item, Recipe, RecipeToItem, User, RecipeLike, ItemType };
+export { Item, Recipe, RecipeToItem, User, RecipeLike, ItemType, ItemCategory };

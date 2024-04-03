@@ -1,4 +1,8 @@
-export enum ItemCategory {
+import { ItemCategory } from "./models";
+
+export { ItemCategory };
+
+/* export enum ItemCategory {
   Meat = 'meat',
   Vegetable = 'vegetable',
   Fruit = 'fruit',
@@ -14,7 +18,7 @@ export enum ItemCategory {
   Seafood = 'seafood',
   Baking = 'baking',
   Ice_cream = 'ice cream',
-}
+} */
 
 export interface NewRecipesItem {
   name: string;

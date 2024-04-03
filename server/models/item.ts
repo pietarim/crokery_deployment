@@ -1,14 +1,34 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from '../config/db';
 
-const ItemTypeValues = [
+export enum ItemCategory {
+  Meat = 'meat',
+  Vegetable = 'vegetable',
+  Fruit = 'fruit',
+  Dairy = 'dairy',
+  Grain = 'grain',
+  Other = 'other',
+  Spice = 'spice',
+  Premade = 'premade',
+  FrozenPremade = 'frozen premade',
+  Candy = 'candy',
+  Sauce = 'sauce',
+  Fish = 'fish',
+  Seafood = 'seafood',
+  Baking = 'baking',
+  Ice_cream = 'ice cream',
+}
+
+/* const ItemTypeValues = [
   'meat', 'vegetable', 'spice', 'other', 'rice',
   'premade', 'frozen_premade', 'candy', 'sauce',
   'fish', 'seafood', 'dairy', 'fruit', 'baking',
   'ice cream', 'grain'
-] as const;
+] as const; */
 
-export type ItemType = typeof ItemTypeValues[number];
+const ItemTypeValues = Object.values(ItemCategory);
+
+export type ItemType = `${ItemCategory}`;
 
 interface ItemAttributes {
   id: number;

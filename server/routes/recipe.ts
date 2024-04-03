@@ -1,6 +1,5 @@
 import express from 'express';
 import { returnMostLikedRecipes, getIntroduceRecipes, createRecipe, updateRecipe, deleteRecipe, getUsersOwnRecipes, likeRecipeController } from '../controllers/recipes';
-import { parseString, parseNumber, parseBoolean } from '../config/utils';
 import { userExtractor } from '../middleware/userExtractor';
 
 const router = express.Router();

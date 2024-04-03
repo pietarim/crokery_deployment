@@ -39,7 +39,7 @@ const ListRecipes = () => {
         setRecipeErrorMessage(null);
         try {
           if (recipe.length === 0 || recipeOrder !== "shuffle") {
-            const recipeReponse = await get('/recipes/introductory');
+            const recipeReponse = await post('/recipes/introductory', { recipeIds: introducturyRecipeIds });
             const recipeData: RecipeData = recipeReponse.data;
             dispatch(setRecipes(recipeData.recipes));
             setIntroducturyRecipeIds(recipeData?.recipeIds);
