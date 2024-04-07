@@ -57,7 +57,7 @@ const transformItems = (items: PlaneItem[]) => {
   });
 };
 
-export const getAllItems = async (_req: Request, res: Response, next: NextFunction) => {
+export const getAllItems = async (_req, res: Response, next: NextFunction) => {
   const items = await getItems();
   if (!items) {
     return next(new Error('No items found'));
@@ -66,7 +66,7 @@ export const getAllItems = async (_req: Request, res: Response, next: NextFuncti
   res.status(200).json(transformedItems);
 };
 
-export const addItem = async (req: Request, res: Response, next: NextFunction) => {
+export const addItem = async (req, res: Response, next: NextFunction) => {
   const parsedItem = parseRecipeItem(req.body);
   const NewRecipesItem = await createItem(parsedItem);
 
@@ -77,7 +77,7 @@ export const addItem = async (req: Request, res: Response, next: NextFunction) =
   res.status(201).json({ message: `${NewRecipesItem.name} added to item list.` });
 };
 
-export const updateItem = async (req: Request, res: Response, next: NextFunction) => {
+export const updateItem = async (req, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const parsedId = parseNumber(id);
   const parsedItem = parseRecipeItem(req.body);

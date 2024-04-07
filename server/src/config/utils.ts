@@ -1,4 +1,4 @@
-import { NewRecipesItem, ItemCategory, TokenUser } from '../types';
+import { NewRecipesItem, ItemCategory, TokenUser } from '../types/types';
 
 export const parseIncredient = (item: unknown): NewRecipesItem => {
   if (

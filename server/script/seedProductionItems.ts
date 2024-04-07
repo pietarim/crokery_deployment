@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import { items } from '../seeders/items';
-import { Item } from "../models";
-import config from '../config/config';
+import { Item } from "../src/models";
+import config from '../src/config/config';
 
 const sequelize = new Sequelize(config.databaseUrl, {});
 

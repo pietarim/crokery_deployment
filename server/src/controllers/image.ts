@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const imageFilter = (_req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+const imageFilter = (_req, file: Express.Multer.File, cb: FileFilterCallback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
     return cb(null, false);
   }
@@ -24,13 +24,13 @@ const imageFilter = (_req: Request, file: Express.Multer.File, cb: FileFilterCal
 
 const upload = multer({ storage: storage, fileFilter: imageFilter }).single('image');
 
-export const getImage = async (_req: Request, res: Response) => {
+export const getImage = async (_req, res: Response) => {
 
   const imageExtensions = ['.png', '.jpg', '.jpeg'];
 
   const { name } = _req.params;
   for (const extension of imageExtensions) {
-    const imagePath = path.join(__dirname, `../images/${name}${extension}`);
+    const imagePath = path.join(__dirname, `../../images/${name}${extension}`);
     if (fs.existsSync(imagePath)) {
       res.sendFile(imagePath);
       return;
@@ -39,7 +39,7 @@ export const getImage = async (_req: Request, res: Response) => {
   res.status(404).send({ error: 'Image not found' });
 };
 
-export const uploadImageController = async (req: Request, res: Response, next: NextFunction) => {
+export const uploadImageController = async (req, res: Response, next: NextFunction) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       return next(new Error('Multer error'));
@@ -54,7 +54,7 @@ export const uploadImageController = async (req: Request, res: Response, next: N
 };
 
 export const removeImage = async (name: string) => {
-  const imagePath = path.join(__dirname, `../images/${name}.png`);
+  const imagePath = path.join(__dirname, `../../images/${name}.png`);
   fs.unlink(imagePath, (err) => {
     if (err) {
       throw new Error('Something went wrong');

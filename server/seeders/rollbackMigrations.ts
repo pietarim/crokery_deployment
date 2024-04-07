@@ -1,4 +1,4 @@
-import config from '../config/config';
+import config from '../src/config/config';
 const { Sequelize } = require('sequelize');
 const { Umzug, SequelizeStorage } = require('umzug');
 

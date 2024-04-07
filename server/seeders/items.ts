@@ -1,5 +1,5 @@
-import { Item, ItemCategory } from "../models";
-import { NewItem } from "../types";
+import { Item, ItemCategory } from "../src/models";
+import { NewItem } from "../src/types/types";
 
 export const items: NewItem[] = [
   {

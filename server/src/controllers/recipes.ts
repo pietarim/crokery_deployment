@@ -2,7 +2,7 @@ import { sequelize } from '../config/db';
 import { Op } from 'sequelize';
 import { Recipe } from '../models/recipe';
 import { RecipeToItem } from '../models/recipeToItem';
-import { NewRecipesItem, NewRecipeToItem, NewRecipe } from '../types';
+import { NewRecipesItem, NewRecipeToItem, NewRecipe } from '../types/types';
 import { parseIncredient, parseString, parseDescription, parseNumber, parseBoolean } from '../config/utils';
 import { getRecipeToItemById, createRecipeToItems, deleteRecipeToItems } from '../query/recipeToItem';
 import {
@@ -11,30 +11,24 @@ import {
 } from '../query/recipe';
 import { removeImage } from './image';
 import { Request, Response } from 'express';
-import { TokenUser } from '../types';
 
-interface UserRecipeRequest extends Request {
-  user: TokenUser;
-  query: { page: string; };
-}
-
-export const getUsersOwnRecipes = async (req: UserRecipeRequest, res: Response) => {
+export const getUsersOwnRecipes = async (req, res: Response) => {
   const userId = req.user.id;
-  const page = parseInt(req.query.page);
-  const recipes = await getUsersRecipes(userId, page);
+  const { page } = req.query;
+  let pageInt = parseInt(page as string);
+  if (!pageInt) {
+    pageInt = 0;
+  }
+  const recipes = await getUsersRecipes(userId, pageInt);
   const recipeCount = await Recipe.count();
-  if (recipeCount > page * 5) {
+  if (recipeCount > pageInt * 5) {
     res.json({ recipes, hasMore: true });
   } else {
     res.json({ recipes, hasMore: false });
   }
 };
 
-interface IntroduceRecipesRequest extends Request {
-  body: { recipeIds: number[]; };
-}
-
-export const getIntroduceRecipes = async (req: Request, res: Response) => {
+export const getIntroduceRecipes = async (req, res: Response) => {
   const { recipeIds } = req.body;
   const recipes = await getRandomRecipes(recipeIds);
   const recipeCount = await Recipe.count();
@@ -47,30 +41,30 @@ export const getIntroduceRecipes = async (req: Request, res: Response) => {
   }
 };
 
-interface MostLikedRecipesRequest extends Request {
-  query: { page: string; };
-}
-
-export const returnMostLikedRecipes = async (req: MostLikedRecipesRequest, res: Response) => {
-  const page = parseInt(req.query.page);
-  const recipes = await getMostLikedRecipes(page);
+export const returnMostLikedRecipes = async (req, res: Response) => {
+  const { page } = req.query;
+  let pageInt = parseInt(page as string);
+  if (!pageInt) {
+    pageInt = 0;
+  }
+  const recipes = await getMostLikedRecipes(pageInt);
   const recipeCount = await Recipe.count();
-  console.log(recipes);
   recipes.sort((a: any, b: any) => b.dataValues.like_count - a.dataValues.like_count);
-  if (recipeCount > page * 5) {
+  if (recipeCount > pageInt * 5) {
     res.json({ recipes, hasMore: true });
   } else {
     res.json({ recipes, hasMore: false });
   }
 };
 
-export const likeRecipeController = async (req: any, res: any) => {
-  const recipeId = req.params.id;
+export const likeRecipeController = async (req, res: Response) => {
+  const recipeId = parseInt(req.params.id);
   const userId = req.user.id;
-  return await likeRecipe(recipeId, userId);
+  await likeRecipe(recipeId, userId);
+  res.status(200).send('Recipe liked');
 };
 
-export const createRecipe = async (req: any, res: any) => {
+export const createRecipe = async (req, res: Response) => {
   const { name, description, global, incredients, imageUri } = req.body;
   const ownerId = req.user.id;
   const transaction = await sequelize.transaction();
@@ -112,7 +106,7 @@ export const createRecipe = async (req: any, res: any) => {
   }
 };
 
-export const deleteRecipe = async (req: any, res: any) => {
+export const deleteRecipe = async (req, res: Response) => {
   const { id } = req.params;
   const recipeId = parseInt(id);
   const userId = req.user.id;

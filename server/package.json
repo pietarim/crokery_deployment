@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "cross-env NODE_ENV=development ts-node ./index.ts",
-    "start": "node ./index.js",
+    "start:dev": "cross-env NODE_ENV=development ts-node ./src/index.ts",
+    "start": "cross-env NODE_ENV=production node ./src/index.js",
     "build": "tsc",
-    "dev": "nodemon --exec cross-env NODE_ENV=development NODE_ENV=development ts-node ./index.ts",
+    "dev": "cross-env NODE_ENV=development nodemon --exec cross-env NODE_ENV=development NODE_ENV=development ts-node ./src/index.ts",
     "local:db": "docker run -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 postgres",
     "db:dev-data": "ts-node seeders/devInitQueries.ts",
     "db:rollback": "ts-node seeders/rollBackMigrations.ts",
@@ -28,6 +28,7 @@
     "@types/validator": "^13.11.6",
     "cross-env": "^7.0.3",
     "nodemon": "^3.0.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.2.2"
   },
   "dependencies": {

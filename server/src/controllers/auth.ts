@@ -9,10 +9,6 @@ import { parseString } from '../config/utils';
 import config from '../config/config';
 import crypto from 'crypto';
 
-interface RequestWithUser extends Request {
-  user?: User;
-}
-
 interface User {
   id: number;
   username: string;
@@ -26,7 +22,7 @@ const createRefreshToken = () => {
   return crypto.randomBytes(40).toString('hex');
 };
 
-export const login = async (req: Request, res: Response, next: NextFunction) => {
+export const login = async (req, res: Response, next: NextFunction) => {
   const { username, password } = req.body;
   const user = {
     username: parseString(username),
@@ -52,15 +48,15 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     res.cookie('refreshToken', refreshToken, {
       domain: config.clientUrl,
       httpOnly: true,
-      secure: false,
+      secure: config.cookieIsSecure,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      sameSite: 'strict'
+      sameSite: config.sameSite,
     });
     res.status(200).send({ token: accessToken, username: userFromDb.username, id: userFromDb.id });
   }
 };
 
-export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
+export const registerUser = async (req, res: Response, next: NextFunction) => {
   const { username, password, email } = req.body;
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -74,24 +70,25 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
   res.status(200).json(savedUser);
 };
 
-export const extractUser = (req: RequestWithUser, res: Response, next: NextFunction) => {
+export const extractUser = (req, res: Response, next: NextFunction) => {
   const token = req.get('authorization');
   if (token && token.toLowerCase().startsWith('bearer ')) {
     const planeToken = token.substring(7);
     const decodedToken = jwt.verify(planeToken, process.env.SECRET as string) as User | string | undefined;
     if (!decodedToken || typeof decodedToken === 'string') {
-      throw new Error('401');
+      throw new Error('401'); // TODO: does express async error handle this?
     } else if (typeof decodedToken === 'object') {
       req.user = decodedToken as User;
     }
   }
 };
 
-export const getAccessToken = async (req: Request, res: Response, next: NextFunction) => {
+export const getAccessToken = async (req, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies.refreshToken;
+  console.log('refreshToken', refreshToken); // TODO
   const user = await getUserByRefreshToken(refreshToken);
   if (!user) {
-    throw new Error('invalid token');
+    throw new Error('invalid token'); // TODO: does express async error handle this?
   } else {
     const userForToken = {
       username: user.username,
@@ -103,7 +100,7 @@ export const getAccessToken = async (req: Request, res: Response, next: NextFunc
   }
 };
 
-export const logout = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+export const logout = async (req, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new Error('401');
   }

@@ -1,6 +1,7 @@
 require('express-async-errors');
-import dotenv from 'dotenv';
-dotenv.config();
+/* import dotenv from 'dotenv';
+dotenv.config(); */
+require('dotenv').config();
 import express, { Request, Response, NextFunction } from 'express';
 import config from './config/config';
 import { userRouter, recipeRouter, itemRouter, imageRouter, authRouter } from './routes';
@@ -20,7 +21,7 @@ app.use(express.static(buildPath));
 
 const sequelize = new Sequelize(config.databaseUrl, {});
 
-const loggerMiddleware = (req: Request, res: Response, next: NextFunction) => {
+const loggerMiddleware = (req, res: Response, next: NextFunction) => {
   console.log(`Request Method: ${req.method}, Endpoint: ${req.path}`);
   if (req.body && Object.keys(req.body).length !== 0) {
     console.log('Request Body:', req.body);

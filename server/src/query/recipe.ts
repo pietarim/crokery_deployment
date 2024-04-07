@@ -1,7 +1,7 @@
 import { Sequelize, Op } from 'sequelize';
 import { sequelize } from '../config/db';
 import { Recipe, Item, User, RecipeLike, RecipeToItem } from '../models';
-import { NewRecipe } from '../types';
+import { NewRecipe } from '../types/types';
 
 const recipesByIds = async (ids: number[]) => {
   return await Recipe.findAll({

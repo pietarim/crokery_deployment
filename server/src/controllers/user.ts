@@ -1,9 +1,10 @@
 import { sequelize } from "../config/db";
+import { Response } from "express";
 import { parseString } from "../config/utils";
 import bcrypt from "bcrypt";
 import { User } from "../models/user";
 import { getUsers } from "../query/user";
-import { NewUser } from "../types";
+import { NewUser } from "../types/types";
 
 export const createUser = async (user: NewUser) => {
   const { username, password, email } = user;
@@ -23,7 +24,7 @@ export const createUser = async (user: NewUser) => {
   return newUser;
 };
 
-export const updateUser = async (req: any, res: any) => {
+export const updateUser = async (req, res: Response) => {
   const { username, password, email } = req.body;
   const parsedUsername = parseString(username);
   const parsedPassword = parseString(password);
@@ -48,7 +49,7 @@ export const updateUser = async (req: any, res: any) => {
   res.status(200).json({ message: "User updated" });
 };
 
-export const getUsersController = async (req: any, res: any) => {
+export const getUsersController = async (req, res: Response) => {
   const users = await getUsers();
   res.status(200).json(users);
 };

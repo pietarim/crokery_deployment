@@ -1,24 +1,17 @@
-import { ItemCategory } from "./models";
+import { ItemCategory } from "../models";
+import { Request } from "express";
 
 export { ItemCategory };
 
-/* export enum ItemCategory {
-  Meat = 'meat',
-  Vegetable = 'vegetable',
-  Fruit = 'fruit',
-  Dairy = 'dairy',
-  Grain = 'grain',
-  Other = 'other',
-  Spice = 'spice',
-  Premade = 'premade',
-  FrozenPremade = 'frozen premade',
-  Candy = 'candy',
-  Sauce = 'sauce',
-  Fish = 'fish',
-  Seafood = 'seafood',
-  Baking = 'baking',
-  Ice_cream = 'ice cream',
-} */
+export interface TokenUser {
+  id: number;
+  username: string;
+  email: string;
+}
+
+export interface RequestWithUser extends Request {
+  user: TokenUser;
+}
 
 export interface NewRecipesItem {
   name: string;
@@ -54,12 +47,6 @@ export interface UserType {
   email: string;
   passwordHash: string;
   isAdmin: boolean;
-}
-
-export interface TokenUser {
-  id: number;
-  username: string;
-  email: string;
 }
 
 export interface NewUser {
