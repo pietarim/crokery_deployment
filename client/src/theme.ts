@@ -2,7 +2,7 @@ import { extendTheme } from '@chakra-ui/react';
 
 export const theme = extendTheme({
   colors: {
-    customGreen: { // #2 on the complementary line grayish blue
+    customBlue: { // grayish blue
       50: '#80A1C0',
       100: '#7197B9',
       200: '#638CB2',
@@ -15,7 +15,7 @@ export const theme = extendTheme({
       900: '#324D67',
       custom: '#466C8F',
     },
-    customeExit: { // #5 on the complementary line dark grayish blue
+    customeExit: { // dark grayish blue
       50: '#758899',
       100: '#687B8C',
       200: '#5C6D7D',
@@ -28,7 +28,7 @@ export const theme = extendTheme({
       900: '#2A3139',
       custom: '#3A454F'
     },
-    customYellow: { // #1 on the complementary line yellow harvest gold
+    customYellow: { // yellow harvest gold
       50: '#e9f5f2',
       100: '#d4a758',
       200: '#d9ba7f',
@@ -41,7 +41,7 @@ export const theme = extendTheme({
       900: '#1a4731',
       custom: '#CF9332'
     },
-    anotherCustomYellow: { // #1 on the complementary line yellow harvest gold
+    anotherCustomYellow: { // yellow harvest gold
       50: '#f7c26e',
       100: '#f5b856',
       200: '#f4ae3e',
@@ -55,7 +55,7 @@ export const theme = extendTheme({
       custom: '#DB8C0D'
     },
 
-    customCoyote: { // #4 on the complementary line
+    customCoyote: { // brownish
       50: '#B5A07E',
       100: '#AD9570',
       200: '#987F57',
@@ -72,9 +72,8 @@ export const theme = extendTheme({
       500: '#54CF32',
       custom: '#54CF32'
     },
-    errorRed: {
-      500: '#CF3A32',
-      custom: '#CF3232'
-    },
-  }
+    errorRed: '#CF3A32',
+    brightBlue: '#3283CF',
+    lightOrangeBackground: '#fcebcf'
+  },
 });

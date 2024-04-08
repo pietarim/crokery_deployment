@@ -17,7 +17,8 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
 
   const theme = useTheme();
   const bgColor = theme.colors.blue[300];
-  const customYellow = theme.colors.yellow[300];
+  const customBlue = theme.colors.customBlue[300];
+  const customYellow = theme.colors.customYellow[500];
 
   const addItemsToArr = (isFirst: boolean) => {
     if (!selectedItem || itemAmount === '0.00') {
@@ -62,7 +63,7 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
       <Flex direction='column'>
         <Flex direction='row' align='center' justify='center' mt='3'>
           <Text style={{
-            backgroundColor: '#466C8F' /* customYellow */,
+            backgroundColor: customBlue,
             margin: '3px',
             borderRadius: '20px',
             display: 'inline-block',
@@ -70,7 +71,7 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
           }}>{selectedItem ? selectedItem.name : 'pick item'}</Text>
           {numberImput()}
         </Flex>
-        <Flex /* direction='row' */ /* align='center' */ justify='center' /* mt='3' */>
+        <Flex justify='center'>
           <Button
             width='auto'
             colorScheme='customeExit'
@@ -89,7 +90,7 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
         <List style={{ backgroundColor: "white", borderRadius: '6px', padding: "4px" }}>
           {itemArray.length && itemArray.map((item, id) => {
             return <ListItem
-              style={{ backgroundColor: '#DBBE0D' /* bgColor */, margin: '3px', borderRadius: '20px', display: 'inline-block', padding: '4px' }}
+              style={{ backgroundColor: bgColor, margin: '3px', borderRadius: '20px', display: 'inline-block', padding: '4px' }}
               key={id}>{item.name} {item.amount}
             </ListItem>;
           })}
@@ -98,7 +99,7 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
           <Text
             m='3'
             style={{
-              backgroundColor: '#DB8C0D' /* '#0D7ADB' */ /* customYellow */, /* todo this pretty good */
+              backgroundColor: customYellow,
               borderRadius: '20px',
               display: 'inline-block',
               padding: '4px'

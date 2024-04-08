@@ -180,7 +180,7 @@ const ShoppingList = () => {
                     +
                   </Button>
                   <Button
-                    colorScheme="customGreen"
+                    colorScheme="customBlue"
                     onClick={() => dispatch(removeProductById(item.id))}>
                     -
                   </Button>
@@ -203,7 +203,7 @@ const ShoppingList = () => {
                 {shoppingList.items.map((item) => (
                   <ListItem key={item.id}>
                     <Text>{item.name}: {item.count}</Text>
-                    <Button mr='1' colorScheme="customGreen" onClick={() => dispatch(addProductById(item.id))}>
+                    <Button mr='1' colorScheme="customBlue" onClick={() => dispatch(addProductById(item.id))}>
                       +
                     </Button>
                     <Button colorScheme="customYellow" onClick={() => dispatch(removeProductById(item.id))}>

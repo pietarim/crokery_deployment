@@ -2,34 +2,26 @@ require('express-async-errors');
 /* import dotenv from 'dotenv';
 dotenv.config(); */
 require('dotenv').config();
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import config from './config/config';
 import { userRouter, recipeRouter, itemRouter, imageRouter, authRouter } from './routes';
 import cors from 'cors';
 import { errorHandler } from './middleware/errorHandler';
+import { loggerMiddleware } from './middleware/loggerMiddleware';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 
-const { Model, DataTypes, Sequelize, QueryTypes } = require('sequelize');
+const { Sequelize } = require('sequelize');
 
 const app = express();
-app.use(cookieParser());
 const port = config.port;
+
+app.use(cookieParser());
 
 const buildPath = path.join(__dirname, '/dist');
 app.use(express.static(buildPath));
 
 const sequelize = new Sequelize(config.databaseUrl, {});
-
-const loggerMiddleware = (req, res: Response, next: NextFunction) => {
-  console.log(`Request Method: ${req.method}, Endpoint: ${req.path}`);
-  if (req.body && Object.keys(req.body).length !== 0) {
-    console.log('Request Body:', req.body);
-  } else {
-    console.log('Request Body: None');
-  }
-  next();
-};
 
 const main = async () => {
   try {
@@ -41,9 +33,7 @@ const main = async () => {
 
 main();
 
-const url = config.url;
-
-const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:3001', 'http://localhost:5173', url, 'https://grocerylist.today'];
+const allowedOrigins = config.allowedOrigins;
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -55,8 +45,10 @@ app.use(cors({
   },
   credentials: true,
 }));
+
 app.use(express.json());
 app.use(loggerMiddleware);
+
 app.get('/ping', (_req, res) => {
   res.send('pong');
 });

@@ -42,7 +42,7 @@ const NotificationComponent: React.FC<NotificationProps> = ({ message, type = 'i
 
   const theme = useTheme();
   const successGreen = theme.colors.successGreen.custom;
-  const errorRed = theme.colors.errorRed.custom;
+  const errorRed = theme.colors.errorRed;
   const infoBlue = theme.colors.blue[500];
 
   const colors = {

@@ -1,6 +1,6 @@
 const port: string = process.env.PORT || '3001';
 const databaseUrl: string = process.env.DATABASE_URL || 'postgres://postgres:mysecretpassword@localhost:5432/postgres';
-const url = process.env.SERVER_URL || 'http://localhost:3000';
+const url = process.env.SERVER_URL || 'http://localhost:3001';
 const clientUrl = process.env.CLIENT_URL || 'localhost';
 
 enum SameSite {
@@ -27,13 +27,16 @@ switch (process.env.NODE_ENV) {
     break;
 }
 
+const allowedOrigins = [url, 'http://127.0.0.1:5173', 'http://localhost:5173'];
+
 const config = {
   port,
   databaseUrl,
   url,
   clientUrl,
   sameSite,
-  cookieIsSecure
+  cookieIsSecure,
+  allowedOrigins
 };
 
 export default config;

@@ -76,7 +76,7 @@ export const extractUser = (req, res: Response, next: NextFunction) => {
     const planeToken = token.substring(7);
     const decodedToken = jwt.verify(planeToken, process.env.SECRET as string) as User | string | undefined;
     if (!decodedToken || typeof decodedToken === 'string') {
-      throw new Error('401'); // TODO: does express async error handle this?
+      next(new Error('401'));
     } else if (typeof decodedToken === 'object') {
       req.user = decodedToken as User;
     }
@@ -85,10 +85,9 @@ export const extractUser = (req, res: Response, next: NextFunction) => {
 
 export const getAccessToken = async (req, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies.refreshToken;
-  console.log('refreshToken', refreshToken); // TODO
   const user = await getUserByRefreshToken(refreshToken);
   if (!user) {
-    throw new Error('invalid token'); // TODO: does express async error handle this?
+    next(new Error('invalid token'));
   } else {
     const userForToken = {
       username: user.username,

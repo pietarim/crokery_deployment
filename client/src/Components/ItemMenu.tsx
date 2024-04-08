@@ -1,4 +1,4 @@
-import { useRadioGroup, useRadio, Wrap, Box } from "@chakra-ui/react";
+import { useRadioGroup, useRadio, Wrap, Box, useTheme } from "@chakra-ui/react";
 import { WorkMemryItem, OptionsForMenu, WorkMemorySelection, NewSelectedItem } from "../types";
 import { useSelector } from "react-redux";
 
@@ -14,6 +14,9 @@ interface ItemMenuProps {
 function RadioCard(props: any) {
   const { getInputProps, getRadioProps } = useRadio(props);
 
+  const theme = useTheme();
+  const customYellow = theme.colors.customYellow[500];
+
   const input = getInputProps();
   const checkbox = getRadioProps();
 
@@ -27,7 +30,7 @@ function RadioCard(props: any) {
         borderRadius='md'
         boxShadow='md'
         _checked={{
-          bg: '#DB8C0D'/* '#CF9332' */,
+          bg: customYellow,
           color: 'white',
           borderColor: '#CF9332',
         }}
@@ -48,6 +51,10 @@ const ItemMenu = ({
   setSelectedItem,
   setHiddenCategoryList,
   handleVisibleItems }: ItemMenuProps) => {
+
+  const theme = useTheme();
+  const customBlue = theme.colors.customBlue['custom'];
+  const brightBlue = theme.colors.brightBlue;
 
   interface AppState {
     itemOptions: OptionsForMenu[];
@@ -95,7 +102,7 @@ const ItemMenu = ({
                 boxShadow='md'
                 onClick={() => hadleToggleHideList(value.category)}
                 style={{
-                  backgroundColor: hiddenCategoryList.includes(value.category) ? "#466C8F" : "#3283CF"
+                  backgroundColor: hiddenCategoryList.includes(value.category) ? customBlue : brightBlue
                 }}
                 px={[2, 3]}
                 py={[2, 3]}

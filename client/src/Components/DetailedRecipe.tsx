@@ -97,7 +97,7 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipePro
             <Button variant='outline' colorScheme='blue' onClick={() => handleAddToCart()}>
               Add to cart
             </Button>
-            <Button colorScheme='customGreen' variant='ghost' onClick={() => { handleLike(); }}>
+            <Button colorScheme='customBlue' variant='ghost' onClick={() => { handleLike(); }}>
               Like
             </Button>
             {isRecipeOwner ? <Button leftIcon={<DeleteIcon />} onClick={() => handleRemove()}>

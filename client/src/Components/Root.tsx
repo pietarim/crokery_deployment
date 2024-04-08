@@ -115,7 +115,7 @@ const Root = () => {
                 <NavButton buttonPath='/shopping-list' buttonText='Shopping list' />
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Badge fontSize='0.8em' colorScheme='customGreen' mr='2' variant='solid' >
+                <Badge fontSize='0.8em' colorScheme='customBlue' mr='2' variant='solid' >
                   User: {token.username} logged in
                 </Badge>
                 <Button colorScheme='customeExit' onClick={() => handleLogout()}>Log out</Button>
