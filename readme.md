@@ -60,7 +60,7 @@ Add these secrets to your github actions secrets:
 PORT: port that your server is using for running express app
 DATABASE_URL_PRODUCTION: production postgres connection string
 SECRET: jwt secret used for token you can free to chose string here
-SERVER_URL: production url
+SERVER_URL: production url (https://your-domain:22 port is used for tcp connection)
 (in case of you deploy to digital ocean using ubuntu server you need also:
 SERVER_USER: <user that you use to deploy>
 SSH_PRIVATE_KEY: <deploying users ssh key>
