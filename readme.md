@@ -61,20 +61,18 @@ PORT: port that your server is using for running express app
 DATABASE_URL_PRODUCTION: production postgres connection string
 SECRET: jwt secret used for token you can free to chose string here
 SERVER_URL: production url
+(in case of you deploy to digital ocean using ubuntu server you need also:
+SERVER_USER: <user that you use to deploy>
+SSH_PRIVATE_KEY: <deploying users ssh key>
+)
 
-You can get .env file to your production environment by adding:
+App needs ecosystem.config.js in order to run with pm2
 
-home/ubuntu_user/ecosystem/ecosystem.config.js:
+add to your server home/ubuntu_user/ecosystem/ecosystem.config.js:
 
 module.exports = {
 apps: [{
 name: 'grocerlist',
 script: './index.js',
-env: {
-DATABASE_URL: CONNECTION_STRING,
-SERVER: APP_URL,
-PORT: EXPRESS_PORT,
-SECRET: FREE_TO_CHOOSE_JWT_SECRET,
-},
 }]
 };
