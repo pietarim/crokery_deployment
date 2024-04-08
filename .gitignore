@@ -5,3 +5,5 @@ dev-notes.txt
 /server/build/
 client/dist/
 commits.txt
+/server/dist/*
+!server/dist/.gitkeep
