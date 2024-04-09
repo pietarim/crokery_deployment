@@ -46,11 +46,11 @@ export const login = async (req, res: Response, next: NextFunction) => {
 
     const accessToken = jwt.sign(userForToken, process.env.SECRET as string, { expiresIn: '2m' });
     res.cookie('refreshToken', refreshToken, {
-      domain: config.clientUrl,
+      domain: config.cookieUrl,
       httpOnly: true,
       secure: config.cookieIsSecure,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      sameSite: config.sameSite,
+      sameSite: config.cookieIsSameSite,
     });
     res.status(200).send({ token: accessToken, username: userFromDb.username, id: userFromDb.id });
   }

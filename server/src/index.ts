@@ -33,13 +33,11 @@ const main = async () => {
 
 main();
 
-const allowedOrigins = config.allowedCorsOrigins;
-
 app.use(loggerMiddleware);
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || config.corsAllowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('CORS Error: This origin is not allowed'));
