@@ -24,6 +24,7 @@ const createRefreshToken = () => {
 
 export const login = async (req, res: Response, next: NextFunction) => {
   const { username, password } = req.body;
+  console.log(req.body);
   const user = {
     username: parseString(username),
     password: parseString(password),

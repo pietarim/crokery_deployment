@@ -23,14 +23,14 @@ switch (process.env.NODE_ENV) {
   case 'development':
     cookieIsSameSite = SameSite.None;
     cookieIsSecure = false;
-    corsAllowedOrigins.push(corsOriginClientUrl);
+    corsAllowedOrigins.push(corsOriginClientUrl, process.env.SERVER_URL);
     cookieUrl = 'localhost';
     break;
   default:
-    cookieIsSameSite = SameSite.Srtict;
-    cookieIsSecure = true;
-    corsAllowedOrigins.push(cookieUrl);
-    cookieUrl = process.env.CLIENT_URL;
+    cookieIsSameSite = SameSite.None;
+    cookieIsSecure = false;
+    corsAllowedOrigins.push(corsOriginClientUrl, process.env.SERVER_URL);
+    cookieUrl = 'localhost';
     break;
 }
 

@@ -33,8 +33,6 @@ const main = async () => {
 
 main();
 
-app.use(loggerMiddleware);
-
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || config.corsAllowedOrigins.includes(origin)) {
@@ -47,6 +45,8 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+app.use(loggerMiddleware);
 
 app.get('/ping', (_req, res) => {
   res.send('pong');
