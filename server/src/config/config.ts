@@ -1,6 +1,5 @@
 const port: string = process.env.PORT || '3001';
 const databaseUrl: string = process.env.DATABASE_URL || 'postgres://postgres:mysecretpassword@localhost:5432/postgres';
-const url = process.env.SERVER_URL || 'http://localhost:3001';
 let cookieUrl;
 const corsOriginClientUrl = process.env.CLIENT_URL || 'http://localhost:5432';
 
@@ -19,13 +18,13 @@ switch (process.env.NODE_ENV) {
     cookieIsSameSite = SameSite.Srtict;
     cookieIsSecure = true;
     corsAllowedOrigins.push(process.env.CLIENT_URL || 'http://localhost:5432');
-    cookieUrl = 'localhost';
+    cookieUrl = process.env.SERVER_URL;
     break;
   case 'development':
     cookieIsSameSite = SameSite.None;
     cookieIsSecure = false;
     corsAllowedOrigins.push(corsOriginClientUrl);
-    cookieUrl = process.env.CLIENT_URL;
+    cookieUrl = 'localhost';
     break;
   default:
     cookieIsSameSite = SameSite.Srtict;
@@ -38,7 +37,6 @@ switch (process.env.NODE_ENV) {
 const config = {
   port,
   databaseUrl,
-  url,
   cookieUrl,
   cookieIsSameSite,
   cookieIsSecure,
