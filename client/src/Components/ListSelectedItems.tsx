@@ -2,6 +2,7 @@ import {
   Text, Button, List, ListItem, useTheme, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper,
   NumberDecrementStepper, Flex
 } from "@chakra-ui/react";
+import { SmallCloseIcon } from '@chakra-ui/icons';
 import { SelectedItem, NewSelectedItem } from '../types';
 import { useState } from 'react';
 
@@ -91,7 +92,12 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
           {itemArray.length && itemArray.map((item, id) => {
             return <ListItem
               style={{ backgroundColor: bgColor, margin: '3px', borderRadius: '20px', display: 'inline-block', padding: '4px' }}
-              key={id}>{item.name} {item.amount}
+              key={id}>{item.name} {item.amount} <SmallCloseIcon
+                _hover={{ cursor: 'pointer' }}
+                onClick={() => {
+                  const newArray = itemArray.filter((i) => i.id !== item.id);
+                  setItemArray(newArray);
+                }} />
             </ListItem>;
           })}
         </List>

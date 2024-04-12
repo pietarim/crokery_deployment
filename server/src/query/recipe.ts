@@ -58,10 +58,6 @@ export const getRandomRecipes = async (oldIds: number[]) => {
   return { recipes, recipeIds: [...oldIds, ...ids] };
 };
 
-interface RecipeLikeResponse extends Recipe { // TODO remove or use
-  like_count: number;
-}
-
 export const getMostLikedRecipes = async (page: number) => {
   const offsetValue = (page - 1) * 5;
 

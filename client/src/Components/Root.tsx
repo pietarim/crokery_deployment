@@ -43,7 +43,7 @@ const Root = () => {
   if (!token) {
     return (
       <Flex align='center' justify='center'>
-        <Tabs isFitted variant='enclosed' colorScheme='customYellow' width={{ md: '600px' }}>
+        <Tabs mt={1} isFitted variant='enclosed' colorScheme='customYellow' width={{ md: '600px' }}>
           <TabList>
             <Tab>Login</Tab>
             <Tab>Register</Tab>

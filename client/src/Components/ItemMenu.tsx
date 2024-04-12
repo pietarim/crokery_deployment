@@ -92,7 +92,7 @@ const ItemMenu = ({
 
   return (
     <>
-      <Wrap {...group}>
+      <Wrap mb={3} {...group}>
         {visibleItems.length && visibleItems.map((value, i) => {
           return (
             <Wrap key={i}>

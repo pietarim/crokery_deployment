@@ -12,7 +12,10 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}\\server\\src\\index.ts",
       "cwd": "${workspaceFolder}\\server",
-      "outFiles": ["${workspaceFolder}/**/*.js"]
+      "outFiles": ["${workspaceFolder}/**/*.js"],
+      "env": {
+        "NODE_ENV": "development"
+      }
     }
   ]
 }

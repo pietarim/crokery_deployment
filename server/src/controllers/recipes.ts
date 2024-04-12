@@ -115,10 +115,11 @@ export const deleteRecipe = async (req, res: Response) => {
   }
   const imageUri = await getRecipesImageUri(recipeId);
   if (!imageUri) {
-    throw new Error('404');
+    await removeOwnedRecipe(recipeId, userId);
+  } else {
+    await removeOwnedRecipe(recipeId, userId);
+    await removeImage(imageUri);
   }
-  await removeOwnedRecipe(recipeId, userId);
-  await removeImage(imageUri);
   res.status(204).send('Recipe deleted');
 };
 
