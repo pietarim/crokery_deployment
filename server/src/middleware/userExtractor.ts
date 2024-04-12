@@ -15,7 +15,6 @@ export const userExtractor = (req, res: Response, next: NextFunction) => {
       const decodedToken = jwt.verify(token, process.env.SECRET as string);
       const reqWithUser = req as RequestWithToken;
       reqWithUser.user = parseUser(decodedToken);
-      /* req.user = parseUser(decodedToken); */
       if (!reqWithUser.user) {
         return res.status(401).json({ error: 'token invalid' });
       }

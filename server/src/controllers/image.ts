@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 });
 
 const imageFilter = (_req, file: Express.Multer.File, cb: FileFilterCallback) => {
-  if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+  if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/)) {
     return cb(null, false);
   }
   cb(null, true);
@@ -26,7 +26,7 @@ const upload = multer({ storage: storage, fileFilter: imageFilter }).single('ima
 
 export const getImage = async (_req, res: Response) => {
 
-  const imageExtensions = ['.png', '.jpg', '.jpeg'];
+  const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp'];
 
   const { name } = _req.params;
   for (const extension of imageExtensions) {

@@ -5,6 +5,8 @@ interface ErrorWithMessage extends Error {
 }
 
 export const errorHandler: ErrorRequestHandler = (error: ErrorWithMessage, _req, res: Response, next: NextFunction) => {
+  console.log('errorHandler opened');
+  console.log(error.message);
   if (error.message === 'Saving recipe failed') {
     return res.status(500).json({
       error: 'Saving recipe failed',

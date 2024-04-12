@@ -81,7 +81,7 @@ const CreateRecipe = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
 
-    if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
+    if (file && (file.type === "image/png" || file.type === "image/jpeg" || file.type === "image/webp")) {
       setImageToUpload(file);
       const reader = new FileReader();
       reader.onload = (readEvent: ProgressEvent<FileReader>) => {
@@ -99,8 +99,10 @@ const CreateRecipe = () => {
     if (imageToUpload) {
       const formData = new FormData();
       formData.append('image', imageToUpload);
+      console.log('image uploading happening');
       post('/images', formData)
         .then((imageQuery) => {
+          console.log('image uploaded');
           const imageUri = imageQuery.data.imageUri;
           post('/recipes', { ...recipe, imageUri })
             .then(() => {
@@ -174,11 +176,11 @@ const CreateRecipe = () => {
                     )}
                   </Field>
                   <Text fontSize='xs' style={{ marginTop: '18px', marginBottom: '2px', width: '100%', textAlign: 'left' }}>
-                    Upload image (use .png, .jpg or .jpeg)
+                    Upload image (use .png, .jpg, .jpeg or .webp)
                   </Text>
                   <input
                     style={{ marginBottom: '18px', width: '100%', textAlign: 'left' }}
-                    type='file' accept='image/png, image/jpeg' onChange={handleImageChange}
+                    type='file' accept='image/png, image/jpeg, image/webp' onChange={handleImageChange}
                   />
                   <label>
                     <Field type='checkbox' name='public' />
