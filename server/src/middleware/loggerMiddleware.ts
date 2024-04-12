@@ -11,6 +11,8 @@ export const loggerMiddleware = (req, res: Response, next: NextFunction) => {
     }
   } else {
     console.log('Request Body: None');
+  } if (req.file) {
+    console.log('Request File:', req.file);
   }
   next();
 };

@@ -120,7 +120,7 @@ export const deleteRecipe = async (req, res: Response) => {
     await removeOwnedRecipe(recipeId, userId);
     await removeImage(imageUri);
   }
-  res.status(204).send('Recipe deleted');
+  return res.status(204).send('Recipe deleted');
 };
 
 export const updateRecipe = async (recipe: NewRecipe, id: number, ingredients: any) => {

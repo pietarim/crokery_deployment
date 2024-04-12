@@ -134,9 +134,9 @@ export const removeOwnedRecipe = async (recipeId: number, userId: number) => {
     if (recipe.ownerId !== userId) {
       throw new Error('401');
     }
-    await RecipeToItem.destroy({ where: { recipeId: recipeId } });
-    await RecipeLike.destroy({ where: { recipeId: recipeId } });
-    await recipe.destroy();
+    await RecipeToItem.destroy({ where: { recipeId: recipeId }, transaction: transaction });
+    await RecipeLike.destroy({ where: { recipeId: recipeId }, transaction: transaction });
+    await recipe.destroy({ transaction: transaction });
     await transaction.commit();
   } catch (error) {
     await transaction.rollback();

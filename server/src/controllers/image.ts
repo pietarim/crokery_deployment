@@ -54,10 +54,16 @@ export const uploadImageController = async (req, res: Response, next: NextFuncti
 };
 
 export const removeImage = async (name: string) => {
-  const imagePath = path.join(__dirname, `../../images/${name}.png`);
-  fs.unlink(imagePath, (err) => {
-    if (err) {
-      throw new Error('Something went wrong');
+
+  const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp'];
+  for (const extension of imageExtensions) {
+    const imagePath = path.join(__dirname, `../../images/${name}${extension}`);
+    if (fs.existsSync(imagePath)) {
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          throw new Error('Something went wrong');
+        }
+      });
     }
-  });
+  };
 };

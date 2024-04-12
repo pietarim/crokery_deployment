@@ -15,6 +15,8 @@ interface DetailedRecipeProps {
 
 const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipeProps) => {
 
+  console.log("Detailed recipe:", detailedRecipe);
+
   const isMobile = useWidth();
   const { put, deleteReq } = useAxios();
   const { token } = useAuth();
