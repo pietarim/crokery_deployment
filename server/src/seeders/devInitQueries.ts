@@ -1,13 +1,13 @@
 import { Sequelize } from 'sequelize';
 import { Model, DataTypes } from "sequelize";
-import { User, Recipe, RecipeToItem, Item, RecipeLike } from "../src/models/index";
+import { User, Recipe, RecipeToItem, Item, RecipeLike } from "../models/index";
 import { Umzug, SequelizeStorage } from 'umzug';
 import { users } from './users';
 import { items } from './items';
 import { descriptions } from './recipeDescriptions';
-import { Friend } from '../src/models/friend';
-import { createUser } from '../src/controllers/user';
-import { TokenUser } from '../src/types/types';
+import { Friend } from '../models/friend';
+import { createUser } from '../controllers/user';
+import { TokenUser } from '../types/types';
 
 const sequelize = new Sequelize('postgres://postgres:mysecretpassword@localhost:5432/postgres');
 
