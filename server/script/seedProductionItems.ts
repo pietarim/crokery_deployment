@@ -8,6 +8,7 @@ const sequelize = new Sequelize(config.databaseUrl, {});
 const seedProductionItems = async () => {
   try {
     await sequelize.authenticate();
+    await Item.destroy({ where: {} });
     await Item.bulkCreate(items);
     console.log('Items seeded');
   } catch (error) {
