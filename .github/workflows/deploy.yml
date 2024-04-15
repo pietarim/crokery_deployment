@@ -17,7 +17,6 @@ jobs:
 
       - name: Build client
         run: |
-          echo "Go to /client"
           cd client
           echo "Install dependencies"
           npm install
@@ -26,14 +25,9 @@ jobs:
 
       - name: Build backend
         run: |
-          pwd
-          echo "Go to /server"
-          cd server
-          pwd
           echo "Install dependencies"
           npm install
           echo "Build backend"
-          ls node_modules/@types
           npm run build
           cp -R ../client/dist build/
           cp package.json build/
@@ -43,8 +37,6 @@ jobs:
           echo PORT=${{ secrets.PORT }} >> build/.env
           echo SECRET=${{ secrets.SECRET }} >> build/.env
           echo SERVER_URL=https://grocerylist.today >> build/.env
-          echo "juuri ennen build echo"
-          ls -R -a build/
 
       - name: Deploy to server
         uses: appleboy/scp-action@master
@@ -63,10 +55,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/page/www
+            mkdir images
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
-            echo "ennen pwd"
-            pwd
             rm -rf /home/page/www/* && mv /home/page/temp/server/build/* /home/page/www/
             rm -rf /home/page/temp
             echo DATABASE_URL=${{ secrets.DATABASE_URL }} > .env
@@ -75,6 +66,5 @@ jobs:
             echo SERVER_URL=grocerylist.today >> .env
             echo CLIENT_URL=https://grocerylist.today >> .env
             cp ../ecosystem/ecosystem.config.js ./
-            ls
             npm install
             pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js
