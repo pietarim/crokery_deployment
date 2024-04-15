@@ -19,6 +19,7 @@ switch (process.env.NODE_ENV) {
     cookieIsSecure = true;
     corsAllowedOrigins.push(process.env.CLIENT_URL || 'http://localhost:5432');
     cookieUrl = process.env.SERVER_URL;
+
     break;
   case 'development':
     cookieIsSameSite = SameSite.None;

@@ -30,7 +30,7 @@ export const getImage = async (_req, res: Response) => {
 
   const { name } = _req.params;
   for (const extension of imageExtensions) {
-    const imagePath = path.join(__dirname, `../../images/${name}${extension}`);
+    const imagePath = path.join(__dirname, `/server/images/${name}${extension}`);
     if (fs.existsSync(imagePath)) {
       res.sendFile(imagePath);
       return;
@@ -40,8 +40,6 @@ export const getImage = async (_req, res: Response) => {
 };
 
 export const uploadImageController = async (req, res: Response, next: NextFunction) => {
-  console.log('uploadImageController'); // TODO remove
-  console.log(req.params.image); // TODO remove
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       return next(new Error('Multer error'));
@@ -59,7 +57,7 @@ export const removeImage = async (name: string) => {
 
   const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp'];
   for (const extension of imageExtensions) {
-    const imagePath = path.join(__dirname, `../../images/${name}${extension}`);
+    const imagePath = path.join(__dirname, `/server/images/${name}${extension}`);
     if (fs.existsSync(imagePath)) {
       fs.unlink(imagePath, (err) => {
         if (err) {
