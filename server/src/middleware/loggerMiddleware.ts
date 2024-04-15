@@ -11,8 +11,12 @@ export const loggerMiddleware = (req, res: Response, next: NextFunction) => {
     }
   } else {
     console.log('Request Body: None');
-  } if (req.file) {
+  }
+  console.log('HALOJAAA PÄÄSTIINKÖ TÄNNE'); // TODO remove
+  if (req.file) {
     console.log('Request File:', req.file);
+  } else {
+    console.log('Request File: None');
   }
   next();
 };

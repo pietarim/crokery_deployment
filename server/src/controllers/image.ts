@@ -40,6 +40,8 @@ export const getImage = async (_req, res: Response) => {
 };
 
 export const uploadImageController = async (req, res: Response, next: NextFunction) => {
+  console.log('uploadImageController'); // TODO remove
+  console.log(req.params.image); // TODO remove
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       return next(new Error('Multer error'));

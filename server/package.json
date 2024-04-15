@@ -10,8 +10,8 @@
     "build": "tsc",
     "dev": "cross-env NODE_ENV=development ts-node ./src/index.ts",
     "db:local": "docker run -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 postgres",
-    "db:dev-data": "ts-node seeders/devInitQueries.ts",
-    "db:rollback": "ts-node seeders/rollBackMigrations.ts",
+    "db:dev-data": "ts-node src/seeders/devInitQueries.ts",
+    "db:rollback": "ts-node src/seeders/rollBackMigrations.ts",
     "db:migrate:prod": "node script/startMigration.js",
     "seed:items:prod": "node script/seedProductionItems.js"
   },
@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
