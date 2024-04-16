@@ -67,7 +67,7 @@ jobs:
             echo "cd /home/page/temp/server"
             cd /home/page/temp/server # todo clean up start
             ls
-            cd /home/page/temp/sever/build
+            cd /home/page/temp/server/build
             ls
             echo "echo /home/page/temp"
             ls # todo clean up end
