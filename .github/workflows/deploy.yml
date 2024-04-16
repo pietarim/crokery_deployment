@@ -64,8 +64,8 @@ jobs:
             cd /home/page/temp/server/build/server
             ls
             pwd
-            echo "cd /home/page/temp/server"
-            cd /home/page/temp/server # todo clean up start
+            echo "cd /home/page/temp/server/server"
+            cd /home/page/temp/server/server # todo clean up start
             ls
             cd /home/page/temp
             ls
