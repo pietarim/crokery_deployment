@@ -79,7 +79,7 @@ jobs:
             echo SECRET=${{ secrets.SECRET }} >> .env
             echo SERVER_URL=grocerylist.today >> .env
             echo CLIENT_URL=https://grocerylist.today >> .env
-            # cp ../ecosystem/ecosystem.config.js ./ # todo remove this line and next line
+            cp ../ecosystem/ecosystem.config.js ./
             ls
             npm install
-            pm2 restart /home/page/ecosystem.config.js || pm2 start /home/page/ecosystem.config.js
+            pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js
