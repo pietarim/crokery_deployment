@@ -49,7 +49,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: 'server/build/*'
-          target: '/home/page/temp'
+          target: '/home/page/temp/server'
 
       - name: Execute Deployment Commands
         uses: appleboy/ssh-action@master
@@ -58,20 +58,28 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/page/www
+            # is there really build folder
+            cd /home/page/temp/server/build
+            echo "echo /home/page/temp/server/build"
+            ls
             mkdir images
+            cd /home/page/server
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
-            echo "ennen pwd"
+            echo "Keep production images"
+            mv /home/page/server/images/* /home/page/temp/server/build/images/
+            cd /home/page/temp/server/build # todo remove this and next three lines
             pwd
-            rm -rf /home/page/www/* && mv /home/page/temp/server/build/* /home/page/www/
+            ls
+            cd /home/page/server
+            rm -rf /home/page/server/* && mv /home/page/temp/server/build/* /home/page/server/
             rm -rf /home/page/temp
             echo DATABASE_URL=${{ secrets.DATABASE_URL }} > .env
             echo PORT=${{ secrets.PORT }} >> .env
             echo SECRET=${{ secrets.SECRET }} >> .env
             echo SERVER_URL=grocerylist.today >> .env
             echo CLIENT_URL=https://grocerylist.today >> .env
-            cp ../ecosystem/ecosystem.config.js ./
+            # cp ../ecosystem/ecosystem.config.js ./ # todo remove this line and next line
             ls
             npm install
             pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js

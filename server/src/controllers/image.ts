@@ -8,7 +8,7 @@ export const getImageByName = async (name: string) => {
 
 const storage = multer.diskStorage({
   destination: function (_req, file, cb) {
-    cb(null, 'images');
+    cb(null, '../images');
   },
   filename: function (_req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
@@ -30,7 +30,7 @@ export const getImage = async (_req, res: Response) => {
 
   const { name } = _req.params;
   for (const extension of imageExtensions) {
-    const imagePath = path.join(__dirname, `/server/images/${name}${extension}`);
+    const imagePath = path.join(__dirname, `../../../images/${name}${extension}`);
     if (fs.existsSync(imagePath)) {
       res.sendFile(imagePath);
       return;
@@ -57,7 +57,7 @@ export const removeImage = async (name: string) => {
 
   const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp'];
   for (const extension of imageExtensions) {
-    const imagePath = path.join(__dirname, `/server/images/${name}${extension}`);
+    const imagePath = path.join(__dirname, `../../../images/${name}${extension}`);
     if (fs.existsSync(imagePath)) {
       fs.unlink(imagePath, (err) => {
         if (err) {
