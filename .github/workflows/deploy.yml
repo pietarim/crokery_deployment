@@ -59,9 +59,13 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # is there really build folder
-            cd /home/page/temp/server/build
-            echo "echo /home/page/temp/server/build"
+            # cd /home/page/temp/server/build
+            cd /home/page/temp/server # todo clean up start
             ls
+            cd /home/page/temp
+            ls
+            echo "echo /home/page/temp/server/build"
+            ls # todo clean up end
             mkdir images
             cd /home/page/server
             export NVM_DIR=~/.nvm
