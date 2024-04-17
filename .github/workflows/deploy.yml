@@ -60,24 +60,28 @@ jobs:
           script: |
             # is there really build folder
             # cd /home/page/temp/server/build
-            echo "echo /home/page/temp/server/build"
+            echo "POINT 1: echo /home/page/temp/server/build"
             cd /home/page/temp/server/build
             ls
             pwd
-            echo "cd /home/page/temp/server"
+            echo "POINT 2: cd /home/page/temp/server"
             cd /home/page/temp/server # todo clean up start
             ls
             cd /home/page/temp/server/build
             ls
-            echo "echo /home/page/temp"
+            echo "POINT 3: echo /home/page/temp"
             ls # todo clean up end
             mkdir images
             cd /home/page/server
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
-            echo "Keep production images"
+            echo "POINT 4: Keep production images"
             mkdir -p /home/page/server/images
-            mv /home/page/server/images/* /home/page/temp/server/build/images/
+            if [ "$(ls -A /home/page/server/images)" ]; then
+              mv /home/page/server/images/* /home/page/temp/server/build/images/
+            else
+              echo "POINT 5: No production images"
+            fi
             cd /home/page/temp/server/build # todo remove this and next three lines
             pwd
             ls
