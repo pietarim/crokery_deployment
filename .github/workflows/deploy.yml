@@ -76,6 +76,7 @@ jobs:
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
             echo "Keep production images"
+            mkdir -p /home/page/server/images
             mv /home/page/server/images/* /home/page/temp/server/build/images/
             cd /home/page/temp/server/build # todo remove this and next three lines
             pwd
