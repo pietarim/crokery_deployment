@@ -12,6 +12,7 @@ enum SameSite {
 let cookieIsSameSite: SameSite;
 let cookieIsSecure: boolean;
 const corsAllowedOrigins: string[] = [];
+let imageProjectPath: string;
 
 switch (process.env.NODE_ENV) {
   case 'production':
@@ -19,19 +20,21 @@ switch (process.env.NODE_ENV) {
     cookieIsSecure = true;
     corsAllowedOrigins.push(process.env.CLIENT_URL || 'http://localhost:5432');
     cookieUrl = process.env.SERVER_URL;
-
+    imageProjectPath = "../images/";
     break;
   case 'development':
     cookieIsSameSite = SameSite.None;
     cookieIsSecure = false;
     corsAllowedOrigins.push(corsOriginClientUrl, process.env.SERVER_URL);
     cookieUrl = 'localhost';
+    imageProjectPath = "../../images/";
     break;
   default:
     cookieIsSameSite = SameSite.None;
     cookieIsSecure = false;
     corsAllowedOrigins.push(corsOriginClientUrl, process.env.SERVER_URL);
     cookieUrl = 'localhost';
+    imageProjectPath = "../../images/";
     break;
 }
 
@@ -41,7 +44,8 @@ const config = {
   cookieUrl,
   cookieIsSameSite,
   cookieIsSecure,
-  corsAllowedOrigins
+  corsAllowedOrigins,
+  imageProjectPath
 };
 
 export default config;

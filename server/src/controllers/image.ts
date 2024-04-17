@@ -2,9 +2,9 @@ import multer, { FileFilterCallback } from 'multer';
 import { Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
+import config from '../config/config';
 
-export const getImageByName = async (name: string) => {
-};
+const { imageProjectPath } = config;
 
 const storage = multer.diskStorage({
   destination: function (_req, file, cb) {
@@ -30,7 +30,7 @@ export const getImage = async (_req, res: Response) => {
 
   const { name } = _req.params;
   for (const extension of imageExtensions) {
-    const imagePath = path.join(__dirname, `/server/images/${name}${extension}`);
+    const imagePath = path.join(__dirname, `${imageProjectPath}${name}${extension}`);
     if (fs.existsSync(imagePath)) {
       res.sendFile(imagePath);
       return;
@@ -57,7 +57,7 @@ export const removeImage = async (name: string) => {
 
   const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp'];
   for (const extension of imageExtensions) {
-    const imagePath = path.join(__dirname, `/server/images/${name}${extension}`);
+    const imagePath = path.join(__dirname, `${imageProjectPath}${name}${extension}`);
     if (fs.existsSync(imagePath)) {
       fs.unlink(imagePath, (err) => {
         if (err) {
