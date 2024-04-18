@@ -29,17 +29,16 @@ jobs:
           echo "Install dependencies"
           npm install
           echo "Build backend"
-          ls node_modules/@types
           npm run build
           cp -R ../client/dist build/
           cp package.json build/
           cp package-lock.json build/
           rm -rf build/node_modules
-          echo DATABASE_URL=${{ secrets.DATABASE_URL }} > build/.env
-          echo PORT=${{ secrets.PORT }} >> build/.env
-          echo SECRET=${{ secrets.SECRET }} >> build/.env
-          echo SERVER_URL=https://grocerylist.today >> build/.env
-          echo "juuri ennen build echo"
+        #  echo DATABASE_URL=${{ secrets.DATABASE_URL }} > build/.env
+        #  echo PORT=${{ secrets.PORT }} >> build/.env
+        #  echo SECRET=${{ secrets.SECRET }} >> build/.env
+        #  echo SERVER_URL=https://grocerylist.today >> build/.env
+        #  echo "juuri ennen build echo"
           ls -R -a build/
 
       - name: Deploy to server
@@ -58,42 +57,25 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # is there really build folder
-            # cd /home/page/temp/server/build
-            echo "POINT 1: echo /home/page/temp/server/build"
             cd /home/page/temp/server/build
-            ls
-            pwd
-            echo "POINT 2: cd /home/page/temp/server"
-            cd /home/page/temp/server # todo clean up start
-            ls
-            cd /home/page/temp/server/build
-            ls
-            echo "POINT 3: echo /home/page/temp"
-            ls # todo clean up end
             mkdir images
             cd /home/page/server
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
-            echo "POINT 4: Keep production images"
             mkdir -p /home/page/server/images
             if [ "$(ls -A /home/page/server/images)" ]; then
               mv /home/page/server/images/* /home/page/temp/server/build/images/
             else
               echo "POINT 5: No production images"
             fi
-            cd /home/page/temp/server/build # todo remove this and next three lines
-            pwd
-            ls
             cd /home/page/server
             rm -rf /home/page/server/* && mv /home/page/temp/server/build/* /home/page/server/
             rm -rf /home/page/temp
-            echo DATABASE_URL=${{ secrets.DATABASE_URL }} > .env
-            echo PORT=${{ secrets.PORT }} >> .env
-            echo SECRET=${{ secrets.SECRET }} >> .env
-            echo SERVER_URL=grocerylist.today >> .env
-            echo CLIENT_URL=https://grocerylist.today >> .env
+          #  echo DATABASE_URL=${{ secrets.DATABASE_URL }} > .env
+          #  echo PORT=${{ secrets.PORT }} >> .env
+          #  echo SECRET=${{ secrets.SECRET }} >> .env
+          #  echo SERVER_URL=grocerylist.today >> .env
+          #  echo CLIENT_URL=https://grocerylist.today >> .env
             cp ../ecosystem/ecosystem.config.js ./
-            ls
             npm install
             pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js
