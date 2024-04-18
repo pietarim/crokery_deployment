@@ -70,9 +70,18 @@ App needs ecosystem.config.js in order to run with pm2
 
 add to your server home/ubuntu_user/ecosystem/ecosystem.config.js:
 
+```
 module.exports = {
-apps: [{
-name: 'grocerlist',
-script: './index.js',
-}]
+  apps: [{
+    name: 'grocerylist',
+    script: './home/page/<username>/server/index.js',
+    env: {
+      DATABASE_URL: <YOUR-PRODUCTION-CONNECTION-STRING>,
+      SERVER_URL: <YOUR DOMAIN ('https://example.com')>,
+      PORT: 3001,
+      SECRET: <YOUR SECRET>,
+      NODE_ENV: 'production'
+    }
+  }]
 };
+```
