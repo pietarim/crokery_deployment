@@ -26,19 +26,12 @@ jobs:
       - name: Build backend
         run: |
           cd server
-          echo "Install dependencies"
           npm install
-          echo "Build backend"
           npm run build
-          cp -R ../client/dist build/
-          cp package.json build/
-          cp package-lock.json build/
+          mv -R ../client/dist build/
+          mv package.json build/
+          mv package-lock.json build/
           rm -rf build/node_modules
-          #  echo DATABASE_URL=${{ secrets.DATABASE_URL }} > build/.env
-          #  echo PORT=${{ secrets.PORT }} >> build/.env
-          #  echo SECRET=${{ secrets.SECRET }} >> build/.env
-          #  echo SERVER_URL=https://grocerylist.today >> build/.env
-          #  echo "juuri ennen build echo"
           ls -R -a build/
 
       - name: Deploy to server
@@ -57,8 +50,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/page/temp/server/build
-            mkdir images
+            mkdir /home/page/temp/server/build/images
             cd /home/page/server
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
@@ -68,14 +60,9 @@ jobs:
             else
               echo "POINT 5: No production images"
             fi
-            cd /home/page/server
             rm -rf /home/page/server/* && mv /home/page/temp/server/build/* /home/page/server/
             rm -rf /home/page/temp
-            #  echo DATABASE_URL=${{ secrets.DATABASE_URL }} > .env
-            #  echo PORT=${{ secrets.PORT }} >> .env
-            #  echo SECRET=${{ secrets.SECRET }} >> .env
-            #  echo SERVER_URL=grocerylist.today >> .env
-            #  echo CLIENT_URL=https://grocerylist.today >> .env
+            cd /home/page/server
             cp ../ecosystem/ecosystem.config.js ./
             npm install
             pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js
