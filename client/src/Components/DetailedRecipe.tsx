@@ -15,8 +15,6 @@ interface DetailedRecipeProps {
 
 const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipeProps) => {
 
-  console.log("Detailed recipe:", detailedRecipe);
-
   const isMobile = useWidth();
   const { put, deleteReq } = useAxios();
   const { token } = useAuth();
@@ -60,39 +58,40 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipePro
         direction={{ base: 'column', sm: 'row' }}
         overflow='hidden'
         variant='elevated'
-        style={{ marginTop: '4rem', marginBottom: '1rem' }}
+        maxW="container.xl"
       >
-        <Flex className="recipe-content" direction="column" justify="space-between" flex="1">
+        <Flex className="recipe-content" direction="column" justify="space-between">
           <CardBody>
             <Flex justifyContent="flex-end" alignItems="center" width="100%">
               <CloseButton onClick={() => setDetailedRecipe(null)} />
             </Flex>
             <Divider />
-            <Flex direction="row" justify="space-between" flex="1">
-              <Flex direction="column" justify="space-between" flex="1">
-                <Image
-                  objectFit='cover'
-                  maxW={{ base: '100%', sm: '200px' }}
-                  src={`${base_url}/images/${detailedRecipe.imageUri}`}
-                  alt={detailedRecipe.name}
-                />
-                <Card minW='175px'>
-                  {detailedRecipe.item.map((i, index) => (
-                    <Text key={index}>
-                      {i.name}: {i.recipeToItem.amount}
-                    </Text>
-                  ))}
-                </Card>
+            <Flex direction="row" justify="space-between">
+              <Flex className='first-row' direction="column" justify="space-between" maxW={'200px'}>
+                <div>
+                  <Image
+                    objectFit='cover'
+                    src={`${base_url}/images/${detailedRecipe.imageUri}`}
+                    alt={detailedRecipe.name}
+                    maxW={{ base: '100%', sm: '200px' }}
+                  />
+                  <Card w={'100%'}>
+                    {detailedRecipe.item.map((i, index) => (
+                      <Text key={index}>
+                        {i.name}: {i.recipeToItem.amount}
+                      </Text>
+                    ))}
+                  </Card></div>
               </Flex>
-              <div>
-                <Heading mb='3' size='xl' color='customCoyote.custom' textAlign="center" flex="1">
+              <Flex direction="column" w={'100%'}>
+                <Heading mb='3' size='xl' color='customCoyote.custom' textAlign="center">
                   {detailedRecipe.name}
                 </Heading>
                 <Divider />
                 <Text fontSize='lg' style={{ margin: '12px' }}>
                   {detailedRecipe.description}
                 </Text>
-              </div>
+              </Flex>
             </Flex>
           </CardBody>
           <CardFooter>

@@ -1,6 +1,6 @@
 .recipe-container {
   position: relative;
-  margin: 46px;
+  margin: 4rem auto;
 }
 
 .detailed-recipe-background {
@@ -47,7 +47,7 @@
 
 @keyframes fadeOut {
   to {
-    opacity: 0; /* Fade to fully opaque */
+    opacity: 0;
     height: 0;
   }
 }

@@ -99,16 +99,15 @@ const Root = () => {
           }}
           >
             <Box
-              style={{
-                position: 'relative',
-                margin: '0 auto',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                backgroundColor: 'rgba(58, 69, 79, 0.75)',
-                width: '100%',
-                maxWidth: '1280px',
-              }}>
+              m='0 auto'
+              w='100%'
+              maxW='container.xl'
+              justifyContent={'space-between'}
+              alignContent={'center'}
+              display={'flex'}
+              position='relative'
+              backgroundColor={'rgba(58, 69, 79, 0.75)'}
+            >
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <NavButton buttonPath='/' buttonText='Discover recipes' />
                 <NavButton buttonPath='/create-recipe' buttonText='Create recipe' />

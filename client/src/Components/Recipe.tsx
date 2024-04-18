@@ -52,7 +52,7 @@ const Recipe = ({ recipe, setDetailedRecipe }: RecipeProps) => {
             <Text style={{ margin: '12px' }} noOfLines={3}>
               {recipe.description}
             </Text>
-            <Card style={{ backgroundColor: cardBackground /* '#e2e6e9' *//* '#e6f9ff' */ }} variant='elevated' minW='175px'>
+            <Card style={{ backgroundColor: cardBackground }} variant='elevated' minW='175px'>
               <Text as='b' style={{ borderBottom: '1px solid #002633' }}>Incredients:</Text>
               {recipe.item.length && recipe.item.map((i: Item, index: number) => (
                 <Text key={index} noOfLines={3}>

@@ -76,4 +76,9 @@ export const theme = extendTheme({
     brightBlue: '#3283CF',
     lightOrangeBackground: '#fcebcf'
   },
+  sizes: {
+    container: {
+      xl: "1280px"
+    }
+  }
 });
