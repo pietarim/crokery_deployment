@@ -28,7 +28,7 @@ jobs:
           cd server
           npm install
           npm run build
-          mv -R ../client/dist build/
+          mv ../client/dist build/
           mv package.json build/
           mv package-lock.json build/
           rm -rf build/node_modules
