@@ -13,7 +13,6 @@ const NavButton = ({ buttonPath, buttonText }: NavButtonProps) => {
     <Link to={buttonPath}>
       <Button
         mr={0.5}
-        /* variant='outline' */
         style={{ borderBottomLeftRadius: '0', borderBottomRightRadius: '0' }}
         colorScheme='customCoyote' isActive={location.pathname === buttonPath ? true : false}
       >

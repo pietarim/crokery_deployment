@@ -60,13 +60,13 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipePro
         variant='elevated'
         maxW="container.xl"
       >
-        <Flex className="recipe-content" direction="column" justify="space-between">
+        <Flex className="recipe-content" direction="column" justify="space-between" w="100%">
           <CardBody>
             <Flex justifyContent="flex-end" alignItems="center" width="100%">
               <CloseButton onClick={() => setDetailedRecipe(null)} />
             </Flex>
             <Divider />
-            <Flex direction="row" justify="space-between">
+            <Flex className="image-and-description" direction="row" justify="space-between">
               <Flex className='first-row' direction="column" justify="space-between" maxW={'200px'}>
                 <div>
                   <Image
