@@ -2,19 +2,35 @@ import {
   Text, Button, List, ListItem, useTheme, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper,
   NumberDecrementStepper, Flex
 } from "@chakra-ui/react";
-import { SmallCloseIcon } from '@chakra-ui/icons';
+import { SmallCloseIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
 import { SelectedItem, NewSelectedItem } from '../types';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { RecipeToggleContext } from "../context/CreateRecipeToggleContext";
+import { WorkMemorySelection } from "../types";
 
 interface ListSelectedItemsProps {
   itemArray: SelectedItem[];
   setItemArray: React.Dispatch<React.SetStateAction<SelectedItem[]>>;
   selectedItem: NewSelectedItem | null;
   setSelectedItem: React.Dispatch<React.SetStateAction<NewSelectedItem | null>>;
+  visibleItems: WorkMemorySelection[];
+  hiddenCategoryList: string[];
+  setHiddenCategoryList: React.Dispatch<React.SetStateAction<string[]>>;
+  handleVisibleItems: (hiddenCategoryList: string[], workMemoryList: WorkMemorySelection[]) => void;
 }
 
-const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedItem }: ListSelectedItemsProps) => {
+const ListSelectedItems = ({
+  itemArray,
+  setItemArray,
+  selectedItem,
+  setSelectedItem,
+  visibleItems,
+  hiddenCategoryList,
+  setHiddenCategoryList,
+  handleVisibleItems
+}: ListSelectedItemsProps) => {
   const [itemAmount, setItemAmount] = useState('0.00');
+  const { itemVisible, toggleVisible } = useContext(RecipeToggleContext);
 
   const theme = useTheme();
   const bgColor = theme.colors.blue[300];
@@ -59,7 +75,11 @@ const ListSelectedItems = ({ itemArray, setItemArray, selectedItem, setSelectedI
     );
   };
 
-  if (!itemArray.length) {
+  if (!itemVisible) {
+    return (<ArrowUpDownIcon onClick={() => toggleVisible('itemVisible')} />);
+  }
+
+  else if (!itemArray.length) {
     return (
       <Flex direction='column'>
         <Flex direction='row' align='center' justify='center' mt='3'>

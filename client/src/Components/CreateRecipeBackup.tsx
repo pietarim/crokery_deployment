@@ -15,10 +15,6 @@ import ItemMenu from "./ItemMenu";
 import { setItemOptions } from "../redux/modules/itemOptions";
 import { useDispatch } from "react-redux";
 import { useNotification } from "../hooks/useNotification";
-import RecipeTitleAndDescription from "./RecipeTitleAndDescription";
-import CreateRecipeImage from "./CreateRecipeImage";
-import { RecipeToggleContext } from "../context/CreateRecipeToggleContext";
-import { set } from "lodash";
 
 const CreateRecipe = () => {
   const dispatch = useDispatch();
@@ -29,9 +25,6 @@ const CreateRecipe = () => {
   const [selectedItem, setSelectedItem] = useState<NewSelectedItem | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [imageToUpload, setImageToUpload] = useState<File | null>(null);
-  const [titleVisible, setTitleVisible] = useState<boolean>(true);
-  const [imageVisible, setImageVisible] = useState<boolean>(false);
-  const [itemVisible, setItemVisible] = useState<boolean>(false);
 
   const { showNotification } = useNotification();
 
@@ -102,28 +95,6 @@ const CreateRecipe = () => {
     }
   };
 
-  function toggleVisible(visible: string) {
-    switch (visible) {
-      case 'titleVisible':
-        setTitleVisible(true);
-        setItemVisible(false);
-        setImageVisible(false);
-        break;
-      case 'imageVisible':
-        setImageVisible(true);
-        setTitleVisible(false);
-        setItemVisible(false);
-        break;
-      case 'itemVisible':
-        setItemVisible(true);
-        setTitleVisible(false);
-        setImageVisible(false);
-        break;
-      default:
-        break;
-    }
-  }
-
   const handleRecipeSubmit = (recipe: FormRecipe) => {
     if (imageToUpload) {
       const formData = new FormData();
@@ -181,47 +152,71 @@ const CreateRecipe = () => {
             >
               {(props) => (
                 <Form>
-                  <RecipeToggleContext.Provider
-                    value={{
-                      titleVisible, imageVisible, itemVisible, toggleVisible
-                    }}
+                  <Field name='name' validate={validateName}>
+                    {({ field, form }: FormikProps) => (
+                      <FormControl isInvalid={!!form.errors.name && form.touched.name}>
+                        <FormLabel>Recipe name</FormLabel>
+                        <Input style={{ backgroundColor: "white" }} {...field} placeholder='Recipe name' />
+                        <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Field name='description' validate={validateDescription}>
+                    {({ field, form }: FormikPropsWithTextarea) => (
+                      <FormControl isInvalid={!!form.errors.description && form.touched.description}>
+                        <FormLabel>Recipe description</FormLabel>
+                        <Textarea
+                          {...field}
+                          placeholder='Description of the recipe...'
+                          style={{ backgroundColor: "white" }}
+                          size='sm'
+                        />
+                        <FormErrorMessage>{form.errors.description}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Text fontSize='xs' style={{ marginTop: '18px', marginBottom: '2px', width: '100%', textAlign: 'left' }}>
+                    Upload image (use .png, .jpg, .jpeg or .webp)
+                  </Text>
+                  <input
+                    style={{ marginBottom: '18px', width: '100%', textAlign: 'left' }}
+                    type='file' accept='image/png, image/jpeg, image/webp' onChange={handleImageChange}
+                  />
+                  <label>
+                    <Field type='checkbox' name='public' />
+                    Make public
+                  </label>
+                  {previewImage ? <Box boxSize='sm' overflow='hidden'><Image src={previewImage} alt='recipe' /></Box> : null}
+                  <Heading as='h4' mt='2' mb='4' size='md'>Added incredients:</Heading>
+                  <ListSelectedItems
+                    itemArray={itemArray}
+                    setItemArray={setItemArray}
+                    selectedItem={selectedItem}
+                    setSelectedItem={setSelectedItem}
+                  />
+                  <br />
+                  <Button
+                    mt={8}
+                    mb={7}
+                    colorScheme='customeExit'
+                    isLoading={props.isSubmitting}
+                    type='submit'
                   >
-                    <RecipeTitleAndDescription
-                      validateName={validateName}
-                      validateDescription={validateDescription}
-                    />
-                    <CreateRecipeImage
-                      handleImageChange={handleImageChange}
-                      previewImage={previewImage}
-                    />
-                    <Heading as='h4' mt='2' mb='4' size='md'>Added incredients:</Heading>
-                    <ListSelectedItems
-                      itemArray={itemArray}
-                      setItemArray={setItemArray}
-                      selectedItem={selectedItem}
-                      setSelectedItem={setSelectedItem}
-                      visibleItems={visibleItems}
-                      hiddenCategoryList={hiddenCategoryList}
-                      setHiddenCategoryList={setHiddenCategoryList}
-                      handleVisibleItems={handleVisibleItems}
-                    />
-                    <br />
-                    <Button
-                      mt={8}
-                      mb={7}
-                      colorScheme='customeExit'
-                      isLoading={props.isSubmitting}
-                      type='submit'
-                    >
-                      Submit
-                    </Button>
-                  </RecipeToggleContext.Provider>
+                    Submit
+                  </Button>
                 </Form>
               )}
             </Formik>
           </CardBody>
         </Card>
       </Flex >
+      <ItemMenu
+        visibleItems={visibleItems}
+        hiddenCategoryList={hiddenCategoryList}
+        setSelectedItem={setSelectedItem}
+        setHiddenCategoryList={setHiddenCategoryList}
+        handleVisibleItems={handleVisibleItems}
+      />
     </>
   );
 };
