@@ -37,14 +37,11 @@ export interface DbItem {
   id: number;
   name: string;
   unitSize: string;
-  type: string;
-  recipeToItem: RecipeToItem;
   pricePerUnit: number;
   updatedAt: Date;
   brand: string;
   createdAt: Date;
   price: number;
-  category: string;
 }
 
 export interface FormRecipe {

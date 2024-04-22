@@ -4,6 +4,17 @@
   text-align: center;
 }
 
+.formAreaButton {
+  border-bottom: '1px solid black';
+  text-align: 'left';
+  background-color: 'red';
+}
+
+.formAreaButton:hover {
+  background-color: 'lightgrey';
+  cursor: 'pointer';
+}
+
 /* .logo {
   height: 6em;
   padding: 1.5em;

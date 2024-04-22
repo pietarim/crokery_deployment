@@ -1,64 +1,46 @@
 import {
-  Box, Card, CardBody, Flex,
-  FormControl, FormLabel, FormErrorMessage, Input, Textarea, Button, Image, Heading,
-  Divider, Text
+  Card, CardBody, Flex, Button, Heading, Divider, Stack, Progress
 } from "@chakra-ui/react";
-import { Field, Form, Formik } from 'formik';
-import { useAxios } from "../hooks/useAxios";
+import { Form, Formik } from 'formik';
+import { useAxios } from "../../hooks/useAxios";
 import React, { useEffect, useState } from "react";
 import {
-  DbItem, WorkMemorySelection, SelectedItem, NewSelectedItem,
-  FormRecipe, FormikProps, FormikPropsWithTextarea
-} from "../types";
+  DbItem, SelectedItem, FormRecipe, OptionsForMenu
+} from "../../types";
 import ListSelectedItems from "./ListSelectedItems";
-import ItemMenu from "./ItemMenu";
-import { setItemOptions } from "../redux/modules/itemOptions";
+import { setItemOptions } from "../../redux/modules/itemOptions";
 import { useDispatch } from "react-redux";
-import { useNotification } from "../hooks/useNotification";
+import { useNotification } from "../../hooks/useNotification";
 import RecipeTitleAndDescription from "./RecipeTitleAndDescription";
 import CreateRecipeImage from "./CreateRecipeImage";
-import { RecipeToggleContext } from "../context/CreateRecipeToggleContext";
-import { set } from "lodash";
+import { RecipeToggleContext } from "../../context/CreateRecipeToggleContext";
 
 const CreateRecipe = () => {
   const dispatch = useDispatch();
   const { get, post, deleteReq } = useAxios();
-  const [visibleItems, setVisibleItems] = useState<WorkMemorySelection[]>([]);
-  const [hiddenCategoryList, setHiddenCategoryList] = useState<string[]>([]);
+  const [visibleItems, setVisibleItems] = useState<OptionsForMenu[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [itemArray, setItemArray] = useState<SelectedItem[]>([]);
-  const [selectedItem, setSelectedItem] = useState<NewSelectedItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<DbItem | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [imageToUpload, setImageToUpload] = useState<File | null>(null);
   const [titleVisible, setTitleVisible] = useState<boolean>(true);
   const [imageVisible, setImageVisible] = useState<boolean>(false);
   const [itemVisible, setItemVisible] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(33);
 
   const { showNotification } = useNotification();
-
-  const handleVisibleItems = (hiddenCategoryList: string[], workMemoryList: WorkMemorySelection[]) => {
-    const newVisibleData = workMemoryList.map((item) => {
-      if (!hiddenCategoryList.includes(item.category)) {
-        return item;
-      } else {
-        return { category: item.category, items: [] };
-      }
-    });
-    setVisibleItems(newVisibleData);
-  };
 
   useEffect(() => {
     const getItems = async () => {
       try {
         const itemsQuery = await get('/items');
-        const itemList = itemsQuery.data;
+        const itemList: OptionsForMenu[] = itemsQuery.data;
         if (!itemList.length) {
           return;
         } else if (itemList.length) {
-          const initialHiddenCategoryList = itemList.map((item: DbItem) => item.category);
-          setHiddenCategoryList(initialHiddenCategoryList);
           dispatch(setItemOptions(itemList));
           setVisibleItems(itemList);
-          handleVisibleItems(initialHiddenCategoryList, itemList);
         }
       }
       catch {
@@ -108,16 +90,19 @@ const CreateRecipe = () => {
         setTitleVisible(true);
         setItemVisible(false);
         setImageVisible(false);
+        setProgress(33);
         break;
       case 'imageVisible':
         setImageVisible(true);
         setTitleVisible(false);
         setItemVisible(false);
+        setProgress(66);
         break;
       case 'itemVisible':
         setItemVisible(true);
         setTitleVisible(false);
         setImageVisible(false);
+        setProgress(100);
         break;
       default:
         break;
@@ -128,7 +113,6 @@ const CreateRecipe = () => {
     if (imageToUpload) {
       const formData = new FormData();
       formData.append('image', imageToUpload);
-      console.log('image uploading happening');
       post('/images', formData)
         .then((imageQuery) => {
           console.log('image uploaded');
@@ -163,7 +147,10 @@ const CreateRecipe = () => {
       </Heading>
       <Divider mb='2' style={{ marginTop: '10px', color: 'black' }} />
       <Flex justify={'center'}>
-        <Card mb='2' variant='filled' style={{ backgroundColor: '#e2e6e9' }} width={{ base: "100%", md: "480px" }}>
+        <Card mb='2' variant='filled' style={{ backgroundColor: '#e2e6e9' }} width={{ base: "100%", md: "480px", lg: "980px", xl: "1260px" }}>
+          <Stack>
+            <Progress value={progress} />
+          </Stack>
           <CardBody>
             <Formik
               initialValues={{ name: '', description: '', public: false }}
@@ -194,16 +181,14 @@ const CreateRecipe = () => {
                       handleImageChange={handleImageChange}
                       previewImage={previewImage}
                     />
-                    <Heading as='h4' mt='2' mb='4' size='md'>Added incredients:</Heading>
                     <ListSelectedItems
                       itemArray={itemArray}
                       setItemArray={setItemArray}
                       selectedItem={selectedItem}
                       setSelectedItem={setSelectedItem}
                       visibleItems={visibleItems}
-                      hiddenCategoryList={hiddenCategoryList}
-                      setHiddenCategoryList={setHiddenCategoryList}
-                      handleVisibleItems={handleVisibleItems}
+                      selectedCategory={selectedCategory}
+                      setSelectedCategory={setSelectedCategory}
                     />
                     <br />
                     <Button

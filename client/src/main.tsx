@@ -10,7 +10,7 @@ import { NotificationProvider } from './context/NotificationContext.tsx';
 import { WidthProvider } from './context/WidthContext';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from './Components/ErrorPage';
-import CreateRecipe from './Components/CreateRecipe';
+import CreateRecipe from './Components/NewRecipe/CreateRecipe.tsx';
 import ShoppingList from './Components/ShoppingList';
 import ListRecipes from './Components/ListRecipes.tsx';
 import Root from './Components/Root';

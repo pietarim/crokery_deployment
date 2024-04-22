@@ -70,7 +70,7 @@ export const theme = extendTheme({
     },
     successGreen: {
       500: '#54CF32',
-      custom: '#54CF32'
+      custom: "#0DDB5B"/* '#54CF32' */ /* "#32CF6D" */ /* "#527A46" */
     },
     errorRed: '#CF3A32',
     brightBlue: '#3283CF',

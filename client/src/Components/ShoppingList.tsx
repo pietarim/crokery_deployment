@@ -63,6 +63,7 @@ const ShoppingList = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
   const shoppingList = useSelector((state: AppState) => state.shoppingCart);
+  console.log(shoppingList.items); // TODO remove
 
   if (!shoppingList.items.length) {
     return (
@@ -124,6 +125,7 @@ const ShoppingList = () => {
   }
 
   const returnItemsAndTitles = () => {
+    console.log(itemsAndTypes);
     {
       return itemsAndTypes.map((i: ItemAndTitle) => {
         if (typeof i === 'string') {

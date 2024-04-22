@@ -1,13 +1,12 @@
 import { useRadioGroup, useRadio, Wrap, Box, useTheme } from "@chakra-ui/react";
-import { WorkMemryItem, OptionsForMenu, WorkMemorySelection, NewSelectedItem } from "../types";
+import { WorkMemryItem, OptionsForMenu, WorkMemorySelection, DbItem } from "../../types";
 import { useSelector } from "react-redux";
 
 interface ItemMenuProps {
   visibleItems: WorkMemorySelection[];
-  hiddenCategoryList: string[];
-  setSelectedItem: React.Dispatch<React.SetStateAction<NewSelectedItem | null>>;
-  setHiddenCategoryList: React.Dispatch<React.SetStateAction<string[]>>;
-  handleVisibleItems: (hiddenCategoryList: string[], workMemoryList: WorkMemorySelection[]) => void;
+  selectedCategory: string | null;
+  setSelectedItem: React.Dispatch<React.SetStateAction<DbItem | null>>;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,10 +46,10 @@ function RadioCard(props: any) {
 
 const ItemMenu = ({
   visibleItems,
-  hiddenCategoryList,
+  selectedCategory,
   setSelectedItem,
-  setHiddenCategoryList,
-  handleVisibleItems }: ItemMenuProps) => {
+  setSelectedCategory
+}: ItemMenuProps) => {
 
   const theme = useTheme();
   const customBlue = theme.colors.customBlue['custom'];
@@ -70,18 +69,6 @@ const ItemMenu = ({
     setSelectedItem(item);
   };
 
-  const hadleToggleHideList = (category: string) => {
-    if (hiddenCategoryList.includes(category)) {
-      const newHiddenCategoryList = hiddenCategoryList.filter((c) => c !== category);
-      setHiddenCategoryList(newHiddenCategoryList);
-      handleVisibleItems(newHiddenCategoryList, itemOptions);
-    } else {
-      const newHiddenCategoryList = [...hiddenCategoryList, category];
-      setHiddenCategoryList(newHiddenCategoryList);
-      handleVisibleItems(newHiddenCategoryList, itemOptions);
-    }
-  };
-
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'framework',
     defaultValue: 'react',
@@ -91,7 +78,7 @@ const ItemMenu = ({
   const group = getRootProps();
 
   return (
-    <>
+    <div style={{ borderBottom: "black 1px solid", marginTop: "52px" }}>
       <Wrap mb={3} {...group}>
         {visibleItems.length && visibleItems.map((value, i) => {
           return (
@@ -100,16 +87,16 @@ const ItemMenu = ({
                 cursor='pointer'
                 borderRadius='md'
                 boxShadow='md'
-                onClick={() => hadleToggleHideList(value.category)}
+                onClick={() => setSelectedCategory(value.category)}
                 style={{
-                  backgroundColor: hiddenCategoryList.includes(value.category) ? customBlue : brightBlue
+                  backgroundColor: (selectedCategory == value.category) ? customBlue : brightBlue
                 }}
                 px={[2, 3]}
                 py={[2, 3]}
               >
                 {value.category}
               </Box>
-              {value.items.length ? value.items.map((item: WorkMemryItem) => {
+              {(value.category == selectedCategory) ? value.items.map((item: WorkMemryItem) => {
                 const radio = getRadioProps({ value: item.id.toString() });
                 return (
                   <RadioCard key={item.id.toString()} {...radio}>
@@ -122,7 +109,7 @@ const ItemMenu = ({
           );
         })}
       </Wrap>
-    </>
+    </div>
   );
 };
 

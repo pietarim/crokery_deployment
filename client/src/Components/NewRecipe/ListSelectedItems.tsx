@@ -1,22 +1,23 @@
 import {
   Text, Button, List, ListItem, useTheme, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper,
-  NumberDecrementStepper, Flex
+  NumberDecrementStepper, Flex, Heading
 } from "@chakra-ui/react";
-import { SmallCloseIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
-import { SelectedItem, NewSelectedItem } from '../types';
+import { SmallCloseIcon } from '@chakra-ui/icons';
+import { SelectedItem, DbItem, WorkMemorySelection } from '../../types';
 import { useState, useContext } from 'react';
-import { RecipeToggleContext } from "../context/CreateRecipeToggleContext";
-import { WorkMemorySelection } from "../types";
+import { RecipeToggleContext } from "../../context/CreateRecipeToggleContext";
+import ItemMenu from "./ItemMenu";
+import TitleBox from "./TitleBox";
+import FormSectionButton from "./FormSectionButton";
 
 interface ListSelectedItemsProps {
   itemArray: SelectedItem[];
   setItemArray: React.Dispatch<React.SetStateAction<SelectedItem[]>>;
-  selectedItem: NewSelectedItem | null;
-  setSelectedItem: React.Dispatch<React.SetStateAction<NewSelectedItem | null>>;
+  selectedItem: DbItem | null;
+  setSelectedItem: React.Dispatch<React.SetStateAction<DbItem | null>>;
   visibleItems: WorkMemorySelection[];
-  hiddenCategoryList: string[];
-  setHiddenCategoryList: React.Dispatch<React.SetStateAction<string[]>>;
-  handleVisibleItems: (hiddenCategoryList: string[], workMemoryList: WorkMemorySelection[]) => void;
+  selectedCategory: string | null;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const ListSelectedItems = ({
@@ -25,9 +26,8 @@ const ListSelectedItems = ({
   selectedItem,
   setSelectedItem,
   visibleItems,
-  hiddenCategoryList,
-  setHiddenCategoryList,
-  handleVisibleItems
+  selectedCategory,
+  setSelectedCategory
 }: ListSelectedItemsProps) => {
   const [itemAmount, setItemAmount] = useState('0.00');
   const { itemVisible, toggleVisible } = useContext(RecipeToggleContext);
@@ -36,6 +36,17 @@ const ListSelectedItems = ({
   const bgColor = theme.colors.blue[300];
   const customBlue = theme.colors.customBlue[300];
   const customYellow = theme.colors.customYellow[500];
+
+  const renderItemMenu = () => {
+    return (
+      <ItemMenu
+        visibleItems={visibleItems}
+        selectedCategory={selectedCategory}
+        setSelectedItem={setSelectedItem}
+        setSelectedCategory={setSelectedCategory}
+      />
+    );
+  };
 
   const addItemsToArr = (isFirst: boolean) => {
     if (!selectedItem || itemAmount === '0.00') {
@@ -61,9 +72,8 @@ const ListSelectedItems = ({
           value={itemAmount}
           precision={2}
           step={0.01}
-          mt='2'
+          ml='6'
           mr='2'
-          ml='2'
         >
           <NumberInputField style={{ backgroundColor: "white" }} />
           <NumberInputStepper>
@@ -76,12 +86,16 @@ const ListSelectedItems = ({
   };
 
   if (!itemVisible) {
-    return (<ArrowUpDownIcon onClick={() => toggleVisible('itemVisible')} />);
+    return (
+      <FormSectionButton title='Recipe incredients' toggleVisible={toggleVisible} toggleSelection="itemVisible" />
+    );
   }
 
   else if (!itemArray.length) {
     return (
       <Flex direction='column'>
+        <TitleBox title='Recipe incredients 3/3' />
+        <Heading as='h3' mt='12' mb='10' size='md'>Added incredients:</Heading>
         <Flex direction='row' align='center' justify='center' mt='3'>
           <Text style={{
             backgroundColor: customBlue,
@@ -89,25 +103,28 @@ const ListSelectedItems = ({
             borderRadius: '20px',
             display: 'inline-block',
             padding: '4px'
-          }}>{selectedItem ? selectedItem.name : 'pick item'}</Text>
+          }}>
+            {selectedItem ? selectedItem.name : 'pick item'}
+          </Text>
           {numberImput()}
-        </Flex>
-        <Flex justify='center'>
-          <Button
-            width='auto'
+          {selectedItem && <Button
+            ml='6'
             colorScheme='customeExit'
             variant='outline'
             isDisabled={(!selectedItem || itemAmount === '0.00') ? true : false}
             onClick={() => addItemsToArr(true)}
-            mt='5'
           >
             Add item
-          </Button></Flex>
+          </Button>}
+        </Flex>
+        {renderItemMenu()}
       </Flex>
     );
   } else {
     return (
       <>
+        <TitleBox title='Recipe incredients 3/3' />
+        <Heading as='h4' mt={8} mb={8} size='md'>Added incredients:</Heading>
         <List style={{ backgroundColor: "white", borderRadius: '6px', padding: "4px" }}>
           {itemArray.length && itemArray.map((item, id) => {
             return <ListItem
@@ -131,16 +148,18 @@ const ListSelectedItems = ({
               padding: '4px'
             }}>{selectedItem ? selectedItem.name : "pick item"}</Text>
           {numberImput()}
+          {selectedItem && <Button
+            ml="1"
+            colorScheme='customeExit'
+            variant='outline'
+            isDisabled={(!selectedItem || itemAmount === '0.00') ? true : false}
+            onClick={() => addItemsToArr(false)}
+          >
+            Add item
+          </Button>}
         </Flex>
-        <Button
-          mt='5'
-          colorScheme='customeExit'
-          variant='outline'
-          isDisabled={(!selectedItem || itemAmount === '0.00') ? true : false}
-          onClick={() => addItemsToArr(false)}
-        >
-          Add item
-        </Button>
+
+        {renderItemMenu()}
       </>
     );
   }
