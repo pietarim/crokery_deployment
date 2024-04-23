@@ -20,6 +20,8 @@ export interface FormikProps {
   };
 }
 
+export type FormToggleChoices = 'titleVisible' | 'imageVisible' | 'itemVisible';
+
 export interface FormikPropsWithTextarea {
   field: {
     name: string;

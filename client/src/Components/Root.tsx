@@ -92,7 +92,7 @@ const Root = () => {
             position: 'fixed',
             width: '100%',
             left: "0",
-            backgroundColor: 'rgba(58, 69, 79, 0.75)',
+            backgroundColor: 'rgba(58, 69, 79, 0.87)',
             alignItems: 'center',
             textAlign: 'center',
             zIndex: '5'
@@ -106,7 +106,6 @@ const Root = () => {
               alignContent={'center'}
               display={'flex'}
               position='relative'
-              backgroundColor={'rgba(58, 69, 79, 0.75)'}
             >
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <NavButton buttonPath='/' buttonText='Discover recipes' />
@@ -114,7 +113,7 @@ const Root = () => {
                 <NavButton buttonPath='/shopping-list' buttonText='Shopping list' />
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Badge fontSize='0.8em' colorScheme='customBlue' mr='2' variant='solid' >
+                <Badge fontSize='0.8em' colorScheme='anotherCustomYellow' mr='2' variant='outline' style={{ backgroundColor: 'white' }} >
                   User: {token.username} logged in
                 </Badge>
                 <Button colorScheme='customeExit' onClick={() => handleLogout()}>Log out</Button>

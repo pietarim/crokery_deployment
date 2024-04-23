@@ -1,12 +1,11 @@
 import { Text, Box } from "@chakra-ui/react";
 import { ArrowUpDownIcon } from "@chakra-ui/icons";
-
-type ToggleSelection = 'titleVisible' | 'imageVisible' | 'itemVisible';
+import { FormToggleChoices } from "../../types";
 
 interface FormSectionButtonProps {
   title: string;
-  toggleVisible: (visible: string) => void;
-  toggleSelection: ToggleSelection;
+  toggleVisible: (visible: FormToggleChoices) => void;
+  toggleSelection: FormToggleChoices;
 };
 
 const FormSectionButton = ({ title, toggleVisible, toggleSelection }: FormSectionButtonProps) => {

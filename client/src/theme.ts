@@ -54,6 +54,19 @@ export const theme = extendTheme({
       900: '#784d07',
       custom: '#DB8C0D'
     },
+    potentialGreen: {
+      50: '#c1f0d3',
+      100: '#c1f0d3',
+      200: '#c1f0d3',
+      300: '#c1f0d3',
+      400: '#c1f0d3',
+      500: '#28a457' /* '#2db962' */ /* '#31CD6D' */ /* '#32CF6D' */,
+      600: '#23904d',
+      700: '#23904d',
+      800: '#23904d',
+      900: '#23904d',
+      custom: '#32CF6D'
+    },
 
     customCoyote: { // brownish
       50: '#B5A07E',

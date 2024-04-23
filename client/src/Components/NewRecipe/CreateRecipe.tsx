@@ -3,7 +3,7 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from 'formik';
 import { useAxios } from "../../hooks/useAxios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   DbItem, SelectedItem, FormRecipe, OptionsForMenu
 } from "../../types";
@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { useNotification } from "../../hooks/useNotification";
 import RecipeTitleAndDescription from "./RecipeTitleAndDescription";
 import CreateRecipeImage from "./CreateRecipeImage";
-import { RecipeToggleContext } from "../../context/CreateRecipeToggleContext";
+import { CreateRecipeToggleProvider, RecipeToggleContext } from "../../context/CreateRecipeToggleContext";
 
 const CreateRecipe = () => {
   const dispatch = useDispatch();
@@ -24,10 +24,8 @@ const CreateRecipe = () => {
   const [selectedItem, setSelectedItem] = useState<DbItem | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [imageToUpload, setImageToUpload] = useState<File | null>(null);
-  const [titleVisible, setTitleVisible] = useState<boolean>(true);
-  const [imageVisible, setImageVisible] = useState<boolean>(false);
-  const [itemVisible, setItemVisible] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(33);
+
+  const { progress } = useContext(RecipeToggleContext);
 
   const { showNotification } = useNotification();
 
@@ -84,31 +82,6 @@ const CreateRecipe = () => {
     }
   };
 
-  function toggleVisible(visible: string) {
-    switch (visible) {
-      case 'titleVisible':
-        setTitleVisible(true);
-        setItemVisible(false);
-        setImageVisible(false);
-        setProgress(33);
-        break;
-      case 'imageVisible':
-        setImageVisible(true);
-        setTitleVisible(false);
-        setItemVisible(false);
-        setProgress(66);
-        break;
-      case 'itemVisible':
-        setItemVisible(true);
-        setTitleVisible(false);
-        setImageVisible(false);
-        setProgress(100);
-        break;
-      default:
-        break;
-    }
-  }
-
   const handleRecipeSubmit = (recipe: FormRecipe) => {
     if (imageToUpload) {
       const formData = new FormData();
@@ -142,37 +115,33 @@ const CreateRecipe = () => {
 
   return (
     <>
-      <Heading color='customeExit.custom' as='h2' size='2xl' textAlign="center" flex="1">
-        Create new recipe
-      </Heading>
-      <Divider mb='2' style={{ marginTop: '10px', color: 'black' }} />
-      <Flex justify={'center'}>
-        <Card mb='2' variant='filled' style={{ backgroundColor: '#e2e6e9' }} width={{ base: "100%", md: "480px", lg: "980px", xl: "1260px" }}>
-          <Stack>
-            <Progress value={progress} />
-          </Stack>
-          <CardBody>
-            <Formik
-              initialValues={{ name: '', description: '', public: false }}
-              onSubmit={(values, actions) => {
-                const recipe = {
-                  name: values.name,
-                  description: values.description,
-                  public: values.public,
-                  global: false,
-                  incredients: itemArray,
-                };
-                handleRecipeSubmit(recipe);
-                actions.setSubmitting(false);
-              }}
-            >
-              {(props) => (
-                <Form>
-                  <RecipeToggleContext.Provider
-                    value={{
-                      titleVisible, imageVisible, itemVisible, toggleVisible
-                    }}
-                  >
+      <CreateRecipeToggleProvider>
+        <Heading color='customeExit.custom' as='h2' size='2xl' textAlign="center" flex="1">
+          Create new recipe
+        </Heading>
+        <Divider mb='2' style={{ marginTop: '10px', color: 'black' }} />
+        <Flex justify={'center'}>
+          <Card mb='2' variant='filled' style={{ backgroundColor: '#e2e6e9' }} width={{ base: "100%", md: "480px", lg: "980px", xl: "1260px" }}>
+            <Stack>
+              <Progress value={progress} />
+            </Stack>
+            <CardBody>
+              <Formik
+                initialValues={{ name: '', description: '', public: false }}
+                onSubmit={(values, actions) => {
+                  const recipe = {
+                    name: values.name,
+                    description: values.description,
+                    public: values.public,
+                    global: false,
+                    incredients: itemArray,
+                  };
+                  handleRecipeSubmit(recipe);
+                  actions.setSubmitting(false);
+                }}
+              >
+                {(props) => (
+                  <Form>
                     <RecipeTitleAndDescription
                       validateName={validateName}
                       validateDescription={validateDescription}
@@ -200,13 +169,13 @@ const CreateRecipe = () => {
                     >
                       Submit
                     </Button>
-                  </RecipeToggleContext.Provider>
-                </Form>
-              )}
-            </Formik>
-          </CardBody>
-        </Card>
-      </Flex >
+                  </Form>
+                )}
+              </Formik>
+            </CardBody>
+          </Card>
+        </Flex >
+      </CreateRecipeToggleProvider>
     </>
   );
 };

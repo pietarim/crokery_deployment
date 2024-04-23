@@ -14,7 +14,7 @@ const NavButton = ({ buttonPath, buttonText }: NavButtonProps) => {
       <Button
         mr={0.5}
         style={{ borderBottomLeftRadius: '0', borderBottomRightRadius: '0' }}
-        colorScheme='customCoyote' isActive={location.pathname === buttonPath ? true : false}
+        colorScheme='anotherCustomYellow' isActive={location.pathname === buttonPath ? true : false}
       >
         {buttonText}
       </Button>

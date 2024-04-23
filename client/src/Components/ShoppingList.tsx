@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   Heading, List, ListItem, Flex, Card, TableContainer, Table, Tr, Th, Td, Tbody, Text,
   Button, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, useDisclosure, DrawerCloseButton,
-  Divider
+  Divider, Thead
 } from "@chakra-ui/react";
 import _ from "lodash";
 import { addProductById, removeProductById } from "../redux/modules/shoppingCart";
@@ -55,15 +55,12 @@ interface RecipeItemCalc {
   type: string;
 }
 
-type ItemAndTitle = RecipeItemCalc | string;
-type ItemByType = Array<RecipeItemCalc | string>;
 
 const ShoppingList = () => {
   const isMobile = useWidth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
   const shoppingList = useSelector((state: AppState) => state.shoppingCart);
-  console.log(shoppingList.items); // TODO remove
 
   if (!shoppingList.items.length) {
     return (
@@ -98,61 +95,102 @@ const ShoppingList = () => {
 
   const sortItemsByType: RecipeItemCalc[] = _.sortBy(ItemsWithSumAmount, ['type']);
 
-  const itemsAndTypes: ItemByType = sortItemsByType.reduce<ItemByType>((acc, cur) => {
-    if (!acc.length) {
-      return [cur.type, { ...cur, isTitle: cur.type }];
-    } else {
-      const lastItem = acc[acc.length - 1];
-      if (typeof lastItem === 'string') {
-        return [...acc, cur.type, { ...cur }];
-      } else {
-        if (lastItem.type === cur.type) {
-          return [...acc, { ...cur }];
-        } else {
-          return [...acc, cur.type, { ...cur }];
-        }
-      }
-    }
-  }, []);
-
-  const itemAmounts: { [key: string]: number; } = {};
-  for (const item of itemsList) {
-    if (itemAmounts[item.name]) {
-      itemAmounts[item.name] += item.amount;
-    } else {
-      itemAmounts[item.name] = item.amount;
-    }
-  }
-
-  const returnItemsAndTitles = () => {
-    console.log(itemsAndTypes);
-    {
-      return itemsAndTypes.map((i: ItemAndTitle) => {
-        if (typeof i === 'string') {
-          return (
-            <Tr key={i}>
-              <Th>{i || "tittle not found"}</Th>
-            </Tr>);
-        } else {
-          if (!isMobile) {
+  const renderShoppingList = () => {
+    const secondColor = '#80A1C0';
+    const firstColor = 'white';
+    let color = firstColor;
+    return (<Card mt={26} variant="elevated"><TableContainer>
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>Category</Th>
+            <Th>Item</Th>
+            <Th>Amount</Th>
+            <Th>Count</Th>
+          </Tr>
+        </Thead>
+        {sortItemsByType.map((item: RecipeItemCalc, i) => {
+          color = color === firstColor ? secondColor : firstColor;
+          if (i === 0) {
             return (
-              <Tr key={i.name}>
-                <Td>{i.name || "name not found"}</Td>
-                <Td>{i.amount.toFixed(2) || "amount not found"}</Td>
-                <Td>amount: count {Math.ceil(i.amount / parseFloat(i.unitSize)) || "count not found"}</Td>
-              </Tr>
-            );
-          } else {
-            return (
-              <Tr key={i.name}>
-                <Td>{i.name}</Td>
-                <Td>count {Math.ceil(i.amount / parseFloat(i.unitSize))}</Td>
-              </Tr>
-            );
+              <Tbody style={{ backgroundColor: color }} key={item.name}>
+                <Tr>
+                  <Td>{item.type}</Td>
+                  <Td>{item.name}</Td>
+                  <Td>{Math.ceil(item.amount)}</Td>
+                  <Td>{Math.ceil(item.amount / parseFloat(item.unitSize))}</Td>
+                </Tr>
+              </Tbody>);
           }
+          else if (item.type !== sortItemsByType[i - 1].type) {
+            return (
+              <Tbody style={{ backgroundColor: color }} key={item.name}>
+                <Tr>
+                  <Td>{item.type}</Td>
+                  <Td>{item.name}</Td>
+                  <Td>{Math.ceil(item.amount)}</Td>
+                  <Td>{Math.ceil(item.amount / parseFloat(item.unitSize))}</Td>
+                </Tr>
+              </Tbody>);
+          }
+          return (
+            <Tbody style={{ backgroundColor: color }} key={item.name}>
+              <Tr>
+                <Td></Td>
+                <Td>{item.name}</Td>
+                <Td>{Math.ceil(item.amount)}</Td>
+                <Td>{Math.ceil(item.amount / parseFloat(item.unitSize))}</Td>
+              </Tr>
+            </Tbody>
+          );
         }
-      });
-    }
+        )}</Table>
+    </TableContainer></Card>);
+  };
+
+  const renderMobileShoppingList = () => {
+    return (
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>Category</Th>
+            <Th>Item</Th>
+            <Th>Amount</Th>
+          </Tr>
+        </Thead>
+        {sortItemsByType.map((item: RecipeItemCalc, i) => {
+          if (i === 0) {
+            return (
+              <Tbody>
+                <Tr>
+                  <Td>{item.type}</Td>
+                  <Td>{item.name}</Td>
+                  <Td>{Math.ceil(item.amount)}</Td>
+                </Tr>
+              </Tbody>);
+          } else if (item.type !== sortItemsByType[i - 1].type) {
+            return (
+              <Tbody>
+                <Tr>
+                  <Td>{item.type}</Td>
+                  <Td>{item.name}</Td>
+                  <Td>{Math.ceil(item.amount)}</Td>
+                </Tr>
+              </Tbody>);
+          } return (
+            <Tbody>
+              <Tr>
+                <Td></Td>
+                <Td>{item.name}</Td>
+                <Td>{Math.ceil(item.amount)}</Td>
+              </Tr>
+            </Tbody>
+          );
+        }
+        )
+        }
+      </Table>
+    );
   };
 
   if (!isMobile) {
@@ -164,26 +202,24 @@ const ShoppingList = () => {
         <Divider mb='2' style={{ marginTop: '10px', color: 'black' }} />
         <Flex justifyContent="space-between">
           <div></div>
-          <TableContainer>
-            <Table>
-              <Tbody>
-                {returnItemsAndTitles()}</Tbody>
-            </Table>
-          </TableContainer>
-          <Card style={{ backgroundColor: '#e2e6e9' /* '#e6f9ff' */ }} variant='elevated' minW='175px'>
+          {renderShoppingList()}
+          <Card pt={'11'} mt={'18'} style={{ backgroundColor: '#e2e6e9' }} variant='elevated' minW='175px'>
+            <Heading pt={3} pb={3} fontSize={'h3'}>Recipes:</Heading>
             <List>
               {shoppingList.items.map((item) => (
-                <ListItem key={item.id}>
-                  <Text>{item.name} {item.count}</Text>
+                <ListItem style={{ backgroundColor: "white", margin: "4px 2px" }} pt={3} pb={6} key={item.id}>
+                  <Text style={{ fontWeight: 'bold' }} mb={2}>{item.name}: {item.count}</Text>
                   <Button
                     mr='2'
                     colorScheme="anotherCustomYellow"
-                    onClick={() => dispatch(addProductById(item.id))}>
+                    onClick={() => dispatch(addProductById(item.id))}
+                    style={{ borderRadius: '20px', height: '40px', width: '40px', paddingBottom: '3px' }}>
                     +
                   </Button>
                   <Button
                     colorScheme="customBlue"
-                    onClick={() => dispatch(removeProductById(item.id))}>
+                    onClick={() => dispatch(removeProductById(item.id))}
+                    style={{ borderRadius: '20px', height: '40px', width: '40px', paddingBottom: '3px' }}>
                     -
                   </Button>
                 </ListItem>
@@ -200,17 +236,39 @@ const ShoppingList = () => {
           <DrawerOverlay />
           <DrawerContent>
             <DrawerHeader borderBottomWidth='1px'>Selected recipes<DrawerCloseButton /></DrawerHeader>
-            <DrawerBody>
+            <DrawerBody style={{ padding: '2px' }}>
               <List>
                 {shoppingList.items.map((item) => (
-                  <ListItem key={item.id}>
-                    <Text>{item.name}: {item.count}</Text>
-                    <Button mr='1' colorScheme="customBlue" onClick={() => dispatch(addProductById(item.id))}>
-                      +
-                    </Button>
-                    <Button colorScheme="customYellow" onClick={() => dispatch(removeProductById(item.id))}>
-                      -
-                    </Button>
+                  <ListItem style={{
+                    backgroundColor: "lightgray",
+                    margin: "2px 1px",
+                    padding: '8px',
+                    display: 'flex',
+                    justifyContent: 'space-between'
+                  }} key={item.id}>
+                    <Flex style={{ display: "inline-block" }}>
+                      <Text style={{ top: '50%', position: 'relative', transform: "translateY(-50%)", fontWeight: 'bold' }}>
+                        {item.name}: {item.count}
+                      </Text>
+                    </Flex>
+                    <Flex style={{ display: "inline-block" }}>
+                      <Button
+                        mr='1'
+                        ml='3'
+                        colorScheme="customBlue"
+                        onClick={() => dispatch(addProductById(item.id))}
+                        style={{ borderRadius: '20px', height: '40px', width: '40px', display: "inline-block", padding: "0 1px 3px 0" }}
+                      >
+                        +
+                      </Button>
+                      <Button
+                        colorScheme="customYellow"
+                        onClick={() => dispatch(removeProductById(item.id))}
+                        style={{ borderRadius: '20px', height: '40px', width: '40px', display: "inline-block", padding: "0 1px 3px 0" }}
+                      >
+                        -
+                      </Button>
+                    </Flex>
                   </ListItem>
                 ))}
               </List>
@@ -222,10 +280,7 @@ const ShoppingList = () => {
         </Heading>
         <Flex justifyContent="space-between">
           <TableContainer>
-            <Table>
-              <Tbody>
-                {returnItemsAndTitles()}</Tbody>
-            </Table>
+            {renderMobileShoppingList()}
           </TableContainer>
         </Flex>
       </div>
