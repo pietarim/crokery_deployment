@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode } from 'react';
+import { createContext, useState } from 'react';
 import { FormToggleChoices } from '../types';
 
 export interface CreateRecipeToggleContextType {
@@ -9,7 +9,13 @@ export interface CreateRecipeToggleContextType {
   progress: number;
 }
 
-const defaultState: CreateRecipeToggleContextType = { titleVisible: true, imageVisible: false, itemVisible: false, toggleVisible: () => { }, progress: 33 };
+const defaultState: CreateRecipeToggleContextType = {
+  titleVisible: true,
+  imageVisible: false,
+  itemVisible: false,
+  toggleVisible: () => { },
+  progress: 33
+};
 
 export const RecipeToggleContext = createContext<CreateRecipeToggleContextType>(defaultState);
 
@@ -44,14 +50,6 @@ export const CreateRecipeToggleProvider = ({ children }: { children: React.React
     }
   }
 
-  /* const RecipeToggleContext = createContext<CreateRecipeToggleContextType>({
-    titleVisible,
-    imageVisible,
-    itemVisible,
-    toggleVisible,
-    progress
-  }); */
-
   const value: CreateRecipeToggleContextType = { titleVisible, imageVisible, itemVisible, toggleVisible, progress };
 
   return (
@@ -59,19 +57,4 @@ export const CreateRecipeToggleProvider = ({ children }: { children: React.React
       {children}
     </RecipeToggleContext.Provider>
   );
-}
-
-/* const CreateRecipeToggleProvider = ({ children }: { children: ReactNode; }) => {
-
-  return (
-    <CreateRecipeToggleContext.Provider value={{
-      titleVisible,
-      imageVisible,
-      itemVisible,
-    }}>
-      {children}
-    </CreateRecipeToggleContext.Provider>
-  );
 };
-
-export { CreateRecipeToggleContext, CreateRecipeToggleProvider }; */
