@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { useNotification } from "../../hooks/useNotification";
 import RecipeTitleAndDescription from "./RecipeTitleAndDescription";
 import CreateRecipeImage from "./CreateRecipeImage";
-import { CreateRecipeToggleProvider, RecipeToggleContext } from "../../context/CreateRecipeToggleContext";
+import { RecipeToggleContext } from "../../context/CreateRecipeToggleContext";
 
 const CreateRecipe = () => {
   const dispatch = useDispatch();
@@ -115,67 +115,65 @@ const CreateRecipe = () => {
 
   return (
     <>
-      <CreateRecipeToggleProvider>
-        <Heading color='customeExit.custom' as='h2' size='2xl' textAlign="center" flex="1">
-          Create new recipe
-        </Heading>
-        <Divider mb='2' style={{ marginTop: '10px', color: 'black' }} />
-        <Flex justify={'center'}>
-          <Card mb='2' variant='filled' style={{ backgroundColor: '#e2e6e9' }} width={{ base: "100%", md: "480px", lg: "980px", xl: "1260px" }}>
-            <Stack>
-              <Progress value={progress} />
-            </Stack>
-            <CardBody>
-              <Formik
-                initialValues={{ name: '', description: '', public: false }}
-                onSubmit={(values, actions) => {
-                  const recipe = {
-                    name: values.name,
-                    description: values.description,
-                    public: values.public,
-                    global: false,
-                    incredients: itemArray,
-                  };
-                  handleRecipeSubmit(recipe);
-                  actions.setSubmitting(false);
-                }}
-              >
-                {(props) => (
-                  <Form>
-                    <RecipeTitleAndDescription
-                      validateName={validateName}
-                      validateDescription={validateDescription}
-                    />
-                    <CreateRecipeImage
-                      handleImageChange={handleImageChange}
-                      previewImage={previewImage}
-                    />
-                    <ListSelectedItems
-                      itemArray={itemArray}
-                      setItemArray={setItemArray}
-                      selectedItem={selectedItem}
-                      setSelectedItem={setSelectedItem}
-                      visibleItems={visibleItems}
-                      selectedCategory={selectedCategory}
-                      setSelectedCategory={setSelectedCategory}
-                    />
-                    <br />
-                    <Button
-                      mt={8}
-                      mb={7}
-                      colorScheme='customeExit'
-                      isLoading={props.isSubmitting}
-                      type='submit'
-                    >
-                      Submit
-                    </Button>
-                  </Form>
-                )}
-              </Formik>
-            </CardBody>
-          </Card>
-        </Flex >
-      </CreateRecipeToggleProvider>
+      <Heading color='customeExit.custom' as='h2' size='2xl' textAlign="center" flex="1">
+        Create new recipe
+      </Heading>
+      <Divider mb='2' style={{ marginTop: '10px', color: 'black' }} />
+      <Flex justify={'center'}>
+        <Card mb='2' variant='filled' style={{ backgroundColor: '#e2e6e9' }} width={{ base: "100%", md: "480px", lg: "980px", xl: "1260px" }}>
+          <Stack>
+            <Progress value={progress} />
+          </Stack>
+          <CardBody>
+            <Formik
+              initialValues={{ name: '', description: '', public: false }}
+              onSubmit={(values, actions) => {
+                const recipe = {
+                  name: values.name,
+                  description: values.description,
+                  public: values.public,
+                  global: false,
+                  incredients: itemArray,
+                };
+                handleRecipeSubmit(recipe);
+                actions.setSubmitting(false);
+              }}
+            >
+              {(props) => (
+                <Form>
+                  <RecipeTitleAndDescription
+                    validateName={validateName}
+                    validateDescription={validateDescription}
+                  />
+                  <CreateRecipeImage
+                    handleImageChange={handleImageChange}
+                    previewImage={previewImage}
+                  />
+                  <ListSelectedItems
+                    itemArray={itemArray}
+                    setItemArray={setItemArray}
+                    selectedItem={selectedItem}
+                    setSelectedItem={setSelectedItem}
+                    visibleItems={visibleItems}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                  />
+                  <br />
+                  <Button
+                    mt={8}
+                    mb={7}
+                    colorScheme='customeExit'
+                    isLoading={props.isSubmitting}
+                    type='submit'
+                  >
+                    Submit
+                  </Button>
+                </Form>
+              )}
+            </Formik>
+          </CardBody>
+        </Card>
+      </Flex >
     </>
   );
 };

@@ -8,6 +8,7 @@ import { AuthProvider } from './context/AuthContext';
 import { theme } from './theme';
 import { NotificationProvider } from './context/NotificationContext.tsx';
 import { WidthProvider } from './context/WidthContext';
+import { CreateRecipeToggleProvider } from './context/CreateRecipeToggleContext';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from './Components/ErrorPage';
 import CreateRecipe from './Components/NewRecipe/CreateRecipe.tsx';
@@ -43,13 +44,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <Provider store={store}>
-        <AuthProvider>
-          <NotificationProvider>
-            <WidthProvider>
-              <RouterProvider router={router} />
-            </WidthProvider>
-          </NotificationProvider>
-        </AuthProvider>
+        <CreateRecipeToggleProvider>
+          <AuthProvider>
+            <NotificationProvider>
+              <WidthProvider>
+                <RouterProvider router={router} />
+              </WidthProvider>
+            </NotificationProvider>
+          </AuthProvider>
+        </CreateRecipeToggleProvider>
       </Provider>
     </ChakraProvider>
   </React.StrictMode>,
