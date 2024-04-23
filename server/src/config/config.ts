@@ -1,7 +1,7 @@
 const port: string = process.env.PORT || '3001';
 const databaseUrl: string = process.env.DATABASE_URL || 'postgres://postgres:mysecretpassword@localhost:5432/postgres';
 let cookieUrl;
-const corsOriginClientUrl = process.env.CLIENT_URL || 'http://localhost:5432';
+const corsOriginClientUrl = process.env.CLIENT_URL || 'localhost:5432';
 
 enum SameSite {
   Srtict = "strict",
@@ -18,7 +18,7 @@ switch (process.env.NODE_ENV) {
   case 'production':
     cookieIsSameSite = SameSite.Srtict;
     cookieIsSecure = true;
-    corsAllowedOrigins.push(process.env.CLIENT_URL || 'http://localhost:5432');
+    corsAllowedOrigins.push(process.env.CLIENT_URL || 'localhost:5432');
     cookieUrl = process.env.SERVER_URL;
     imageProjectPath = "../images/";
     break;
