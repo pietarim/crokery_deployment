@@ -67,7 +67,6 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipePro
       <Card
         className="recipe-container"
         direction={{ base: 'column', sm: 'row' }}
-        overflow='hidden'
         variant='elevated'
         maxW="container.xl"
         top={yOffset + 'px'}
@@ -122,12 +121,15 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipePro
     );
   }
   return (
-    <Card>
+    <Card
+      top={yOffset + 'px'}
+      className="big-container" style={{ position: 'absolute', zIndex: '10' }}>
       <CardBody>
         <CloseButton onClick={() => setDetailedRecipe(null)} />
         <Image src={`${base_url}/images/${detailedRecipe.imageUri}`} alt={detailedRecipe.name} />
         <Heading>{detailedRecipe.name}</Heading>
         <Text>{detailedRecipe.description}</Text>
+        <Heading size='lg'>Incredients:</Heading>
         {detailedRecipe.item.map((i, index) => (
           <Text key={index}>
             {i.name}: {i.recipeToItem.amount}

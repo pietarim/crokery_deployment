@@ -173,7 +173,9 @@ const ListRecipes = () => {
   return (
     <div>
       {getTitleAndOrder()}
-      <div className={fadeIn ? "fade-in-div" : "transparent-div"}>
+      <div
+        onClick={() => setDetailedRecipe(null)}
+        className={fadeIn ? "fade-in-div" : "transparent-div"}>
       </div>
       <DetailedRecipe
         detailedRecipe={detailedRecipe}
