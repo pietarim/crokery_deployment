@@ -144,6 +144,9 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipePro
         <Button variant='ghost'>
           Like
         </Button>
+        {isRecipeOwner ? <Button leftIcon={<DeleteIcon />} onClick={() => handleRemove()}>
+          Remove
+        </Button> : null}
       </CardFooter>
     </Card>
   );

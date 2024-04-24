@@ -10,6 +10,10 @@ Application for planning shopping list by adding recipes to shopping list. User 
 
 ![Like recipe and add to shopping cart](./gifs/like_and_add_to_cart.gif)
 
+### Mobile view:
+
+![Mobile view]/(./gifs/mobile_view.gif)
+
 ## Istalling
 
 Install client:
