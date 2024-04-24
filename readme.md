@@ -4,7 +4,7 @@ Application for planning shopping list by adding recipes to shopping list. User 
 
 ![Adding recipe](./gifs/add_recipe.gif)
 
-![Like recipe and add to shopping cart](./gifs/add_recipe.gif)
+![Like recipe and add to shopping cart](./gifs/like_and_add_to_cart.gif)
 
 ## Istalling
 
