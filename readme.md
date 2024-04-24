@@ -12,7 +12,7 @@ Application for planning shopping list by adding recipes to shopping list. User 
 
 ### Mobile view:
 
-![Mobile view]/(./gifs/mobile_view.gif)
+![Mobile view](./gifs/mobile_view.gif)
 
 ## Istalling
 
