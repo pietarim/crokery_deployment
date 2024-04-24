@@ -2,7 +2,11 @@
 
 Application for planning shopping list by adding recipes to shopping list. User can browse own recipes or public recipes and add them to shopping list. User can save recipes.
 
+### Creating recipe:
+
 ![Adding recipe](./gifs/add_recipe.gif)
+
+### Liking and adding recipe to shoping cart:
 
 ![Like recipe and add to shopping cart](./gifs/like_and_add_to_cart.gif)
 
