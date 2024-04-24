@@ -28,6 +28,15 @@ const Recipe = ({ recipe, setDetailedRecipe }: RecipeProps) => {
     }
   };
 
+  const formatDescription = (descrition: string) => {
+    return descrition.split('\n').map((line: string, i: number) => (
+      <div key={i}>
+        {line}
+        <br />
+      </div>)
+    );
+  };
+
   return (
     <Card
       key={recipe.id}
@@ -49,8 +58,8 @@ const Recipe = ({ recipe, setDetailedRecipe }: RecipeProps) => {
               src={`${base_url}/images/${recipe.imageUri}`}
               alt={recipe.name}
             />
-            <Text style={{ margin: '12px' }} noOfLines={3}>
-              {recipe.description}
+            <Text overflow={'hidden'} maxH={'200px'} style={{ margin: '12px' }}>
+              {formatDescription(recipe.description)}
             </Text>
             <Card style={{ backgroundColor: cardBackground }} variant='elevated' minW='175px'>
               <Text as='b' style={{ borderBottom: '1px solid #002633' }}>Incredients:</Text>

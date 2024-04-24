@@ -59,6 +59,9 @@ const CreateRecipe = () => {
 
   function validateDescription(value: string) {
     let error;
+    if (value && value.length > 1000) {
+      error = 'Description must be 1000 characters or less';
+    }
     if (!value) {
       error = 'Recipe description is required';
     }

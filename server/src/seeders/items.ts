@@ -530,5 +530,13 @@ export const items: NewItem[] = [
     brand: "kotimaista",
     price: 1.99,
     pricePerUnit: 39.8,
+  },
+  {
+    name: "potato",
+    type: ItemCategory.Vegetable,
+    unitSize: 1,
+    brand: "kotimaista",
+    price: 1.29,
+    pricePerUnit: 1.29,
   }
 ];

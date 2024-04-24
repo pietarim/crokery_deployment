@@ -13,9 +13,6 @@ interface ItemMenuProps {
 function RadioCard(props: any) {
   const { getInputProps, getRadioProps } = useRadio(props);
 
-  const theme = useTheme();
-  const customYellow = theme.colors.customYellow[500];
-
   const input = getInputProps();
   const checkbox = getRadioProps();
 
@@ -28,8 +25,9 @@ function RadioCard(props: any) {
         borderWidth='1px'
         borderRadius='md'
         boxShadow='md'
+        bg='white'
         _checked={{
-          bg: customYellow,
+          bg: 'customYellow.custom',
           color: 'white',
           borderColor: '#CF9332',
         }}

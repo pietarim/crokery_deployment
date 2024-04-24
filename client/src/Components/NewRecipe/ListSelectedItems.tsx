@@ -128,7 +128,13 @@ const ListSelectedItems = ({
         <List style={{ backgroundColor: "white", borderRadius: '6px', padding: "4px" }}>
           {itemArray.length && itemArray.map((item, id) => {
             return <ListItem
-              style={{ backgroundColor: bgColor, margin: '3px', borderRadius: '20px', display: 'inline-block', padding: '4px' }}
+              style={{
+                backgroundColor: bgColor,
+                margin: '3px',
+                borderRadius: '20px',
+                display: 'inline-block',
+                padding: '4px'
+              }}
               key={id}>{item.name} {item.amount} <SmallCloseIcon
                 _hover={{ cursor: 'pointer' }}
                 onClick={() => {

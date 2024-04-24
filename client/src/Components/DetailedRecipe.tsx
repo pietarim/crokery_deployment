@@ -24,7 +24,18 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipePro
     return null;
   }
 
+  const formatDescription = (descrition: string) => {
+    return descrition.split('\n').map((line: string, i: number) => (
+      <div key={i}>
+        {line}
+        <br />
+      </div>)
+    );
+  };
+
   let isRecipeOwner = false;
+
+  const yOffset = window.scrollY + 10;
 
   if (detailedRecipe) {
     isRecipeOwner = token?.id === detailedRecipe.ownerId;
@@ -59,6 +70,7 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipePro
         overflow='hidden'
         variant='elevated'
         maxW="container.xl"
+        top={yOffset + 'px'}
       >
         <Flex className="recipe-content" direction="column" justify="space-between" w="100%">
           <CardBody>
@@ -89,7 +101,7 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipePro
                 </Heading>
                 <Divider />
                 <Text fontSize='lg' style={{ margin: '12px' }}>
-                  {detailedRecipe.description}
+                  {formatDescription(detailedRecipe.description)}
                 </Text>
               </Flex>
             </Flex>
@@ -112,6 +124,7 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipePro
   return (
     <Card>
       <CardBody>
+        <CloseButton onClick={() => setDetailedRecipe(null)} />
         <Image src={`${base_url}/images/${detailedRecipe.imageUri}`} alt={detailedRecipe.name} />
         <Heading>{detailedRecipe.name}</Heading>
         <Text>{detailedRecipe.description}</Text>

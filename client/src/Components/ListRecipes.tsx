@@ -174,12 +174,12 @@ const ListRecipes = () => {
     <div>
       {getTitleAndOrder()}
       <div className={fadeIn ? "fade-in-div" : "transparent-div"}>
-        <DetailedRecipe
-          detailedRecipe={detailedRecipe}
-          setFadeIn={setFadeIn}
-          setDetailedRecipe={setDetailedRecipe}
-        />
       </div>
+      <DetailedRecipe
+        detailedRecipe={detailedRecipe}
+        setFadeIn={setFadeIn}
+        setDetailedRecipe={setDetailedRecipe}
+      />
       <Divider style={{ marginTop: '10px', color: 'black' }} />
       {recipeErrorMessage && <Heading as='h2' size='2xl' textAlign="center" flex="1">
         {recipeErrorMessage}

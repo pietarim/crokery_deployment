@@ -1,6 +1,7 @@
 .recipe-container {
   position: relative;
   margin: 4rem auto;
+  z-index: 3;
 }
 
 .detailed-recipe-background {
