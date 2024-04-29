@@ -99,9 +99,9 @@ const DetailedRecipe = ({ detailedRecipe, setDetailedRecipe }: DetailedRecipePro
                   {detailedRecipe.name}
                 </Heading>
                 <Divider />
-                <Text fontSize='lg' style={{ margin: '12px' }}>
+                <Flex fontSize='lg' style={{ margin: '12px' }}>
                   {formatDescription(detailedRecipe.description)}
-                </Text>
+                </Flex>
               </Flex>
             </Flex>
           </CardBody>

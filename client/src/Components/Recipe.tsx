@@ -58,9 +58,9 @@ const Recipe = ({ recipe, setDetailedRecipe }: RecipeProps) => {
               src={`${base_url}/images/${recipe.imageUri}`}
               alt={recipe.name}
             />
-            <Text overflow={'hidden'} maxH={'200px'} style={{ margin: '12px' }}>
+            <Flex overflow={'hidden'} maxH={'200px'} style={{ margin: '12px' }}>
               {formatDescription(recipe.description)}
-            </Text>
+            </Flex>
             <Card style={{ backgroundColor: cardBackground }} variant='elevated' minW='175px'>
               <Text as='b' style={{ borderBottom: '1px solid #002633' }}>Incredients:</Text>
               {recipe.item.length && recipe.item.map((i: Item, index: number) => (

@@ -8,8 +8,9 @@ import { descriptions } from './recipeDescriptions';
 import { Friend } from '../models/friend';
 import { createUser } from '../controllers/user';
 import { TokenUser } from '../types/types';
+import config from '../config/config';
 
-const sequelize = new Sequelize('postgres://postgres:mysecretpassword@localhost:5432/postgres');
+const sequelize = new Sequelize(config.databaseUrl);
 
 const migrationConf = {
   migrations: {
