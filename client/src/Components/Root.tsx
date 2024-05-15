@@ -10,12 +10,15 @@ import CreateNewUser from './CreateNewUser';
 import { useAuth, useNotification, useAxios, useWidth } from '../hooks';
 import { Outlet, Link } from 'react-router-dom';
 import NavButton from './NavButton';
+import { useDispatch } from 'react-redux';
+import { setRecipes } from '../redux/modules/recipes';
 
 const Root = () => {
   const { setToken, token } = useAuth();
   const { get } = useAxios();
   const { showNotification } = useNotification();
   const isMobileView = useWidth();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getAuthUser = async () => {
@@ -33,6 +36,7 @@ const Root = () => {
   const handleLogout = async () => {
     try {
       await get('/auth/logout', { withCredentials: true });
+      dispatch(setRecipes([]));
       setToken(null);
     }
     catch {

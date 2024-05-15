@@ -51,7 +51,7 @@ export const getRandomRecipes = async (oldIds: number[]) => {
     attributes: ['id'],
     order: sequelize.random(),
     limit: 5,
-    where: { id: { [Op.notIn]: oldIds } }
+    where: { id: { [Op.notIn]: oldIds }, global: true }
   });
   const ids = randomIds.map((id: any) => id.id);
   const recipes = await recipesByIds(ids);
@@ -72,7 +72,8 @@ export const getMostLikedRecipes = async (page: number) => {
     ],
     order: [[Sequelize.literal('like_count'), 'DESC'], ['id', 'ASC']],
     limit: 5,
-    offset: offsetValue
+    offset: offsetValue,
+    where: { global: true }
   });
 
   const ids = mostLikedRecipes.map(recipe => recipe.id);
